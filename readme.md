@@ -1,5 +1,7 @@
 # CSC207 Final Project Read Me
 
+Before starting, also read howto.md please (-Kyle)
+
 Brief description:
 
 Problem Domain: Time Management 
@@ -11,8 +13,7 @@ for example, git-hub or other workspaces and automatically adds the events and d
 
 # APIs
 
-- //TODO add a link to a documentation of a API we will use for this project
-- API for github
+- Doc for Git-hub rest API: https://docs.github.com/en/rest?apiVersion=2022-11-28
 - API for weather
 - API for other... add to this
 - //SCREENSHOT OF USING API using hopscotch or other website..etc.
