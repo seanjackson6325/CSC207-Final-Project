@@ -1,7 +1,9 @@
 # Github
 
 Version: 2022-11-28
+
 Create a token for these accesses:
+
 read:user, read:discussion, read:project
 
 For now, we can use mine (githubAPItoken.txt) to read stuff and test things out;
