@@ -8,3 +8,5 @@ How to make changes to this project:
 
 # How to use Git_hub API
 
+See the example in API_GitHub.java, GetUserInfo() method.
+Note that the method uses OkHttp; Generally, we should be able to use OkHttp for most of our url APIs.
