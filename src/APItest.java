@@ -1,11 +1,21 @@
+import okhttp3.*;
+
 public class APItest {
-    private String token = "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";
 
+    private static String token = "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";
 
-    //TODO Figure out how to use the api lul
-    // STILL TRYING TO FIGURE IT OUT DOESN't WORK
-    String[] cmd = new String[]{"curl -X POST https://postman-echo.com/post --data foo1=bar1&foo2=bar2"};
-    Process process = Runtime.getRuntime().exec(cmd);
-    process.getInputStream();
-    process.destroy();
+    public static void main(String[] args) {
+
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        MediaType mediaType = MediaType.parse("text/plain");
+        RequestBody body = RequestBody.create(mediaType, "");
+        Request request = new Request.Builder()
+                .url("https://api.github.com/user/repos")
+                .method("GET", body)
+                .addHeader("Authorization", "Bearer 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")
+                .build();
+        Response response = client.newCall(request).execute();
+    }
+
 }
