@@ -4,6 +4,9 @@ Before starting, also read howto.md please (-Kyle)
 
 Please Note that you should run it on JDK11 (universal JDK for CSC207)
 
+Guys send me your teach.cs username to kyle.joung@mail.utoronto.ca or on discord by friday 6pm cause we need to hand the repository.
+Sean we need to make the project public so the TAs can see it (stated in the project quercus page)
+
 # Brief description:
 
 Problem Domain: Time Management 
