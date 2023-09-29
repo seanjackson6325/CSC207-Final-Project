@@ -20,8 +20,10 @@ for example, git-hub or other workspaces and automatically adds the events and d
 
 - Doc for Git-hub rest API: https://docs.github.com/en/rest?apiVersion=2022-11-28
 - API for Open Weather: https://openweathermap.org/api/one-call-3
-  example call: https://api.openweathermap.org/data/3.0/onecall?lat=33.44&lon=94.04&units=metric&appid=e76bf39d6d8a7ea676663caff3c3601a
+  
+  example call (call this in a web browser): https://api.openweathermap.org/data/3.0/onecall?lat=33.44&lon=94.04&units=metric&appid=e76bf39d6d8a7ea676663caff3c3601a
   API KEY: e76bf39d6d8a7ea676663caff3c3601a
+  call limited to once per minute
 
 - Here is a photo of GitHub API being accessed through postman
 - ![screenshot of postman.png](photos%2Fscreenshot%20of%20postman.png)
