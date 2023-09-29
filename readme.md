@@ -23,6 +23,7 @@ for example, git-hub or other workspaces and automatically adds the events and d
   
   example call (call this in a web browser): https://api.openweathermap.org/data/3.0/onecall?lat=33.44&lon=94.04&units=metric&appid=e76bf39d6d8a7ea676663caff3c3601a
   API KEY: e76bf39d6d8a7ea676663caff3c3601a
+  
   call limited to once per minute
 
 - Here is a photo of GitHub API being accessed through postman
