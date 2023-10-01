@@ -37,6 +37,10 @@ Response{protocol=h2, code=200, message=, url=https://api.github.com/user/repos}
 since the output is long, only the front part has been added; you can run the 
 pvsm in API_GitHub class to achieve the same results!
 
+NEW NOTE: apparently github doesn't like when we share private tokens, so we all each have to use our own token; 
+I think a good way to do this is by having each of us making a JSON file with our tokens,
+and making a get method to access the token from the class (that way we can all use the class without updating the token everytime someone else uses it)
+
 # Sources and References
 
 - OkHttp: https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp/4.10.0
