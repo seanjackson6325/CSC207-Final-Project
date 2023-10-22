@@ -30,7 +30,7 @@ TMM aims to make managing time management in a group environment easy. For examp
 
 # APIs
 
-- Currently being worked on (To be added soon)
+- Google Sheets API: https://developers.google.com/sheets/api/guides/concepts
 
 # Sources and References
 
@@ -45,9 +45,15 @@ Documentation for OkHttp: https://square.github.io/okhttp/
 Add your name in the bracket for the things you've worked on substantially
 This is done so we can keep track of the responsibilities and if we have problems (for example on how to use a certain method); we know who to ask.
 
+example:
+
+- [x] NameOfArea (People who worked on the area)
+
 Non-Coding Related
-- Project Blueprint and Specification (Group)
-- Documentation / ReadMe (Kyle)
+- [x]  Project Blueprint and Specification (Group)
+- [x] Documentation / ReadMe (Kyle)
+- [x] UML Diagram (Kyle)
+- [ ] Sequence Diagram ()
 
 Coding Related 
-- DAO Implementation (Kyle)
+- [ ] DAO Implementation (Kyle)
