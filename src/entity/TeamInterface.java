@@ -11,5 +11,5 @@ public interface TeamInterface  {
 
     List<Team> getTeam();
 
-
+    void setTaskList(Todo todo);
 }
