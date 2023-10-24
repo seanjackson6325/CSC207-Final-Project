@@ -5,6 +5,12 @@ Here, you will find general instructions, references, and most importantly, the 
 
 # Fixes and Tips:
 
+Git Workflow: make sure your origin/main is up-to-date!
+Then create a local branch (with whatever name you want).
+Use intellij's built in commit; it will automatically 
+create the remote branch on git for you. Got to GitHub
+and create a merge request.
+
     - Build -> Rebuild Project (can fix some issues)
     - Delete the remote clone and reclone from VCS
     - Go talk to Kyle :)
@@ -59,11 +65,46 @@ example:
 
 - [x] NameOfArea (People who worked on the area)
 
+Checked means that the class is ready for use and is done!
+
 Non-Coding Related
 - [x]  Project Blueprint and Specification (Group)
-- [x] Documentation / ReadMe (Kyle)
+- [x] Documentation / ReadMe (Kyle, Sean)
 - [x] UML Diagram (Kyle)
 - [ ] Sequence Diagram ()
 
-Coding Related 
+Coding Related
+
+- [ ] Main (Sean)
+
+(View / ViewModel)
+- [ ] Test/Building Purpose View/View model (Sean)
+- [ ] Login/Signup View ()
+- [ ] Login/Signup ViewModel ()
+- [ ] TodoCreation View ()
+- [ ] TodoCreation ViewModel ()
+- [ ] Personal View ()
+- [ ] Personal ViewModel ()
+- [ ] Group View ()
+- [ ] Group ViewModel ()
+
+(Entity)
+- [x] User (Kyle)
+- [x] Todo (Kyle)
+- [x] Team (Kyle)
+
+(DataAccess)
 - [ ] DAO Implementation (Kyle)
+
+(Use Cases)
+- [ ] CreateTodoUser (Darryl)
+  - [ ] InputBoundary (Darryl)
+  - [ ] InputData (Darryl)
+  - [ ] OutputBoundary (Darryl)
+  - [ ] OutputData (Darryl)
+  - [ ] Interactor (Darryl)
+
+
+- [ ] CreateTodoGroup
+
+
