@@ -1,4 +1,4 @@
-package use_case.todo;
+package use_case;
 
 import java.time.LocalDateTime;
 
