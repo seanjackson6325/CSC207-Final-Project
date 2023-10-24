@@ -1,15 +1,23 @@
 package entity;
+
 import java.util.List;
 
 public interface TeamInterface  {
 
-    String getUsername();
+    String getTeamName();
 
-    String getPassword();
+    List<Todo>  getTeamTasks();
 
-    List<Todo> taskList();
+    List<User> getManagers();
 
-    List<Team> getTeam();
+    List<User> getMembers();
 
-    void setTaskList(Todo todo);
+    void setTeamName(String teamName);
+
+    void setTeamTasks(List<Todo>  teamTasks);
+
+    void setManagers(List<User> managers);
+
+    void setMembers(List<User> members);
+
 }
