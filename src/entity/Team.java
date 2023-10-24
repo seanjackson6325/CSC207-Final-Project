@@ -4,10 +4,10 @@ import java.util.List;
 
 public class Team implements TeamInterface {
 
-    private String teamName;
+    private final String teamName;
     private List<Todo> teamTasks;
-    private List<User> managers;
-    private List<User> members;
+    private List<String> managers;
+    private List<String> members;
 
     /**
      * Constructor for Team()
@@ -18,7 +18,7 @@ public class Team implements TeamInterface {
      * @param members   List of Users that are members
      *
      */
-    public Team(String teamName, List<Todo> teamTasks, List<User> managers, List<User> members) {
+    public Team(String teamName, List<Todo> teamTasks, List<String> managers, List<String> members) {
         this.teamName = teamName;
         this.teamTasks = teamTasks;
         this.managers = managers;
@@ -36,18 +36,13 @@ public class Team implements TeamInterface {
     }
 
     @Override
-    public List<User> getManagers() {
+    public List<String> getManagers() {
         return this.managers;
     }
 
     @Override
-    public List<User> getMembers() {
+    public List<String> getMembers() {
         return this.members;
-    }
-
-    @Override
-    public void setTeamName(String teamName) {
-        this.teamName = teamName;
     }
 
     @Override
@@ -56,12 +51,12 @@ public class Team implements TeamInterface {
     }
 
     @Override
-    public void setManagers(List<User> managers) {
+    public void setManagers(List<String> managers) {
         this.managers = managers;
     }
 
     @Override
-    public void setMembers(List<User> members) {
+    public void setMembers(List<String> members) {
         this.managers = members;
     }
 

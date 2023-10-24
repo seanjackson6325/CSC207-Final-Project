@@ -8,16 +8,14 @@ public interface TeamInterface  {
 
     List<Todo>  getTeamTasks();
 
-    List<User> getManagers();
+    List<String> getManagers();
 
-    List<User> getMembers();
-
-    void setTeamName(String teamName);
+    List<String> getMembers();
 
     void setTeamTasks(List<Todo>  teamTasks);
 
-    void setManagers(List<User> managers);
+    void setManagers(List<String> managers);
 
-    void setMembers(List<User> members);
+    void setMembers(List<String> members);
 
 }

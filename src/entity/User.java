@@ -7,7 +7,7 @@ public class User implements UserInterface {
     private final String username;
     private final String password;
     private List<Todo> taskList;
-    private List<Team> teams;
+    private List<String> teams;
 
     /**
      * Constructor for User()
@@ -18,7 +18,7 @@ public class User implements UserInterface {
      * @param teams   teams that the User is in
      *
      */
-    public User(String username, String password, List<Todo> taskList, List<Team> teams) {
+    public User(String username, String password, List<Todo> taskList, List<String> teams) {
         this.username = username;
         this.password = password;
         this.taskList = taskList;
@@ -41,7 +41,7 @@ public class User implements UserInterface {
     }
 
     @Override
-    public List<Team> getTeam() {
+    public List<String> getTeam() {
         return this.teams;
     }
 
@@ -51,7 +51,7 @@ public class User implements UserInterface {
     }
 
     @Override
-    public void SetTeams(List<Team> teams) {
+    public void SetTeams(List<String> teams) {
         this.teams = teams;
     }
 }
