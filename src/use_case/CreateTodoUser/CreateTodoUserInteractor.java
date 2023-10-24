@@ -1,4 +1,4 @@
-package use_case;
+package use_case.CreateTodoUser;
 
 public class CreateTodoUserInteractor implements CreateTodoUserInputBoundary {
     public CreateTodoUserInteractor() {
