@@ -11,9 +11,9 @@ public interface UserInterface {
 
     List<Todo> getTaskList();
 
-    List<Team> getTeam();
+    List<String> getTeam();
 
     void SetTaskList(List<Todo> taskList);
 
-    void SetTeams(List<Team> teams);
+    void SetTeams(List<String> teams);
 }

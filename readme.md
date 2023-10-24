@@ -39,7 +39,7 @@ TMM aims to make managing time management in a group environment easy. For examp
 7. Add/Remove Group Members -> Invite/Accept/Remove Members
  
 
-# Diagrams
+# Diagrams (For references, not accurate; outdated)
 
 ![UML Diagram (CreateTodoUser).png](photos%2FUML%20Diagram%20%28CreateTodoUser%29.png)
 
@@ -59,7 +59,7 @@ Documentation for OkHttp: https://square.github.io/okhttp/
 # Responsibilities
 
 Add your name in the bracket for the things you've worked on substantially
-This is done so we can keep track of the responsibilities and if we have problems (for example on how to use a certain method); we know who to ask.
+This is done in order to keep track of the responsibilities and if we have problems (for example on how to use a certain method); we know who to ask.
 
 example:
 
@@ -73,38 +73,55 @@ Non-Coding Related
 - [x] UML Diagram (Kyle)
 - [ ] Sequence Diagram ()
 
-Coding Related
+Below are Coding Related:
 
 - [ ] Main (Sean)
 
 (View / ViewModel)
-- [ ] Test/Building Purpose View/View model (Sean)
+- [ ] Prototype View/View model (Sean)
+  - [ ] Test ()
 - [ ] Login/Signup View ()
+  - [ ] Test ()
 - [ ] Login/Signup ViewModel ()
+  - [ ] Test ()
 - [ ] TodoCreation View ()
+  - [ ] Test ()
 - [ ] TodoCreation ViewModel ()
+  - [ ] Test ()
 - [ ] Personal View ()
+  - [ ] Test ()
 - [ ] Personal ViewModel ()
+  - [ ] Test ()
 - [ ] Group View ()
+  - [ ] Test ()
 - [ ] Group ViewModel ()
+  - [ ] Test ()
 
 (Entity)
 - [x] User (Kyle)
+  - [ ] Test (Kyle)
 - [x] Todo (Kyle)
+  - [ ] Test (Kyle)
 - [x] Team (Kyle)
+  - [ ] Test (Kyle)
 
 (DataAccess)
 - [ ] DAO Implementation (Kyle)
+  - [ ] Test (Kyle)
 
-(Use Cases)
-- [ ] CreateTodoUser (Darryl)
-  - [ ] InputBoundary (Darryl)
-  - [ ] InputData (Darryl)
-  - [ ] OutputBoundary (Darryl)
-  - [ ] OutputData (Darryl)
-  - [ ] Interactor (Darryl)
+(Use Cases CreateTodoUser)
+- [ ] InputBoundary (Darryl)
+  - [ ] Test ()
+- [ ] InputData (Darryl)
+  - [ ] Test ()
+- [ ] OutputBoundary (Darryl)
+  - [ ] Test ()
+- [ ] OutputData (Darryl)
+  - [ ] Test ()
+- [ ] Interactor (Darryl)
+  - [ ] Test ()
 
 
-- [ ] CreateTodoGroup
+(Use Case CreateTodoTeam)
 
 
