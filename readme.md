@@ -23,6 +23,16 @@ TMM aims to make managing time management in a group environment easy. For examp
     - Different types of Todos (commute, private, work...etc)
     - Smart Suggestions and Auto Update (Bonus)
 
+# Use Cases
+1. Sign in
+2. Login
+3. Create TODO (Personal)
+4. Create TODO (Group)
+5. Delete TODO
+6. Create Group
+7. Add/Remove Group Members -> Invite/Accept/Remove Members
+ 
+
 # Diagrams
 
 ![UML Diagram (CreateTodoUser).png](photos%2FUML%20Diagram%20%28CreateTodoUser%29.png)
