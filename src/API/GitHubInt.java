@@ -1,3 +1,5 @@
+package API;
+
 public interface GitHubInt {
 
     void GetUserInfo(String url, String token);
