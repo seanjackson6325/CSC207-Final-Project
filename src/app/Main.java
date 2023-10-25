@@ -3,7 +3,7 @@ package app;
 import interface_adapter.PlaceholderViewModel;
 import view.PlaceholderView;
 
-public class main {
+public class Main {
 
     public static void main(String[] args)
     {
