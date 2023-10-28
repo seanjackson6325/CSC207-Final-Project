@@ -1,4 +1,7 @@
-package entity;
+package Factory;
+
+import entity.Todo;
+import entity.User;
 
 import java.util.List;
 
