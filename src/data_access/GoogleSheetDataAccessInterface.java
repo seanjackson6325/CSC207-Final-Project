@@ -18,6 +18,9 @@ public interface GoogleSheetDataAccessInterface {
      */
     void createUser(User user);
 
+    /**
+     * Returns: null if there are no User with the String provided
+     */
     User readUser(String username);
 
     void updateUser(User user);
@@ -29,6 +32,9 @@ public interface GoogleSheetDataAccessInterface {
      */
     void createTeam(Team team);
 
+    /**
+     * Returns: null if there are no Team with the String provided
+     */
     Team readTeam(String teamName);
 
     void updateTeam(Team team);
