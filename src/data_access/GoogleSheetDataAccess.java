@@ -4,6 +4,7 @@ import entity.Team;
 import entity.Todo;
 import entity.User;
 import okhttp3.*;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -20,6 +21,7 @@ public class GoogleSheetDataAccess implements GoogleSheetDataAccessInterface {
     private final String accessCode = "4/0AfJohXn6lWroj4_6SdHNQf9QIB4rz1JNle0csBjXRLSGuEySUVI68XSTKXSCQ3UrMnBsxA";
     private final String refresh_token = "1//05mKc0v9JzEdpCgYIARAAGAUSNwF-L9IrC7XGlJx88NL3NvEEM2wu21p8u3WGQa8AA42AY_DUlPxvgPj7Yp8NpUpgeKMGl0A4HbI";
     private String access_token = "";
+    private String token_type = "";
 
     public GoogleSheetDataAccess() {
         // sets up the access_token that will be used by the Class
@@ -28,7 +30,7 @@ public class GoogleSheetDataAccess implements GoogleSheetDataAccessInterface {
 
     public static void main(String[] args) throws IOException {
         GoogleSheetDataAccess da = new GoogleSheetDataAccess();
-//        User TestUser = da.readUser("Test User");
+        //User TestUser = da.readUser("Test User");
 //        Team TestTeam = da.readTeam("Test Team");
 //        if (TestUser == null) {
 //            System.out.println("null");
@@ -42,7 +44,7 @@ public class GoogleSheetDataAccess implements GoogleSheetDataAccessInterface {
 //        }
 
 
-        //System.out.println(da.CreateSheet("User_", "asdf").body().string());
+        System.out.println(da.CreateSheet("User_", "asdf").body().string());
 
     }
 
@@ -68,9 +70,9 @@ public class GoogleSheetDataAccess implements GoogleSheetDataAccessInterface {
                 .build();
 
         try {
-            Response response = client.newCall(request).execute();
-
-            this.access_token = response.body().string().replaceAll("\n", "").split("\"")[3];
+            JSONObject response = new JSONObject(client.newCall(request).execute().body().string());
+            this.access_token = response.getString("access_token");
+            this.token_type = response.getString("token_type");
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -112,6 +114,7 @@ public class GoogleSheetDataAccess implements GoogleSheetDataAccessInterface {
 
     private Response CreateSheet(String type, String sheetName) {
 
+            //TODO
         String url = "https://sheets.googleapis.com/v4/spreadsheets/" + spreadsheetId +":batchUpdate";
 
         // make an instance of OkHttpClient
@@ -119,7 +122,7 @@ public class GoogleSheetDataAccess implements GoogleSheetDataAccessInterface {
                 .build();
         // Build the request body
         RequestBody requestBody = new FormBody.Builder()
-                .add("Authorization", "Bearer " + this.access_token)
+                .add("Authorization", this.token_type + " " + this.access_token)
                 .add("requests", "[{\"addSheet\":{\"properties\":{\"title\":\"" + type + sheetName + "\"}}}]")
                 .build();
         Request request = new Request.Builder()
@@ -175,9 +178,11 @@ public class GoogleSheetDataAccess implements GoogleSheetDataAccessInterface {
 
     @Override
     public User readUser(String username) {
+        //TODO
+
         try {
             // Create a response for the password (in the first row/column) and record the data
-            Response psResponse = RequestSheet("User_" + username, "A1");
+            Response psResponse = RequestSheet("User_" + username, "1:1");
             assert psResponse.body() != null;
 
             // Checks for Error 400; username does not exist
@@ -185,29 +190,26 @@ public class GoogleSheetDataAccess implements GoogleSheetDataAccessInterface {
                 return null;
             }
 
-            String[] psValue = psResponse.body().string().replaceAll("\n", "").split("\"");
-            String password = psValue[11];
+            JSONObject psJSON = new JSONObject(psResponse.body().string());
+            System.out.println(psJSON.toString());
+            String password = psJSON.getJSONArray("values").getJSONArray(0).getString(0);
 
             // Create a response for the list of To-dos, (in the second row) and record the data
             Response toDOResponse = RequestSheet("User_" + username, "2:2");
             assert toDOResponse.body() != null;
-            String[] toDoValue = toDOResponse.body().string().replaceAll("\n", "").split("\"");
+            JSONObject toDOJSON = new JSONObject(toDOResponse.body().string());
             List<String> toDO = new ArrayList<String>();
-            int k = 11;
-            while (k < toDoValue.length) {
-                toDO.add(toDoValue[k]);
-                k += 2;
+            for (Object s: toDOJSON.getJSONArray("values").getJSONArray(0)) {
+                toDO.add(s.toString());
             }
 
             // Create a response for the list of To-dos, (in the third row) and record the data
             Response teamResponse = RequestSheet("User_" + username, "3:3");
             assert teamResponse.body() != null;
-            String[] teamValue = teamResponse.body().string().replaceAll("\n", "").split("\"");
+            JSONObject teamJSON = new JSONObject(teamResponse.body().string());
             List<String> teams = new ArrayList<String>();
-            int i = 11;
-            while (i < teamValue.length) {
-                teams.add(teamValue[i]);
-                i += 2;
+            for (Object s: teamJSON.getJSONArray("values").getJSONArray(0)) {
+                toDO.add(s.toString());
             }
 
             List<Todo> taskList = new ArrayList<Todo>();
