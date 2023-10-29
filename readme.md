@@ -106,7 +106,7 @@ Below are Coding Related:
   - [ ] Test (Kyle)
 
 (DataAccess)
-- [ ] DAO Implementation (Kyle)
+- [x] DAO Implementation (Kyle)
   - [ ] Test (Kyle)
 
 (Use Cases CreateTodoUser)
