@@ -24,7 +24,7 @@ public class Todo implements TodoInterface {
      * @param status   Status of completion, True = finished
      *
      */
-    Todo(String name, String description, LocalDateTime startTime, LocalDateTime endTime, String requester,
+    public Todo(String name, String description, LocalDateTime startTime, LocalDateTime endTime, String requester,
          String requestedTo, Boolean status) {
         this.name = name;
         this.description = description;
