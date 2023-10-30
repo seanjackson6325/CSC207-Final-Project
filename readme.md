@@ -108,7 +108,7 @@ Below are Coding Related:
   - [ ] Test (Kyle)
 
 (DataAccess)
-- [ ] DAO Implementation (Kyle)
+- [x] DAO Implementation (Kyle)
   - [ ] Test (Kyle)
 
 (Use Cases CreateTodoUser)
@@ -147,6 +147,15 @@ Below are Coding Related:
 - [ ] Interactor (Darryl)
   - [ ] Test ()
 
-(Use Case CreateTodoTeam)
-
+(Use Case CreateGroup)
+- [ ] InputBoundary (Kyle)
+  - [ ] Test ()
+- [ ] InputData (Kyle)
+  - [ ] Test ()
+- [ ] OutputBoundary (Kyle)
+  - [ ] Test ()
+- [ ] OutputData (Kyle)
+  - [ ] Test ()
+- [ ] Interactor (Kyle)
+  - [ ] Test ()
 
