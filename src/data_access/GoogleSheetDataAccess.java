@@ -112,6 +112,10 @@ public class GoogleSheetDataAccess implements GoogleSheetDataAccessInterface {
         }
     }
 
+    /**
+     * @param type: is either User_ or Team_
+     * @param sheetName: precondition (name does not already exist)
+     */
     private Response CreateSheet(String type, String sheetName) {
 
             //TODO
@@ -122,12 +126,32 @@ public class GoogleSheetDataAccess implements GoogleSheetDataAccessInterface {
                 .build();
         // Build the request body
         RequestBody requestBody = new FormBody.Builder()
-                .add("Authorization", this.token_type + " " + this.access_token)
-                .add("requests", "[{\"addSheet\":{\"properties\":{\"title\":\"" + type + sheetName + "\"}}}]")
+                .add("requests", "{\n" +
+                        "  \"requests\": [\n" +
+                        "    {\n" +
+                        "      \"addSheet\": {\n" +
+                        "        \"properties\": {\n" +
+                        "          \"title\": \"Deposits\",\n" +
+                        "          \"gridProperties\": {\n" +
+                        "            \"rowCount\": 20,\n" +
+                        "            \"columnCount\": 12\n" +
+                        "          },\n" +
+                        "          \"tabColor\": {\n" +
+                        "            \"red\": 1.0,\n" +
+                        "            \"green\": 0.3,\n" +
+                        "            \"blue\": 0.4\n" +
+                        "          }\n" +
+                        "        }\n" +
+                        "      }\n" +
+                        "    }\n" +
+                        "  ]\n" +
+                        "}")
                 .build();
         Request request = new Request.Builder()
                 .url(url)
-                .post(requestBody)
+                .header("Authorization", this.token_type + " " + this.access_token)
+                .header()
+                //.post(requestBody)
                 .build();
 
         try {
