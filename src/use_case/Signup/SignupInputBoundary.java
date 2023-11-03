@@ -1,4 +1,4 @@
-package use_case.signup;
+package use_case.Signup;
 
 public interface SignupInputBoundary {
     void execute(SignupInputData signupInputData);
