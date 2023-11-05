@@ -15,6 +15,7 @@ public interface GoogleSheetDataAccessInterface {
 
     /**
      * Precondition: username does not already exist in the Database (is unique)
+     * You can check this by running readUser(username) == null
      */
     void createUser(User user);
 
@@ -23,12 +24,17 @@ public interface GoogleSheetDataAccessInterface {
      */
     User readUser(String username);
 
+    /**
+     * Precondition: username already exist in the Database
+     * You can check this by running readUser(username) != null
+     */
     void updateUser(User user);
 
     void deleteUser(String username);
 
     /**
      * Precondition: teamName does not already exist in the Database (is unique)
+     * You can check this by running readUser(teamName) == null
      */
     void createTeam(Team team);
 
@@ -37,7 +43,12 @@ public interface GoogleSheetDataAccessInterface {
      */
     Team readTeam(String teamName);
 
+    /**
+     * Precondition: teamname already exist in the Database
+     * You can check this by running readUser(teamname) != null
+     */
     void updateTeam(Team team);
+
 
     void deleteTeam(String teamName);
 
