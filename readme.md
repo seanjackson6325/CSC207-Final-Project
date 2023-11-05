@@ -125,6 +125,19 @@ Below are Coding Related:
 - [ ] Interactor (Darryl)
   - [ ] Test ()
 
+(Use Cases CreateTodoTeam)
+
+- [ ] InputBoundary (Darryl)
+  - [ ] Test ()
+- [ ] InputData (Darryl)
+  - [ ] Test ()
+- [ ] OutputBoundary (Darryl)
+  - [ ] Test ()
+- [ ] OutputData (Darryl)
+  - [ ] Test ()
+- [ ] Interactor (Darryl)
+  - [ ] Test ()
+
 (Use Cases Signup)
 - [ ] InputBoundary (Darryl)
   - [ ] Test ()
