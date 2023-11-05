@@ -54,6 +54,8 @@ TMM aims to make managing time management in a group environment easy. For examp
 
 Documentation for OkHttp: https://square.github.io/okhttp/
 
+- JSON: https://docs.oracle.com/javaee/7/api/javax/json/JsonObject.html
+
 - Previous Labs and Class from (CSC207 UofT)
 
 # Responsibilities
