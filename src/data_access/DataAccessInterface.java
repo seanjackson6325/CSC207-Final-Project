@@ -11,7 +11,7 @@ import entity.User;
  * delete(): find the object and delete it in the database
  *
  */
-public interface GoogleSheetDataAccessInterface {
+public interface DataAccessInterface {
 
     /**
      * Precondition: username does not already exist in the Database (is unique)
