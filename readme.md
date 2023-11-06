@@ -46,7 +46,7 @@ TMM aims to make managing time management in a group environment easy. For examp
 
 # APIs
 
-- Google Sheets API: https://developers.google.com/sheets/api/guides/concepts
+- GSON: https://javadoc.io/doc/com.google.code.gson/gson/latest/com.google.gson/module-summary.html
 
 # Sources and References
 
@@ -70,14 +70,16 @@ example:
 Checked means that the class is ready for use and is done!
 
 Non-Coding Related
-- [x]  Project Blueprint and Specification (Group)
+- [x] Project Blueprint and Specification (Group)
 - [x] Documentation / ReadMe (Kyle, Sean)
 - [x] UML Diagram (Kyle)
 - [ ] Sequence Diagram ()
 
 Below are Coding Related:
 
+(App)
 - [ ] Main (Sean)
+- [x] EntityMemory (Kyle)
 
 (View / ViewModel)
 - [ ] Prototype View/View model (Sean)
@@ -111,7 +113,7 @@ Below are Coding Related:
 
 (DataAccess)
 - [x] DAO Implementation (Kyle)
-  - [ ] Test (Kyle)
+  - [x] Test (Kyle)
 
 (Use Cases CreateTodoUser)
 - [ ] InputBoundary (Darryl)

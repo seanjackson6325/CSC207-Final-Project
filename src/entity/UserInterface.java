@@ -13,7 +13,7 @@ public interface UserInterface {
 
     List<String> getTeam();
 
-    void SetTaskList(List<Todo> taskList);
+    void setTaskList(List<Todo> taskList);
 
-    void SetTeams(List<String> teams);
+    void setTeams(List<String> teams);
 }

@@ -15,7 +15,7 @@ public interface DataAccessInterface {
 
     /**
      * Precondition: username does not already exist in the Database (is unique)
-     * You can check this by running readUser(username) == null
+     * @exception RuntimeException if there is already a user.
      */
     void createUser(User user);
 
@@ -26,15 +26,19 @@ public interface DataAccessInterface {
 
     /**
      * Precondition: username already exist in the Database
-     * You can check this by running readUser(username) != null
+     * @exception RuntimeException if there isn't a user.
      */
     void updateUser(User user);
 
+    /**
+     * Precondition: username already exist in the Database
+     * @exception RuntimeException if there isn't a user.
+     */
     void deleteUser(String username);
 
     /**
      * Precondition: teamName does not already exist in the Database (is unique)
-     * You can check this by running readUser(teamName) == null
+     * @exception RuntimeException if there is already a team.
      */
     void createTeam(Team team);
 
@@ -45,11 +49,14 @@ public interface DataAccessInterface {
 
     /**
      * Precondition: teamname already exist in the Database
-     * You can check this by running readUser(teamname) != null
+     * @exception RuntimeException if there isn't a team.
      */
     void updateTeam(Team team);
 
-
+    /**
+     * Precondition: teamname already exist in the Database
+     * @exception RuntimeException if there isn't a team.
+     */
     void deleteTeam(String teamName);
 
 }
