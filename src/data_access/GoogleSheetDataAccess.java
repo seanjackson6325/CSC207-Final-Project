@@ -17,15 +17,16 @@ public class GoogleSheetDataAccess implements GoogleSheetDataAccessInterface {
     private final String spreadsheetId = "1hDLCHjcF-QNP7E9hu2O1L3foRHLhZMkirfVefCyxtFc";
     private final String clientID = "624377237022-8rrpocmm6in8ht8qjkki0tlhrgl6eusu.apps.googleusercontent.com";
     private final String clinetSecret = "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";
-    //https://accounts.google.com/o/oauth2/auth/oauthchooseaccount?access_type=offline&approval_prompt=auto&client_id=[YOUR CLIENT ID HERE]&response_type=code&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fspreadsheets&redirect_uri=http%3A%2F%2Flocalhost&service=lso&o2v=1&theme=glif&flowName=GeneralOAuthFlow
-    private final String accessCode = "4/0AfJohXn6lWroj4_6SdHNQf9QIB4rz1JNle0csBjXRLSGuEySUVI68XSTKXSCQ3UrMnBsxA";
-    private final String refresh_token = "1//05mKc0v9JzEdpCgYIARAAGAUSNwF-L9IrC7XGlJx88NL3NvEEM2wu21p8u3WGQa8AA42AY_DUlPxvgPj7Yp8NpUpgeKMGl0A4HbI";
+    private final String accessCode = "";
+    private final String refresh_token = "";
     private String access_token = "";
     private String token_type = "";
 
     public GoogleSheetDataAccess() {
-        // sets up the access_token that will be used by the Class
-        RefreshAccessToken();
+        // sets up the access_token that will be used by the Class\
+        GetAccessCode();
+//        GetRefreshToken();
+//        RefreshAccessToken();
     }
 
     public static void main(String[] args) throws IOException {
@@ -43,8 +44,8 @@ public class GoogleSheetDataAccess implements GoogleSheetDataAccessInterface {
 //            System.out.println(TestTeam.getMembers());
 //        }
 
-
-        System.out.println(da.CreateSheet("User_", "asdf").body().string());
+//
+//        System.out.println(da.CreateSheet("User_", "asdf").body().string());
 
     }
 
@@ -71,6 +72,7 @@ public class GoogleSheetDataAccess implements GoogleSheetDataAccessInterface {
 
         try {
             JSONObject response = new JSONObject(client.newCall(request).execute().body().string());
+            System.out.println(response);
             this.access_token = response.getString("access_token");
             this.token_type = response.getString("token_type");
 
@@ -100,6 +102,29 @@ public class GoogleSheetDataAccess implements GoogleSheetDataAccessInterface {
                 .build();
         Request request = new Request.Builder()
                 .post(requestBody)
+                .url(url)
+                .build();
+
+        try {
+            Response response = client.newCall(request).execute();
+            System.out.println(response.body().string());
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void GetAccessCode() {
+        String url = "https://accounts.google.com/o/oauth2/auth/oauthchooseaccount?access_type=offline&approval_" +
+                "prompt=auto&client_id=" + this.clientID + "&response_type=code&scope=https%3A%2F%2Fwww.googleap" +
+                "is.com%2Fauth%2Fspreadsheets&redirect_uri=http%3A%2F%2Flocalhost&service=lso&o2v=1&theme=glif&f" +
+                "lowName=GeneralOAuthFlow";
+        // make an instance of OkHttpClient
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        // Build the request body
+        Request request = new Request.Builder()
+                .get()
                 .url(url)
                 .build();
 
@@ -150,7 +175,6 @@ public class GoogleSheetDataAccess implements GoogleSheetDataAccessInterface {
         Request request = new Request.Builder()
                 .url(url)
                 .header("Authorization", this.token_type + " " + this.access_token)
-                .header()
                 //.post(requestBody)
                 .build();
 
