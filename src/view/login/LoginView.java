@@ -1,13 +1,18 @@
-package view;
+package view.login;
+
+import view.personal.PersonalViewModel;
+import view.signup.SignupViewModel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import javax.swing.JButton;
 
-public class LoginView extends JPanel implements ActionListener {
+public class LoginView extends JPanel implements PropertyChangeListener {
 
     private LoginViewModel loginViewModel;
 
@@ -25,18 +30,35 @@ public class LoginView extends JPanel implements ActionListener {
         signUpButton = new JButton(LoginViewModel.SIGNUP_BUTTON_STRING);
 
         JPanel usernamePanel = new JPanel();
-        usernamePanel.add(new JLabel(LoginViewModel.USERNAME_FIELD_STIRNG));
+        usernamePanel.add(new JLabel(LoginViewModel.USERNAME_FIELD_STRING));
         usernamePanel.add(usernameInputField);
 
         JPanel passwordPanel = new JPanel();
         passwordPanel.add(new JLabel(LoginViewModel.PASSWORD_FIELD_STRING));
         passwordPanel.add(passwordInputField);
 
+
+
         loginButton.addActionListener(
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        System.out.println("Login");
+                        if(e.getSource().equals(loginButton))
+                        {
+                            loginViewModel.getViewManager().switchToView(loginViewModel.getPersonalViewModel().getName());
+                        }
+                    }
+                }
+        );
+
+        signUpButton.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if(e.getSource().equals(signUpButton))
+                        {
+                            loginViewModel.getViewManager().switchToView(loginViewModel.getSignupViewModel().getName());
+                        }
                     }
                 }
         );
@@ -83,7 +105,7 @@ public class LoginView extends JPanel implements ActionListener {
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void propertyChange(PropertyChangeEvent evt) {
 
     }
 }
