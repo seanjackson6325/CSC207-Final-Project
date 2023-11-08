@@ -1,9 +1,9 @@
-package view.login;
+package interface_adapter.login;
 
+import interface_adapter.user.UserViewModel;
+import interface_adapter.signup.SignupViewModel;
 import view.ViewManager;
 import view.ViewModel;
-import view.personal.PersonalViewModel;
-import view.signup.SignupViewModel;
 
 public class LoginViewModel extends ViewModel {
 
@@ -14,13 +14,16 @@ public class LoginViewModel extends ViewModel {
 
     private SignupViewModel signupViewModel;
 
-    private PersonalViewModel personalViewModel;
+    private UserViewModel personalViewModel;
 
-    public LoginViewModel(ViewManager viewManager, SignupViewModel signupViewModel, PersonalViewModel personalViewModel)
+    private LoginState loginState;
+
+    public LoginViewModel(ViewManager viewManager, SignupViewModel signupViewModel, UserViewModel userViewModel)
     {
         super("Login", viewManager);
         this.signupViewModel = signupViewModel;
-        this.personalViewModel = personalViewModel;
+        this.personalViewModel = userViewModel;
+        this.loginState = new LoginState();
     }
 
     public SignupViewModel getSignupViewModel()
@@ -33,15 +36,23 @@ public class LoginViewModel extends ViewModel {
         this.signupViewModel = signupViewModel;
     }
 
-    public PersonalViewModel getPersonalViewModel()
+    public UserViewModel getPersonalViewModel()
     {
         return personalViewModel;
     }
 
-    public void setPersonalViewModel(PersonalViewModel personalViewModel)
+    public void setPersonalViewModel(UserViewModel userViewModel)
     {
-        this.personalViewModel = personalViewModel;
+        this.personalViewModel = userViewModel;
     }
 
+    public LoginState getState()
+    {
+        return loginState;
+    }
 
+    public void setState(LoginState state)
+    {
+        this.loginState = state;
+    }
 }

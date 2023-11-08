@@ -1,7 +1,7 @@
 package view.login;
 
-import view.personal.PersonalViewModel;
-import view.signup.SignupViewModel;
+import interface_adapter.login.LoginController;
+import interface_adapter.login.LoginViewModel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -15,6 +15,7 @@ import javax.swing.JButton;
 public class LoginView extends JPanel implements PropertyChangeListener {
 
     private LoginViewModel loginViewModel;
+    private LoginController loginController;
 
     private final JTextField usernameInputField = new JTextField(15);
     private final JPasswordField passwordInputField = new JPasswordField(15);
@@ -22,9 +23,10 @@ public class LoginView extends JPanel implements PropertyChangeListener {
     private JButton loginButton;
     private JButton signUpButton;
 
-    public LoginView(LoginViewModel loginViewModel)
+    public LoginView(LoginViewModel loginViewModel, LoginController loginController)
     {
         this.loginViewModel = loginViewModel;
+        this.loginController = loginController;
 
         loginButton = new JButton(LoginViewModel.LOGIN_BUTTON_STRING);
         signUpButton = new JButton(LoginViewModel.SIGNUP_BUTTON_STRING);
@@ -46,6 +48,9 @@ public class LoginView extends JPanel implements PropertyChangeListener {
                         if(e.getSource().equals(loginButton))
                         {
                             loginViewModel.getViewManager().switchToView(loginViewModel.getPersonalViewModel().getName());
+                            String username = loginViewModel.getState().getUsername();
+                            String password = loginViewModel.getState().getPassword();
+                            loginController.execute(username, password);
                         }
                     }
                 }
@@ -68,7 +73,7 @@ public class LoginView extends JPanel implements PropertyChangeListener {
                     @Override
                     public void keyTyped(KeyEvent e) {
                         String text = usernameInputField.getText() + e.getKeyChar();
-                        System.out.println(text);
+                        loginViewModel.getState().setUsername(text);
                     }
 
                     @Override
@@ -85,7 +90,7 @@ public class LoginView extends JPanel implements PropertyChangeListener {
                     @Override
                     public void keyTyped(KeyEvent e) {
                         String text = usernameInputField.getText() + e.getKeyChar();
-                        System.out.println(text);
+                        loginViewModel.getState().setPassword(text);
                     }
 
                     @Override

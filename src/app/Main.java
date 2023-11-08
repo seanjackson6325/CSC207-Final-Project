@@ -1,12 +1,17 @@
 package app;
 
+import Factory.LoginFactory;
+import Factory.SignupFactory;
+import Factory.UserFactory;
+import use_case.login.LoginUserDataAccessInterface;
+import use_case.signup.SignupUserDataAccessInterface;
 import view.login.LoginView;
-import view.login.LoginViewModel;
+import interface_adapter.login.LoginViewModel;
 import view.ViewManager;
-import view.personal.PersonalView;
-import view.personal.PersonalViewModel;
+import view.user.UserView;
+import interface_adapter.user.UserViewModel;
 import view.signup.SignupView;
-import view.signup.SignupViewModel;
+import interface_adapter.signup.SignupViewModel;
 
 import javax.swing.*;
 
@@ -17,23 +22,28 @@ public class Main {
 
     public static void main(String[] args)
     {
+
+        LoginUserDataAccessInterface loginDataAccess = null; // NEED A FILE_DATA_OBJECT
+        SignupUserDataAccessInterface signupDataAccess = null; // NEED A FILE_DATA_OBJECT
+
+
         JFrame applicationFrame = new JFrame("Team Task Manager");
         applicationFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         ViewManager viewManager = new ViewManager(applicationFrame);
 
         SignupViewModel signupViewModel = new SignupViewModel(viewManager);
-        SignupView signupView = new SignupView(signupViewModel);
+        SignupView signupView = SignupFactory.createSignupView(viewManager, signupViewModel, signupDataAccess, new UserFactory());
 
-        PersonalViewModel personalViewModel = new PersonalViewModel(viewManager);
-        PersonalView personalView = new PersonalView(personalViewModel);
+        UserViewModel userViewModel = new UserViewModel(viewManager);
+        UserView userView = new UserView(userViewModel);
 
-        LoginViewModel loginViewModel = new LoginViewModel(viewManager, signupViewModel, personalViewModel);
-        LoginView loginView = new LoginView(loginViewModel);
+        LoginViewModel loginViewModel = new LoginViewModel(viewManager, signupViewModel, userViewModel);
+        LoginView loginView = LoginFactory.createLoginView(viewManager, loginViewModel, loginDataAccess);
 
         viewManager.addView(loginView, loginViewModel.getName());
         viewManager.addView(signupView, signupViewModel.getName());
-        viewManager.addView(personalView, personalViewModel.getName());
+        viewManager.addView(userView, userViewModel.getName());
         viewManager.switchToView(loginViewModel.getName());
 
         applicationFrame.setVisible(true);

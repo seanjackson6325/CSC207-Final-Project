@@ -1,19 +1,19 @@
 package view.signup;
 
-import view.ViewManager;
-import view.login.LoginViewModel;
+import interface_adapter.signup.SignupController;
+import interface_adapter.signup.SignupViewModel;
+import use_case.signup.SignupInputData;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 public class SignupView extends JPanel {
 
     private SignupViewModel signupViewModel;
+    private SignupController signupController;
 
     private final JTextField usernameInputField = new JTextField(15);
     private final JPasswordField passwordInputField1 = new JPasswordField(15);
@@ -22,9 +22,10 @@ public class SignupView extends JPanel {
     private JButton backButton;
     private JButton signUpButton;
 
-    public SignupView(SignupViewModel signupViewModel)
+    public SignupView(SignupViewModel signupViewModel, SignupController signupController)
     {
         this.signupViewModel = signupViewModel;
+        this.signupController = signupController;
 
         backButton = new JButton(SignupViewModel.BACK_BUTTON_STRING);
         signUpButton = new JButton(SignupViewModel.SIGNUP_BUTTON_STRING);
@@ -54,7 +55,10 @@ public class SignupView extends JPanel {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-
+                        String username = signupViewModel.getState().getUsername();
+                        String password = signupViewModel.getState().getPassword();
+                        String repeatPassword = signupViewModel.getState().getRepeatPassword();
+                        signupController.execute(username, password, repeatPassword);
                     }
                 }
         );
@@ -64,7 +68,7 @@ public class SignupView extends JPanel {
                     @Override
                     public void keyTyped(KeyEvent e) {
                         String text = usernameInputField.getText() + e.getKeyChar();
-                        System.out.println(text);
+                        signupViewModel.getState().setUsername(text);
                     }
 
                     @Override
@@ -80,7 +84,8 @@ public class SignupView extends JPanel {
                 new KeyListener() {
                     @Override
                     public void keyTyped(KeyEvent e) {
-
+                        String text = usernameInputField.getText() + e.getKeyChar();
+                        signupViewModel.getState().setPassword(text);
                     }
 
                     @Override
@@ -96,7 +101,8 @@ public class SignupView extends JPanel {
                 new KeyListener() {
                     @Override
                     public void keyTyped(KeyEvent e) {
-
+                        String text = usernameInputField.getText() + e.getKeyChar();
+                        signupViewModel.getState().setRepeatPassword(text);
                     }
 
                     @Override

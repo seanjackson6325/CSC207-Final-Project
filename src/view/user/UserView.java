@@ -1,25 +1,23 @@
-package view.personal;
+package view.user;
 
-import view.ViewManager;
+import interface_adapter.user.UserViewModel;
 
 import javax.swing.*;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class PersonalView extends JPanel {
+public class UserView extends JPanel {
 
-    PersonalViewModel personalViewModel;
+    UserViewModel userViewModel;
 
     JToolBar personalToolBar;
     JList<String> todos;
 
     JScrollPane todoInfoPane;
 
-    public PersonalView(PersonalViewModel personalViewModel)
+    public UserView(UserViewModel userViewModel)
     {
-        this.personalViewModel = personalViewModel;
+        this.userViewModel = userViewModel;
         personalToolBar = new JToolBar();
 
         todos = new JList<>(new DefaultListModel<String>());

@@ -54,5 +54,8 @@ public class ViewManager {
         switchToView(lastView);
     }
 
-
+    public void showErrorMessage(String error)
+    {
+        JOptionPane.showMessageDialog(views.get(currentView), error);
+    }
 }
