@@ -3,6 +3,7 @@ package view.user;
 import interface_adapter.user.UserViewModel;
 
 import javax.swing.*;
+import javax.swing.border.AbstractBorder;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
 
@@ -13,7 +14,14 @@ public class UserView extends JPanel {
     JToolBar personalToolBar;
     JList<String> todos;
 
-    JScrollPane todoInfoPane;
+    JPanel addRemoveButtonsPanel;
+    JPanel todoListPanel;
+    JButton addTodo;
+    JButton removeTodo;
+
+    JPanel todoDescriptionPanel;
+    JButton editTodo;
+
 
     public UserView(UserViewModel userViewModel)
     {
@@ -28,30 +36,24 @@ public class UserView extends JPanel {
         todos.setLayoutOrientation(JList.VERTICAL);
 
         JScrollPane listScroller = new JScrollPane(todos);
-        listScroller.setPreferredSize(new Dimension(250, 80));
+        listScroller.setPreferredSize(new Dimension(250, 120));
 
-        JTextPane textPane = new JTextPane();
-        StyledDocument doc = textPane.getStyledDocument();
+        addRemoveButtonsPanel = new JPanel();
 
-        try
-        {
-            doc.insertString(0, "Some type of shitty description", null);
-        }
-        catch(javax.swing.text.BadLocationException e)
-        {
+        addTodo = new JButton("Add");
+        removeTodo = new JButton("Remove");
 
-        }
+        addRemoveButtonsPanel.add(addTodo);
+        addRemoveButtonsPanel.add(removeTodo);
 
-        todoInfoPane = new JScrollPane();
-        todoInfoPane.setVerticalScrollBarPolicy(
-                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        todoInfoPane.setPreferredSize(new Dimension(250, 145));
-        todoInfoPane.setMinimumSize(new Dimension(10, 10));
+        addRemoveButtonsPanel.setLayout(new BoxLayout(addRemoveButtonsPanel, BoxLayout.X_AXIS));
 
+        todoListPanel = new JPanel();
+        todoListPanel.setLayout(new BoxLayout(todoListPanel, BoxLayout.Y_AXIS));
+        todoListPanel.add(listScroller);
+        todoListPanel.add(addRemoveButtonsPanel);
 
-
-        this.add(listScroller);
-        this.add(todoInfoPane);
+        this.add(todoListPanel);
     }
 
 }
