@@ -1,4 +1,4 @@
-package use_case.signup;
+package use_case.Signup;
 
 import java.util.ArrayList;
 import java.util.List;

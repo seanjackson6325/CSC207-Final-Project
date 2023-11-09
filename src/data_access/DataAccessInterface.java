@@ -11,10 +11,11 @@ import entity.User;
  * delete(): find the object and delete it in the database
  *
  */
-public interface GoogleSheetDataAccessInterface {
+public interface DataAccessInterface {
 
     /**
      * Precondition: username does not already exist in the Database (is unique)
+     * @exception RuntimeException if there is already a user.
      */
     void createUser(User user);
 
@@ -23,12 +24,21 @@ public interface GoogleSheetDataAccessInterface {
      */
     User readUser(String username);
 
+    /**
+     * Precondition: username already exist in the Database
+     * @exception RuntimeException if there isn't a user.
+     */
     void updateUser(User user);
 
+    /**
+     * Precondition: username already exist in the Database
+     * @exception RuntimeException if there isn't a user.
+     */
     void deleteUser(String username);
 
     /**
      * Precondition: teamName does not already exist in the Database (is unique)
+     * @exception RuntimeException if there is already a team.
      */
     void createTeam(Team team);
 
@@ -37,8 +47,16 @@ public interface GoogleSheetDataAccessInterface {
      */
     Team readTeam(String teamName);
 
+    /**
+     * Precondition: teamname already exist in the Database
+     * @exception RuntimeException if there isn't a team.
+     */
     void updateTeam(Team team);
 
+    /**
+     * Precondition: teamname already exist in the Database
+     * @exception RuntimeException if there isn't a team.
+     */
     void deleteTeam(String teamName);
 
 }

@@ -23,10 +23,6 @@ public class Main {
     public static void main(String[] args)
     {
 
-        LoginUserDataAccessInterface loginDataAccess = null; // NEED A FILE_DATA_OBJECT
-        SignupUserDataAccessInterface signupDataAccess = null; // NEED A FILE_DATA_OBJECT
-
-
         JFrame applicationFrame = new JFrame("Team Task Manager");
         applicationFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -48,5 +44,9 @@ public class Main {
 
         applicationFrame.setVisible(true);
         applicationFrame.setResizable(true);
+
+        EntityMemory runTimeUser = new EntityMemory();
+        PlaceholderViewModel placeHolderViewModel = new PlaceholderViewModel();
+        PlaceholderView placeHolderView = new PlaceholderView(placeHolderViewModel);
     }
 }

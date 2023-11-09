@@ -46,13 +46,15 @@ TMM aims to make managing time management in a group environment easy. For examp
 
 # APIs
 
-- Google Sheets API: https://developers.google.com/sheets/api/guides/concepts
+- GSON: https://javadoc.io/doc/com.google.code.gson/gson/latest/com.google.gson/module-summary.html
 
 # Sources and References
 
 - OkHttp (Maven): https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp/4.10.0
 
 Documentation for OkHttp: https://square.github.io/okhttp/
+
+- JSON: https://docs.oracle.com/javaee/7/api/javax/json/JsonObject.html
 
 - Previous Labs and Class from (CSC207 UofT)
 
@@ -68,14 +70,16 @@ example:
 Checked means that the class is ready for use and is done!
 
 Non-Coding Related
-- [x]  Project Blueprint and Specification (Group)
+- [x] Project Blueprint and Specification (Group)
 - [x] Documentation / ReadMe (Kyle, Sean)
 - [x] UML Diagram (Kyle)
 - [ ] Sequence Diagram ()
 
 Below are Coding Related:
 
-- [X] Main (Sean)
+(App)
+- [ ] Main (Sean)
+- [x] EntityMemory (Kyle)
 
 (View / ViewModel)
 - [X] Prototype View/View model (Sean)
@@ -109,9 +113,22 @@ Below are Coding Related:
 
 (DataAccess)
 - [x] DAO Implementation (Kyle)
-  - [ ] Test (Kyle)
+  - [x] Test (Kyle)
 
 (Use Cases CreateTodoUser)
+- [ ] InputBoundary (Darryl)
+  - [ ] Test ()
+- [ ] InputData (Darryl)
+  - [ ] Test ()
+- [ ] OutputBoundary (Darryl)
+  - [ ] Test ()
+- [ ] OutputData (Darryl)
+  - [ ] Test ()
+- [ ] Interactor (Darryl)
+  - [ ] Test ()
+
+(Use Cases CreateTodoTeam)
+
 - [ ] InputBoundary (Darryl)
   - [ ] Test ()
 - [ ] InputData (Darryl)

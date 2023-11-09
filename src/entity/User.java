@@ -46,12 +46,12 @@ public class User implements UserInterface {
     }
 
     @Override
-    public void SetTaskList(List<Todo> taskList) {
+    public void setTaskList(List<Todo> taskList) {
         this.taskList = taskList;
     }
 
     @Override
-    public void SetTeams(List<String> teams) {
+    public void setTeams(List<String> teams) {
         this.teams = teams;
     }
 }
