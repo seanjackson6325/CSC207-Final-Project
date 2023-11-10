@@ -1,13 +1,16 @@
 package data_access;
 
+import io.imagekit.sdk.ImageKit;
+import io.imagekit.sdk.config.Configuration;
+import io.imagekit.sdk.exceptions.*;
+import io.imagekit.sdk.models.FileCreateRequest;
+import io.imagekit.sdk.models.results.ResultFileVersions;
 import okhttp3.*;
 
 import java.io.*;
-import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Base64;
-
-import org.apache.commons.codec.digest.HmacAlgorithms;
-import org.apache.commons.codec.digest.HmacUtils;
+import java.util.List;
 
 
 public class ImageKitIoAPI {
@@ -22,15 +25,13 @@ public class ImageKitIoAPI {
      * Uploads data.json into ImageKit.io's drive
      */
     public void upload(String dataPath, String fileName) {
-        String url = "https://upload.imagekit.io/api/v1/files/upload"; //endpoint
-        //client side unix expiry date / unique token : +50 minutes from now
-        long unixTimeExpiry = Instant.now().getEpochSecond() + 3000;
-        //client signature encoded with HMAC_SHA1 algorithm
-        String signature = new HmacUtils(HmacAlgorithms.HMAC_SHA_1, privateKey).hmacHex(
-                String.valueOf(unixTimeExpiry) + String.valueOf(unixTimeExpiry));
+        //initialize imageKitAPI
+        String urlEndpoint = "https://ik.imagekit.io/kylej143"; //endpoint
+        Configuration config = new Configuration(publicKey, privateKey, urlEndpoint);
+        ImageKit imageKit = ImageKit.getInstance();
+        imageKit.setConfig(config);
 
         String data;
-
         try {
             BufferedReader br = new BufferedReader(new FileReader(dataPath));
             data = br.readLine();
@@ -41,47 +42,17 @@ public class ImageKitIoAPI {
         }
         String encodedData = Base64.getEncoder().encodeToString(data.getBytes());
 
-        // make an instance of OkHttpClient
-        OkHttpClient client = new OkHttpClient().newBuilder()
-                .build();
-
-        RequestBody requestBodyDelete = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("publicKey", publicKey)
-                .addFormDataPart("PrivateKey", privateKey)
-                .build();
-        Request requestDelete = new Request.Builder()
-                .url("https://api.imagekit.io/v1/files/:" + dataPath)
-                .post(requestBodyDelete)
-                .build();
+        FileCreateRequest fileCreateRequest =new FileCreateRequest(encodedData, fileName);
+        List<String> responseFields=new ArrayList<>();
+        fileCreateRequest.setResponseFields(responseFields);
+        fileCreateRequest.setUseUniqueFileName(false);
         try {
-            Response response = client.newCall(requestDelete).execute();
-            System.out.println(response.body().string());
-            assert response.code() == 200;
+            String fileId = ImageKit.getInstance().upload(fileCreateRequest).getFileId();
+            ImageKit.getInstance().deleteFile(fileId);
+            ImageKit.getInstance().upload(fileCreateRequest);
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        RequestBody requestBody = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("file", encodedData)
-                .addFormDataPart("publicKey", publicKey)
-                .addFormDataPart("signature", signature)
-                .addFormDataPart("expire", String.valueOf(unixTimeExpiry))
-                .addFormDataPart("token", String.valueOf(unixTimeExpiry))
-                .addFormDataPart("fileName", fileName)
-                .addFormDataPart("useUniqueFileName", "false") // replace file        // Build the request
-                .build();
-        Request request = new Request.Builder()
-                .url(url)
-                .post(requestBody)
-                .build();
-        try {
-            Response response = client.newCall(request).execute();
-            assert response.code() == 200;
-
-        } catch (IOException e) {
+        } catch (ForbiddenException | TooManyRequestsException | InternalServerException | UnauthorizedException |
+                 BadRequestException | UnknownException e) {
             throw new RuntimeException(e);
         }
     }
@@ -101,15 +72,31 @@ public class ImageKitIoAPI {
                 .get()
                 .url(url)
                 .build();
+
+        //initialize imageKitAPI
+        String urlEndpoint = "https://ik.imagekit.io/kylej143"; //endpoint
+        Configuration config = new Configuration(publicKey, privateKey, urlEndpoint);
+        ImageKit imageKit = ImageKit.getInstance();
+        imageKit.setConfig(config);
+
+        FileCreateRequest fileCreateRequest =new FileCreateRequest("e30=", fileName);
+        List<String> responseFields=new ArrayList<>();
+        fileCreateRequest.setResponseFields(responseFields);
+        fileCreateRequest.setUseUniqueFileName(false);
         try {
+            String fileId = ImageKit.getInstance().getFileList(fileCreateRequest).getFileId();
+            System.out.println(versionID);
+
             Response response = client.newCall(request).execute();
             BufferedWriter bw = new BufferedWriter(new FileWriter(dataPath));
+            System.out.println(response.body().string());
             bw.write(response.body().string());
             bw.close();
 
             assert response.code() == 200;
 
-        } catch (IOException e) {
+        } catch (ForbiddenException | TooManyRequestsException | InternalServerException | UnauthorizedException |
+                 BadRequestException | UnknownException | IOException | NotFoundException e) {
             throw new RuntimeException(e);
         }
     }
