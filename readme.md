@@ -44,13 +44,14 @@ TMM aims to make managing time management in a group environment easy. For examp
 ![UML Diagram (CreateTodoUser).png](photos%2FUML%20Diagram%20%28CreateTodoUser%29.png)
 
 
-# APIs
+# APIs and Maven Dependencies
 
 - GSON: https://javadoc.io/doc/com.google.code.gson/gson/latest/com.google.gson/module-summary.html
+- HMAC: https://mvnrepository.com/artifact/commons-codec/commons-codec/1.16.0
+- OkHttp: https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp/4.10.0
+
 
 # Sources and References
-
-- OkHttp (Maven): https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp/4.10.0
 
 Documentation for OkHttp: https://square.github.io/okhttp/
 
