@@ -4,29 +4,25 @@ import io.imagekit.sdk.ImageKit;
 import io.imagekit.sdk.config.Configuration;
 import io.imagekit.sdk.exceptions.*;
 import io.imagekit.sdk.models.FileCreateRequest;
-import io.imagekit.sdk.models.results.ResultFileVersions;
 import okhttp3.*;
-
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
+import java.time.Instant;
+import java.util.*;
 
 
-public class ImageKitIoAPI {
-    private final String dataPath = "src/data_access/data.json";
-    private final String publicKey = "public_IEPr3LO80N8Dnqhr0fGSEE3+6+4=";
-    private final String privateKey = "private_gbpWgMKkbdD0wqV1iYfl178UggM=";
-    private final String fileName = "data.json";
+public class ImageKitIoAPI implements ImageKitIoAPIInterface {
 
 
     /**
      * Limited to 1 call per second
      * Uploads data.json into ImageKit.io's drive
      */
+    @Override
     public void upload(String dataPath, String fileName) {
         //initialize imageKitAPI
         String urlEndpoint = "https://ik.imagekit.io/kylej143"; //endpoint
+        String publicKey = "public_IEPr3LO80N8Dnqhr0fGSEE3+6+4=";
+        String privateKey = "private_gbpWgMKkbdD0wqV1iYfl178UggM=";
         Configuration config = new Configuration(publicKey, privateKey, urlEndpoint);
         ImageKit imageKit = ImageKit.getInstance();
         imageKit.setConfig(config);
@@ -47,6 +43,7 @@ public class ImageKitIoAPI {
         fileCreateRequest.setResponseFields(responseFields);
         fileCreateRequest.setUseUniqueFileName(false);
         try {
+            //delete previous versions in imagekit and upload a new version
             String fileId = ImageKit.getInstance().upload(fileCreateRequest).getFileId();
             ImageKit.getInstance().deleteFile(fileId);
             ImageKit.getInstance().upload(fileCreateRequest);
@@ -62,8 +59,9 @@ public class ImageKitIoAPI {
      * Limited to 1 call per second
      * Downloads data.json from ImageKit.io's drive
      */
+    @Override
     public void download(String dataPath, String fileName) {
-        String url = "https://ik.imagekit.io/kylej143/" + fileName; //endpoint
+        String url = "https://ik.imagekit.io/kylej143/" + fileName + "?updatedAt=" + Instant.now().getEpochSecond(); //endpoint
 
         // make an instance of OkHttpClient
         OkHttpClient client = new OkHttpClient().newBuilder()
@@ -73,32 +71,17 @@ public class ImageKitIoAPI {
                 .url(url)
                 .build();
 
-        //initialize imageKitAPI
-        String urlEndpoint = "https://ik.imagekit.io/kylej143"; //endpoint
-        Configuration config = new Configuration(publicKey, privateKey, urlEndpoint);
-        ImageKit imageKit = ImageKit.getInstance();
-        imageKit.setConfig(config);
-
-        FileCreateRequest fileCreateRequest =new FileCreateRequest("e30=", fileName);
-        List<String> responseFields=new ArrayList<>();
-        fileCreateRequest.setResponseFields(responseFields);
-        fileCreateRequest.setUseUniqueFileName(false);
         try {
-            String fileId = ImageKit.getInstance().getFileList(fileCreateRequest).getFileId();
-            System.out.println(versionID);
-
             Response response = client.newCall(request).execute();
             BufferedWriter bw = new BufferedWriter(new FileWriter(dataPath));
-            System.out.println(response.body().string());
+            assert response.body() != null;
             bw.write(response.body().string());
             bw.close();
 
             assert response.code() == 200;
 
-        } catch (ForbiddenException | TooManyRequestsException | InternalServerException | UnauthorizedException |
-                 BadRequestException | UnknownException | IOException | NotFoundException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-
 }

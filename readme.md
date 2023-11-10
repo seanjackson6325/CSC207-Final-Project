@@ -37,26 +37,19 @@ TMM aims to make managing time management in a group environment easy. For examp
 5. Delete TODO
 6. Create Group
 7. Add/Remove Group Members -> Invite/Accept/Remove Members
- 
-
-# Diagrams (For references, not accurate; outdated)
-
-![UML Diagram (CreateTodoUser).png](photos%2FUML%20Diagram%20%28CreateTodoUser%29.png)
-
 
 # APIs and Maven Dependencies
 
-- GSON: https://javadoc.io/doc/com.google.code.gson/gson/latest/com.google.gson/module-summary.html
-- HMAC: https://mvnrepository.com/artifact/commons-codec/commons-codec/1.16.0
-- OkHttp: https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp/4.10.0
-
+- GSON (Json API): https://mvnrepository.com/artifact/com.google.code.gson/gson/2.10.1
+- OkHttp (Http Request API): https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp/4.10.0
+- ImageKit.io (Online Database API): https://github.com/imagekit-developer/imagekit-java
 
 # Sources and References
 
-Documentation for OkHttp: https://square.github.io/okhttp/
-
+- GSON: https://javadoc.io/doc/com.google.code.gson/gson/latest/com.google.gson/module-summary.html
+- OkHttp: https://square.github.io/okhttp/
 - JSON: https://docs.oracle.com/javaee/7/api/javax/json/JsonObject.html
-
+- ImageKit.io: https://docs.imagekit.io/
 - Previous Labs and Class from (CSC207 UofT)
 
 # Responsibilities
@@ -115,6 +108,8 @@ Below are Coding Related:
 (DataAccess)
 - [x] DAO Implementation (Kyle)
   - [x] Test (Kyle)
+- [x] DAO online database API Implementation (Kyle)
+  - [x] Test (Kyle)
 
 (Use Cases CreateTodoUser)
 - [ ] InputBoundary (Darryl)
@@ -139,6 +134,18 @@ Below are Coding Related:
 - [ ] OutputData (Darryl)
   - [ ] Test ()
 - [ ] Interactor (Darryl)
+  - [ ] Test ()
+
+(Use Case DeleteToDo)
+- [ ] InputBoundary ()
+  - [ ] Test ()
+- [ ] InputData ()
+  - [ ] Test ()
+- [ ] OutputBoundary ()
+  - [ ] Test ()
+- [ ] OutputData ()
+  - [ ] Test ()
+- [ ] Interactor ()
   - [ ] Test ()
 
 (Use Cases Signup)
@@ -177,3 +184,54 @@ Below are Coding Related:
 - [ ] Interactor (Kyle)
   - [ ] Test ()
 
+(Use Case AddManager)
+- [ ] InputBoundary ()
+  - [ ] Test ()
+- [ ] InputData ()
+  - [ ] Test ()
+- [ ] OutputBoundary ()
+  - [ ] Test ()
+- [ ] OutputData ()
+  - [ ] Test ()
+- [ ] Interactor ()
+  - [ ] Test ()
+
+(Use Case RemoveManager)
+- [ ] InputBoundary ()
+  - [ ] Test ()
+- [ ] InputData ()
+  - [ ] Test ()
+- [ ] OutputBoundary ()
+  - [ ] Test ()
+- [ ] OutputData ()
+  - [ ] Test ()
+- [ ] Interactor ()
+  - [ ] Test ()
+
+(Use Case AddMember)
+- [ ] InputBoundary ()
+  - [ ] Test ()
+- [ ] InputData ()
+  - [ ] Test ()
+- [ ] OutputBoundary ()
+  - [ ] Test ()
+- [ ] OutputData ()
+  - [ ] Test ()
+- [ ] Interactor ()
+  - [ ] Test ()
+
+(Use Case RemoveMember)
+- [ ] InputBoundary ()
+  - [ ] Test ()
+- [ ] InputData ()
+  - [ ] Test ()
+- [ ] OutputBoundary ()
+  - [ ] Test ()
+- [ ] OutputData ()
+  - [ ] Test ()
+- [ ] Interactor ()
+  - [ ] Test ()
+
+# Diagrams (For references, not accurate; outdated)
+
+![UML Diagram (CreateTodoUser).png](photos%2FUML%20Diagram%20%28CreateTodoUser%29.png)
