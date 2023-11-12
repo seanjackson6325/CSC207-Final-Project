@@ -11,13 +11,13 @@ import entity.User;
  * delete(): find the object and delete it in the database
  *
  */
-public interface DataAccessInterface {
+public interface DataAccessInterface  {
 
     /**
      * Precondition: username does not already exist in the Database (is unique)
      * @exception RuntimeException if there is already a user or a datbase error.
      */
-    void createUser(User user);
+    void createUser(User user) throws RuntimeException;
 
     /**
      * Returns: null if there are no User with the String provided
@@ -28,19 +28,19 @@ public interface DataAccessInterface {
      * Precondition: username already exist in the Database
      * @exception RuntimeException if there isn't a user or a datbase error.
      */
-    void updateUser(User user);
+    void updateUser(User user) throws RuntimeException;
 
     /**
      * Precondition: username already exist in the Database
      * @exception RuntimeException if there isn't a user or a datbase error.
      */
-    void deleteUser(String username);
+    void deleteUser(String username) throws RuntimeException;
 
     /**
      * Precondition: teamName does not already exist in the Database (is unique)
      * @exception RuntimeException if there is already a team or a datbase error.
      */
-    void createTeam(Team team);
+    void createTeam(Team team) throws RuntimeException;
 
     /**
      * Returns: null if there are no Team with the String provided
@@ -51,12 +51,12 @@ public interface DataAccessInterface {
      * Precondition: teamname already exist in the Database
      * @exception RuntimeException if there isn't a team or a datbase error.
      */
-    void updateTeam(Team team);
+    void updateTeam(Team team) throws RuntimeException;
 
     /**
      * Precondition: teamname already exist in the Database
      * @exception RuntimeException if there isn't a team or a datbase error.
      */
-    void deleteTeam(String teamName);
+    void deleteTeam(String teamName) throws RuntimeException;
 
 }
