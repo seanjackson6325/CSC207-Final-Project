@@ -1,5 +1,7 @@
 package interface_adapter.login;
 
+import app.EntityMemory;
+import entity.User;
 import use_case.Login.LoginOutputBoundary;
 import use_case.Login.LoginOutputData;
 import view.ViewManager;
@@ -20,6 +22,7 @@ public class LoginPresenter implements LoginOutputBoundary {
     public void prepareSuccessView(LoginOutputData user) {
         loginViewModel.getState().setUsername(user.getUsername());
         viewManager.switchToView(loginViewModel.getPersonalViewModel().getName());
+        EntityMemory.setLoggedInUser(user.getUser());
     }
 
     @Override
