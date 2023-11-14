@@ -15,6 +15,7 @@ import view.signup.SignupView;
 import interface_adapter.signup.SignupViewModel;
 
 import javax.swing.*;
+import java.time.LocalDateTime;
 
 // best tutorial for swing stuff:
 // https://docs.oracle.com/javase/tutorial/uiswing/components/componentlist.html
@@ -23,13 +24,13 @@ public class Main {
 
     public static void main(String[] args)
     {
-
 	    EntityMemory runTimeUser = new EntityMemory();
 
         DataAccess dataAccess = new DataAccess();
 
         LoginUserDataAccessInterface loginDataAccess = null; // NEED A FILE_DATA_OBJECT
         SignupUserDataAccessInterface signupDataAccess = null; // NEED A FILE_DATA_OBJECT
+
 
 
         JFrame applicationFrame = new JFrame("Team Task Manager");
@@ -51,6 +52,7 @@ public class Main {
         viewManager.addView(userView, userViewModel.getName());
         viewManager.switchToView(loginViewModel.getName());
 
+        applicationFrame.setLocationRelativeTo(null);
         applicationFrame.setVisible(true);
         applicationFrame.setResizable(true);
     }
