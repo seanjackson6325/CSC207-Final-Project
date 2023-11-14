@@ -3,6 +3,7 @@ package app;
 import Factory.LoginFactory;
 import Factory.SignupFactory;
 import Factory.UserFactory;
+import data_access.DataAccess;
 import use_case.Login.LoginUserDataAccessInterface;
 import use_case.Signup.SignupUserDataAccessInterface;
 import view.login.LoginView;
@@ -24,6 +25,8 @@ public class Main {
     {
 
 	    EntityMemory runTimeUser = new EntityMemory();
+
+        DataAccess dataAccess = new DataAccess();
 
         LoginUserDataAccessInterface loginDataAccess = null; // NEED A FILE_DATA_OBJECT
         SignupUserDataAccessInterface signupDataAccess = null; // NEED A FILE_DATA_OBJECT
