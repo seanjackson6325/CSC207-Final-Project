@@ -47,7 +47,7 @@ public class CreateTodoUserInputData {
         return status;
     }
 
-    public Object getUser() {
+    public User getUser() {
         return user;
     }
 }

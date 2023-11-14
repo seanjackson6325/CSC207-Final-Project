@@ -12,9 +12,9 @@ public interface TodoInterface {
 
     LocalDateTime getEndTime();
 
-    String getRequester();
+    User getRequester();
 
-    String getRequestedTo();
+    User getRequestedTo();
 
     Boolean getStatus();
 

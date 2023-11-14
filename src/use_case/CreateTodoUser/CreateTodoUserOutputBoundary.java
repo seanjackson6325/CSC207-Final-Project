@@ -1,5 +1,6 @@
 package use_case.CreateTodoUser;
 
 public interface CreateTodoUserOutputBoundary {
-    void successView(CreateTodoUserOutputBoundary outputData);
+    void successView(CreateTodoUserOutputData outputData);
+    void failureView(CreateTodoUserOutputData outputData);
 }

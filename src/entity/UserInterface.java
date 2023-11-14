@@ -16,4 +16,5 @@ public interface UserInterface {
     void setTaskList(List<Todo> taskList);
 
     void setTeams(List<String> teams);
+    void addTask(Todo task);
 }

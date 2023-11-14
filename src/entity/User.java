@@ -54,4 +54,9 @@ public class User implements UserInterface {
     public void setTeams(List<String> teams) {
         this.teams = teams;
     }
+
+    @Override
+    public void addTask(Todo task) {
+        this.taskList.add(task);
+    }
 }
