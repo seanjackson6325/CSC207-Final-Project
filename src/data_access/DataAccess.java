@@ -106,6 +106,10 @@ public class DataAccess implements DataAccessInterface {
 
     private String convertTodotoString(List<Todo> todo) {
 
+        if (todo.isEmpty()) {
+            return "";
+        }
+
         StringBuilder string = new StringBuilder();
         for (Todo s: todo) {
             string.append(",").append("\"").append(s.getName()).append(",")
@@ -120,6 +124,11 @@ public class DataAccess implements DataAccessInterface {
     }
 
     private String convertListToString(List<String> team) {
+
+        if (team.isEmpty()) {
+            return "";
+        }
+
         StringBuilder string = new StringBuilder();
         for (String s: team) {
             string.append(",").append("\"").append(s).append("\"");

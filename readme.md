@@ -119,7 +119,7 @@ Below are Coding Related:
 - [ ] OutputBoundary (Darryl)
   - [ ] Test ()
 - [ ] OutputData (Darryl)
-  - [ ] Test ()
+  - [ ] Test () 
 - [ ] Interactor (Darryl)
   - [ ] Test ()
 
@@ -137,7 +137,7 @@ Below are Coding Related:
   - [ ] Test ()
 
 (Use Case DeleteToDo)
-- [ ] InputBoundary ()
+- [ ] InputBoundary (kyle)
   - [ ] Test ()
 - [ ] InputData ()
   - [ ] Test ()
