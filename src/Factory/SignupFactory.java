@@ -1,5 +1,6 @@
 package Factory;
 
+import data_access.DataAccessInterface;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
@@ -13,7 +14,7 @@ public class SignupFactory {
 
     public static SignupView createSignupView(ViewManager viewManager,
                                              SignupViewModel signupViewModel,
-                                             SignupUserDataAccessInterface userDataAccess,
+                                             DataAccessInterface userDataAccess,
                                              UserFactory userFactory)
     {
         SignupController controller = createSignupController(viewManager, signupViewModel, userDataAccess, userFactory);
@@ -22,7 +23,7 @@ public class SignupFactory {
 
     private static SignupController createSignupController(ViewManager viewManager,
                                                          SignupViewModel signupViewModel,
-                                                         SignupUserDataAccessInterface userDataAccess,
+                                                         DataAccessInterface userDataAccess,
                                                          UserFactory userFactory)
     {
         SignupOutputBoundary presenter = new SignupPresenter(viewManager, signupViewModel);

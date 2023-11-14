@@ -1,9 +1,11 @@
 package use_case.CreateTodoTeam;
 
+import data_access.DataAccessInterface;
+
 public class CreateTodoTeamInteractor implements CreateTodoTeamInputBoundary {
-    final CreateTodoTeamDataAccessInterface teamDataAccessObject;
+    final DataAccessInterface teamDataAccessObject;
     final CreateTodoTeamOutputBoundary teamPresenter;
-    public CreateTodoTeamInteractor(CreateTodoTeamDataAccessInterface teamDataAccessInterface,
+    public CreateTodoTeamInteractor(DataAccessInterface teamDataAccessInterface,
                                     CreateTodoTeamOutputBoundary teamOutputBoundary) {
         this.teamDataAccessObject = teamDataAccessInterface;
         this.teamPresenter = teamOutputBoundary;

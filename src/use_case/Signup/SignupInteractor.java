@@ -2,6 +2,8 @@ package use_case.Signup;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import data_access.DataAccessInterface;
 import entity.Todo;
 import entity.User;
 import Factory.UserFactory;
@@ -9,11 +11,11 @@ import Factory.UserFactory;
 import java.time.LocalDateTime;
 
 public class SignupInteractor implements SignupInputBoundary {
-    final SignupUserDataAccessInterface userDataAccessObject;
+    final DataAccessInterface userDataAccessObject;
     final SignupOutputBoundary userPresenter;
     final UserFactory userFactory;
 
-    public SignupInteractor(SignupUserDataAccessInterface signupDataAccessInterface,
+    public SignupInteractor(DataAccessInterface signupDataAccessInterface,
                             SignupOutputBoundary signupOutputBoundary,
                             UserFactory userFactory) {
         this.userDataAccessObject = signupDataAccessInterface;
@@ -23,7 +25,7 @@ public class SignupInteractor implements SignupInputBoundary {
 
     @Override
     public void execute(SignupInputData signupInputData) {
-        if (userDataAccessObject.existsByName(signupInputData.getUsername())) {
+        if (userDataAccessObject.readUser(signupInputData.getUsername()) != null) {
             userPresenter.prepareFailView("User already exists.");
         } else if (!signupInputData.getPassword().equals(signupInputData.getRepeatPassword())) {
             userPresenter.prepareFailView("Passwords don't match.");
@@ -33,7 +35,7 @@ public class SignupInteractor implements SignupInputBoundary {
             List<Todo> taskList = new ArrayList<>();
             List<String> teams = new ArrayList<>();
             User user = userFactory.create(signupInputData.getUsername(), signupInputData.getPassword(), taskList, teams);
-            userDataAccessObject.save(user);
+            userDataAccessObject.createUser(user);
 
             SignupOutputData signupOutputData = new SignupOutputData(user.getUsername(), ltd.toString(), false);
             userPresenter.prepareSuccessView(signupOutputData);

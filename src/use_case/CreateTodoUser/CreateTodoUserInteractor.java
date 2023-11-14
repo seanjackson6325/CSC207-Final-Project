@@ -1,9 +1,11 @@
 package use_case.CreateTodoUser;
 
+import data_access.DataAccessInterface;
+
 public class CreateTodoUserInteractor implements CreateTodoUserInputBoundary {
-    final CreateTodoUserDataAccessInterface userDataAccessObject;
+    final DataAccessInterface userDataAccessObject;
     final CreateTodoUserOutputBoundary userPresenter;
-    public CreateTodoUserInteractor(CreateTodoUserDataAccessInterface userDataAccessInterface,
+    public CreateTodoUserInteractor(DataAccessInterface userDataAccessInterface,
                                     CreateTodoUserOutputBoundary userOutputBoundary) {
         this.userDataAccessObject = userDataAccessInterface;
         this.userPresenter = userOutputBoundary;
