@@ -25,14 +25,7 @@ public class Main {
 
     public static void main(String[] args)
     {
-	    EntityMemory runTimeUser = new EntityMemory();
-
         DataAccessInterface dataAccess = new DataAccess();
-
-        LoginUserDataAccessInterface loginDataAccess = null; // NEED A FILE_DATA_OBJECT
-        SignupUserDataAccessInterface signupDataAccess = null; // NEED A FILE_DATA_OBJECT
-
-
 
         JFrame applicationFrame = new JFrame("Team Task Manager");
         applicationFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
