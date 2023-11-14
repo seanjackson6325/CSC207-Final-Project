@@ -9,8 +9,8 @@ public class EntityMemory {
         return loggedInUser;
     }
 
-    public static void setLoggedInUser(User loggedInUser) {
-        loggedInUser = loggedInUser;
+    public static void setLoggedInUser(User loggedInUser1) {
+        loggedInUser = loggedInUser1;
     }
 
 
