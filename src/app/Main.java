@@ -40,13 +40,13 @@ public class Main {
         ViewManager viewManager = new ViewManager(applicationFrame);
 
         SignupViewModel signupViewModel = new SignupViewModel(viewManager);
-        SignupView signupView = SignupFactory.createSignupView(viewManager, signupViewModel, signupDataAccess, new UserFactory());
+        SignupView signupView = SignupFactory.createSignupView(viewManager, signupViewModel, dataAccess, new UserFactory());
 
         UserViewModel userViewModel = new UserViewModel(viewManager);
         UserView userView = new UserView(userViewModel);
 
         LoginViewModel loginViewModel = new LoginViewModel(viewManager, signupViewModel, userViewModel);
-        LoginView loginView = LoginFactory.createLoginView(viewManager, loginViewModel, loginDataAccess);
+        LoginView loginView = LoginFactory.createLoginView(viewManager, loginViewModel, dataAccess);
 
         viewManager.addView(loginView, loginViewModel.getName());
         viewManager.addView(signupView, signupViewModel.getName());
