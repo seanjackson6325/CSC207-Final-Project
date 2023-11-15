@@ -6,7 +6,6 @@ import data_access.DataAccessInterface;
 import entity.Team;
 import entity.Todo;
 import entity.User;
-import use_case.CreateTodoUser.CreateTodoUserOutputData;
 
 import java.time.LocalDateTime;
 import java.util.List;
