@@ -59,7 +59,7 @@ public class CreateTodoUserInteractor implements CreateTodoUserInputBoundary {
             this.userPresenter.failureView(outputData);
         } else {
             CreateTodoUserOutputData outputData = new CreateTodoUserOutputData("Task Successfully Created!");
-            user.addTask(newTodo);
+            user.getTaskList().add(newTodo);
             this.userPresenter.successView(outputData);
         }
     }

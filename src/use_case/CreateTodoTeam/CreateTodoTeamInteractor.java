@@ -62,7 +62,7 @@ public class CreateTodoTeamInteractor implements CreateTodoTeamInputBoundary {
             this.teamPresenter.failureView(outputData);
         } else {
             CreateTodoTeamOutputData outputData = new CreateTodoTeamOutputData("Task Successfully Created!");
-            user.addTask(newTodo);
+            user.getTaskList().add(newTodo);
             this.teamPresenter.successView(outputData);
         }
     }
