@@ -33,12 +33,12 @@ public class CreateTodoUserInteractor implements CreateTodoUserInputBoundary {
         String desc = inputData.getDescription();
         LocalDateTime start = inputData.getStartTime();
         LocalDateTime end = inputData.getEndTime();
-        User requestedTo = inputData.getRequestedTo();
+        User requestedTo = userDataAccessObject.readUser(inputData.getRequestedTo());
         Boolean status = inputData.getStatus();
-        User user = inputData.getUser();
+        User user = userDataAccessObject.readUser(inputData.getUser());
 
         TodoFactory todoFactory = new TodoFactory();
-        Todo newTodo = todoFactory.create(name, desc, start, end, user, requestedTo, status);
+        Todo newTodo = todoFactory.create(name, desc, start, end, user.getUsername(), requestedTo.getUsername(), status);
 
         List<Todo> taskList = user.getTaskList();
         for (Todo task : taskList) { // Check for duplicate name

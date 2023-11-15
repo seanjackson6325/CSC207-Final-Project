@@ -8,8 +8,8 @@ public class Todo implements TodoInterface {
     private final String description;
     private final LocalDateTime startTime;
     private final LocalDateTime endTime;
-    private final User requester;
-    private final User requestedTo;
+    private final String requester;
+    private final String requestedTo;
     private final Boolean status;
 
     /**
@@ -24,8 +24,8 @@ public class Todo implements TodoInterface {
      * @param status   Status of completion, True = finished
      *
      */
-    public Todo(String name, String description, LocalDateTime startTime, LocalDateTime endTime, User requester,
-                User requestedTo, Boolean status) {
+    public Todo(String name, String description, LocalDateTime startTime, LocalDateTime endTime, String requester,
+         String requestedTo, Boolean status) {
         this.name = name;
         this.description = description;
         this.startTime = startTime;
@@ -56,12 +56,12 @@ public class Todo implements TodoInterface {
     }
 
     @Override
-    public User getRequester() {
+    public String getRequester() {
         return this.requester;
     }
 
     @Override
-    public User getRequestedTo() {
+    public String getRequestedTo() {
         return this.requestedTo;
     }
 

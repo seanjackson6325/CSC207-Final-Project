@@ -9,11 +9,11 @@ public class CreateTodoTeamInputData {
     final private String description;
     final private LocalDateTime startTime;
     final private LocalDateTime endTime;
-    final private Team requestedTo;
+    final private String requestedTo;
     final private Boolean status;
-    final private Team team;
+    final private String team;
 
-    public CreateTodoTeamInputData(String name, String desc, LocalDateTime start, LocalDateTime end, Team requestedTo, Boolean status, Team team) {
+    public CreateTodoTeamInputData(String name, String desc, LocalDateTime start, LocalDateTime end, String requestedTo, Boolean status, String team) {
         this.name = name;
         this.description = desc;
         this.startTime = start;
@@ -39,7 +39,7 @@ public class CreateTodoTeamInputData {
         return endTime;
     }
 
-    public Team getRequestedTo() {
+    public String getRequestedTo() {
         return requestedTo;
     }
 
@@ -47,7 +47,7 @@ public class CreateTodoTeamInputData {
         return status;
     }
 
-    public Object getTeam() {
+    public String getTeam() {
         return team;
     }
 }

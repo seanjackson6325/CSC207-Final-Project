@@ -95,8 +95,8 @@ public class DataAccess implements DataAccessInterface {
                             toDoAttr[1],
                             LocalDateTime.parse(toDoAttr[2]),
                             LocalDateTime.parse(toDoAttr[3]),
-                            readUser(toDoAttr[4]),
-                            readUser(toDoAttr[5]),
+                            toDoAttr[4],
+                            toDoAttr[5],
                             Boolean.parseBoolean(toDoAttr[6])
                     )
             );
