@@ -9,11 +9,11 @@ public class CreateTodoUserInputData {
     final private String description;
     final private LocalDateTime startTime;
     final private LocalDateTime endTime;
-    final private User requestedTo;
+    final private String requestedTo;
     final private Boolean status;
-    final private User user;
+    final private String user;
 
-    public CreateTodoUserInputData(String name, String desc, LocalDateTime start, LocalDateTime end, User requestedTo, Boolean status, User user) {
+    public CreateTodoUserInputData(String name, String desc, LocalDateTime start, LocalDateTime end, String requestedTo, Boolean status, String user) {
         this.name = name;
         this.description = desc;
         this.startTime = start;
@@ -39,7 +39,7 @@ public class CreateTodoUserInputData {
         return endTime;
     }
 
-    public User getRequestedTo() {
+    public String getRequestedTo() {
         return requestedTo;
     }
 
@@ -47,7 +47,7 @@ public class CreateTodoUserInputData {
         return status;
     }
 
-    public Object getUser() {
+    public String getUser() {
         return user;
     }
 }
