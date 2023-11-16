@@ -6,7 +6,6 @@ import entity.Todo;
 import entity.User;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 public class CreateTodoUserInteractor implements CreateTodoUserInputBoundary {
