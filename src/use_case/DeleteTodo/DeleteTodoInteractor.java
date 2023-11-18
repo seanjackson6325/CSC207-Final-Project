@@ -36,8 +36,5 @@ public class DeleteTodoInteractor implements DeleteTodoInputBoundary {
         catch (Exception e) {
             deleteTodoPresenter.prepareFailView("Failed to Delete Todo From List");
         }
-
-
-
     }
 }
