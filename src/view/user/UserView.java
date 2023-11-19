@@ -1,6 +1,7 @@
 package view.user;
 
 import entity.Todo;
+import interface_adapter.user.UserController;
 import interface_adapter.user.UserViewModel;
 import view.DateTimeInputPanel;
 
@@ -22,6 +23,7 @@ import java.util.Arrays;
 public class UserView extends JPanel {
 
     UserViewModel userViewModel;
+    UserController userController;
 
     // For the list selector:
     JList<String> todoNames;
@@ -35,9 +37,10 @@ public class UserView extends JPanel {
     JEditorPane todoDescriptionTextPane;
     String[] todoDescriptions;
 
-    public UserView(UserViewModel userViewModel)
+    public UserView(UserViewModel userViewModel, UserController userController)
     {
         this.userViewModel = userViewModel;
+        this.userController = userController;
 
         // Initialize everything that needs user info
 

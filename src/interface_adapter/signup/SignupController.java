@@ -5,7 +5,7 @@ import use_case.Signup.SignupInputData;
 
 public class SignupController {
 
-    final SignupInputBoundary signupInputBoundary;
+    private final SignupInputBoundary signupInputBoundary;
 
     public SignupController(SignupInputBoundary signupInputBoundary)
     {
@@ -17,6 +17,4 @@ public class SignupController {
         SignupInputData input = new SignupInputData(username, password, repeatPassword);
         signupInputBoundary.execute(input);
     }
-
-
 }
