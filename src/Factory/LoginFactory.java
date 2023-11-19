@@ -1,5 +1,6 @@
 package Factory;
 
+import data_access.DataAccessInterface;
 import interface_adapter.login.LoginController;
 import interface_adapter.login.LoginPresenter;
 import interface_adapter.login.LoginViewModel;
@@ -13,7 +14,7 @@ public class LoginFactory {
 
     public static LoginView createLoginView(ViewManager viewManager,
                                      LoginViewModel loginViewModel,
-                                     LoginUserDataAccessInterface userDataAccess)
+                                     DataAccessInterface userDataAccess)
     {
         LoginController controller = createLoginController(viewManager, loginViewModel, userDataAccess);
         return new LoginView(loginViewModel, controller);
@@ -21,7 +22,7 @@ public class LoginFactory {
 
     private static LoginController createLoginController(ViewManager viewManager,
                                                  LoginViewModel loginViewModel,
-                                                 LoginUserDataAccessInterface userDataAccess)
+                                                 DataAccessInterface userDataAccess)
     {
         LoginOutputBoundary presenter = new LoginPresenter(viewManager, loginViewModel);
         LoginInteractor interactor = new LoginInteractor(userDataAccess, presenter);

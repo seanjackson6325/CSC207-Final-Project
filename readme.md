@@ -37,25 +37,19 @@ TMM aims to make managing time management in a group environment easy. For examp
 5. Delete TODO
 6. Create Group
 7. Add/Remove Group Members -> Invite/Accept/Remove Members
- 
 
-# Diagrams (For references, not accurate; outdated)
+# APIs and Maven Dependencies
 
-![UML Diagram (CreateTodoUser).png](photos%2FUML%20Diagram%20%28CreateTodoUser%29.png)
-
-
-# APIs
-
-- GSON: https://javadoc.io/doc/com.google.code.gson/gson/latest/com.google.gson/module-summary.html
+- GSON (Json API): https://mvnrepository.com/artifact/com.google.code.gson/gson/2.10.1
+- OkHttp (Http Request API): https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp/4.10.0
+- ImageKit.io (Online Database API): https://github.com/imagekit-developer/imagekit-java
 
 # Sources and References
 
-- OkHttp (Maven): https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp/4.10.0
-
-Documentation for OkHttp: https://square.github.io/okhttp/
-
+- GSON: https://javadoc.io/doc/com.google.code.gson/gson/latest/com.google.gson/module-summary.html
+- OkHttp: https://square.github.io/okhttp/
 - JSON: https://docs.oracle.com/javaee/7/api/javax/json/JsonObject.html
-
+- ImageKit.io: https://docs.imagekit.io/
 - Previous Labs and Class from (CSC207 UofT)
 
 # Responsibilities
@@ -108,60 +102,76 @@ Below are Coding Related:
   - [ ] Test (Darryl)
 - [x] Todo (Kyle)
   - [ ] Test (Kyle)
+- [x] TodoFactory (Darryl)
+  - [ ] Test (Darryl)
 - [x] Team (Kyle)
   - [ ] Test (Kyle)
 
 (DataAccess)
 - [x] DAO Implementation (Kyle)
   - [x] Test (Kyle)
+- [x] DAO online database API Implementation (Kyle)
+  - [x] Test (Kyle)
 
 (Use Cases CreateTodoUser)
-- [ ] InputBoundary (Darryl)
+- [x] InputBoundary (Darryl)
   - [ ] Test ()
-- [ ] InputData (Darryl)
+- [x] InputData (Darryl)
   - [ ] Test ()
-- [ ] OutputBoundary (Darryl)
+- [x] OutputBoundary (Darryl)
   - [ ] Test ()
-- [ ] OutputData (Darryl)
-  - [ ] Test ()
-- [ ] Interactor (Darryl)
+- [x] OutputData (Darryl)
+  - [ ] Test () 
+- [x] Interactor (Darryl)
   - [ ] Test ()
 
 (Use Cases CreateTodoTeam)
 
-- [ ] InputBoundary (Darryl)
+- [x] InputBoundary (Darryl)
   - [ ] Test ()
-- [ ] InputData (Darryl)
+- [x] InputData (Darryl)
   - [ ] Test ()
-- [ ] OutputBoundary (Darryl)
+- [x] OutputBoundary (Darryl)
   - [ ] Test ()
-- [ ] OutputData (Darryl)
+- [x] OutputData (Darryl)
   - [ ] Test ()
-- [ ] Interactor (Darryl)
+- [x] Interactor (Darryl)
+  - [ ] Test ()
+
+(Use Case DeleteToDo)
+- [ ] InputBoundary (kyle)
+  - [ ] Test ()
+- [ ] InputData ()
+  - [ ] Test ()
+- [ ] OutputBoundary ()
+  - [ ] Test ()
+- [ ] OutputData ()
+  - [ ] Test ()
+- [ ] Interactor ()
   - [ ] Test ()
 
 (Use Cases Signup)
-- [ ] InputBoundary (Darryl)
+- [x] InputBoundary (Darryl)
   - [ ] Test ()
-- [ ] InputData (Darryl)
+- [x] InputData (Darryl)
   - [ ] Test ()
-- [ ] OutputBoundary (Darryl)
+- [x] OutputBoundary (Darryl)
   - [ ] Test ()
-- [ ] OutputData (Darryl)
+- [x] OutputData (Darryl)
   - [ ] Test ()
-- [ ] Interactor (Darryl)
+- [x] Interactor (Darryl)
   - [ ] Test ()
 
 (Use Cases Login)
-- [ ] InputBoundary (Darryl)
+- [x] InputBoundary (Darryl)
   - [ ] Test ()
-- [ ] InputData (Darryl)
+- [x] InputData (Darryl)
   - [ ] Test ()
-- [ ] OutputBoundary (Darryl)
+- [x] OutputBoundary (Darryl)
   - [ ] Test ()
-- [ ] OutputData (Darryl)
+- [x] OutputData (Darryl)
   - [ ] Test ()
-- [ ] Interactor (Darryl)
+- [x] Interactor (Darryl)
   - [ ] Test ()
 
 (Use Case CreateGroup)
@@ -176,3 +186,54 @@ Below are Coding Related:
 - [ ] Interactor (Kyle)
   - [ ] Test ()
 
+(Use Case AddManager)
+- [ ] InputBoundary ()
+  - [ ] Test ()
+- [ ] InputData ()
+  - [ ] Test ()
+- [ ] OutputBoundary ()
+  - [ ] Test ()
+- [ ] OutputData ()
+  - [ ] Test ()
+- [ ] Interactor ()
+  - [ ] Test ()
+
+(Use Case RemoveManager)
+- [ ] InputBoundary ()
+  - [ ] Test ()
+- [ ] InputData ()
+  - [ ] Test ()
+- [ ] OutputBoundary ()
+  - [ ] Test ()
+- [ ] OutputData ()
+  - [ ] Test ()
+- [ ] Interactor ()
+  - [ ] Test ()
+
+(Use Case AddMember)
+- [ ] InputBoundary (Darryl)
+  - [ ] Test ()
+- [ ] InputData (Darryl)
+  - [ ] Test ()
+- [ ] OutputBoundary (Darryl)
+  - [ ] Test ()
+- [ ] OutputData (Darryl)
+  - [ ] Test ()
+- [ ] Interactor (Darryl)
+  - [ ] Test ()
+
+(Use Case RemoveMember)
+- [ ] InputBoundary (Darryl)
+  - [ ] Test ()
+- [ ] InputData (Darryl)
+  - [ ] Test ()
+- [ ] OutputBoundary (Darryl)
+  - [ ] Test ()
+- [ ] OutputData (Darryl)
+  - [ ] Test ()
+- [ ] Interactor (Darryl)
+  - [ ] Test ()
+
+# Diagrams (For references, not accurate; outdated)
+
+![UML Diagram (CreateTodoUser).png](photos%2FUML%20Diagram%20%28CreateTodoUser%29.png)

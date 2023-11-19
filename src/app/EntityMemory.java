@@ -3,14 +3,14 @@ package app;
 import entity.User;
 
 public class EntityMemory {
-    private User loggedInUser;
+    private static User loggedInUser;
 
-    public User getLoggedInUser() {
-        return this.loggedInUser;
+    public static User getLoggedInUser() {
+        return loggedInUser;
     }
 
-    public void setLoggedInUser(User loggedInUser) {
-        this.loggedInUser = loggedInUser;
+    public static void setLoggedInUser(User loggedInUser1) {
+        loggedInUser = loggedInUser1;
     }
 
 

@@ -16,7 +16,9 @@ import java.util.List;
 public class DataAccess implements DataAccessInterface {
 
     private final String dataPath = "src/data_access/data.json";
+    private final String fileName = "data.json";
     private JsonObject data;
+    private final ImageKitIoAPIInterface ImageKitIOAPI = new ImageKitIoAPI();
 
 
     public DataAccess() {
@@ -28,6 +30,20 @@ public class DataAccess implements DataAccessInterface {
     }
 
     private void LoadData() {
+
+        try {
+            ImageKitIOAPI.download(dataPath, fileName);
+        } catch (Exception e) {
+            // try again
+            try {
+                Thread.sleep(2000);
+                ImageKitIOAPI.download(dataPath, fileName);
+            } catch (Exception e2) {
+                // try again
+                throw new RuntimeException("Error Downloading from Image Kit, Try again a bit later");
+            }
+        }
+
         Gson gson = new Gson();
 
         try {
@@ -52,6 +68,20 @@ public class DataAccess implements DataAccessInterface {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        try {
+            ImageKitIOAPI.upload(dataPath, fileName);
+        } catch (Exception e) {
+            // try again
+            try {
+                Thread.sleep(2000);
+                ImageKitIOAPI.upload(dataPath, fileName);
+            } catch (Exception e2) {
+                // try again
+                throw new RuntimeException("Error Uploading to Image Kit, Try again a bit later");
+            }
+        }
+
     }
 
 
@@ -76,6 +106,10 @@ public class DataAccess implements DataAccessInterface {
 
     private String convertTodotoString(List<Todo> todo) {
 
+        if (todo.isEmpty()) {
+            return "";
+        }
+
         StringBuilder string = new StringBuilder();
         for (Todo s: todo) {
             string.append(",").append("\"").append(s.getName()).append(",")
@@ -90,6 +124,11 @@ public class DataAccess implements DataAccessInterface {
     }
 
     private String convertListToString(List<String> team) {
+
+        if (team.isEmpty()) {
+            return "";
+        }
+
         StringBuilder string = new StringBuilder();
         for (String s: team) {
             string.append(",").append("\"").append(s).append("\"");
@@ -114,7 +153,7 @@ public class DataAccess implements DataAccessInterface {
             SaveData();
             return;
         }
-        throw new RuntimeException("User Already Exists");
+        throw new RuntimeException();
     }
 
     @Override
@@ -149,7 +188,7 @@ public class DataAccess implements DataAccessInterface {
             createUser(user);  // contains SaveData()
 
         } catch(Exception e) {
-            throw new RuntimeException("User Does Not Exists");
+            throw new RuntimeException();
         }
     }
 
@@ -161,7 +200,7 @@ public class DataAccess implements DataAccessInterface {
             SaveData();
 
         } catch(Exception e) {
-            throw new RuntimeException("User Does Not Exists");
+            throw new RuntimeException();
         }
     }
 
@@ -182,7 +221,7 @@ public class DataAccess implements DataAccessInterface {
             SaveData();
             return;
         }
-        throw new RuntimeException("User Already Exists");
+        throw new RuntimeException();
     }
 
     @Override
@@ -222,7 +261,7 @@ public class DataAccess implements DataAccessInterface {
             createTeam(team);  // contains SaveData()
 
         } catch(Exception e) {
-            throw new RuntimeException("Team Does Not Exists");
+            throw new RuntimeException();
         }
     }
 
@@ -234,7 +273,7 @@ public class DataAccess implements DataAccessInterface {
             SaveData();
 
         } catch(Exception e) {
-            throw new RuntimeException("Team Does Not Exists");
+            throw new RuntimeException();
         }
     }
 }

@@ -1,5 +1,8 @@
 package use_case.CreateTodoTeam;
 
+import use_case.CreateTodoUser.CreateTodoUserOutputData;
+
 public interface CreateTodoTeamOutputBoundary {
-    void successView(CreateTodoTeamOutputBoundary outputData);
+    void successView(CreateTodoTeamOutputData outputData);
+    void failureView(CreateTodoTeamOutputData outputData);
 }
