@@ -11,6 +11,8 @@ public class UserState {
     private String todoRequestedTo;
     private boolean todoStatus;
 
+    private boolean failed;
+
     public UserState() {}
 
     public UserState(UserState prev)
@@ -22,6 +24,7 @@ public class UserState {
         todoUser = prev.getTodoUser();
         todoRequestedTo = prev.getTodoRequestedTo();
         todoStatus = prev.getTodoStatus();
+        failed = prev.isFailed();
     }
 
     public String getTodoName()
@@ -92,6 +95,16 @@ public class UserState {
     public void setTodoStatus(boolean status)
     {
         this.todoStatus = status;
+    }
+
+    public void setFailed(boolean status)
+    {
+        failed = status;
+    }
+
+    public boolean isFailed()
+    {
+        return failed;
     }
 
 }

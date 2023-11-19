@@ -24,6 +24,7 @@ public class LoginPresenter implements LoginOutputBoundary {
         viewManager.switchToView(loginViewModel.getUserViewModel().getName());
         EntityMemory.setLoggedInUser(user.getUser());
         loginViewModel.getUserViewModel().setLoggedInUser(user.getUser());
+        loginViewModel.getUserViewModel().updateDataForView();
     }
 
     @Override

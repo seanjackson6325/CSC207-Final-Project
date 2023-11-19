@@ -23,10 +23,12 @@ public class UserPresenter implements CreateTodoUserOutputBoundary
     public void successView(CreateTodoUserOutputData outputData) {
         JOptionPane.showMessageDialog(null, outputData.getMessage());
         userViewModel.setLoggedInUser(EntityMemory.getLoggedInUser());
+        userViewModel.getState().setFailed(false);
     }
 
     @Override
     public void failureView(CreateTodoUserOutputData outputData) {
         JOptionPane.showMessageDialog(null, outputData.getMessage());
+        userViewModel.getState().setFailed(true);
     }
 }
