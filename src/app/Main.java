@@ -48,6 +48,6 @@ public class Main {
 
         applicationFrame.setLocationRelativeTo(null);
         applicationFrame.setVisible(true);
-        applicationFrame.setResizable(true);
+        applicationFrame.setResizable(false);
     }
 }
