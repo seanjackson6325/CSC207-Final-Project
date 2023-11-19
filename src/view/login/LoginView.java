@@ -47,7 +47,6 @@ public class LoginView extends JPanel implements PropertyChangeListener {
                     public void actionPerformed(ActionEvent e) {
                         if(e.getSource().equals(loginButton))
                         {
-                            loginViewModel.getViewManager().switchToView(loginViewModel.getPersonalViewModel().getName());
                             String username = loginViewModel.getState().getUsername();
                             String password = loginViewModel.getState().getPassword();
                             loginController.execute(username, password);

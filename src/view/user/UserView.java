@@ -10,13 +10,17 @@ import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Array;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class UserView extends JPanel {
 
     UserViewModel userViewModel;
 
-    // For the list:
-    JList<String> todos;
+    // For the list selector:
+    JList<String> todoNames;
     JPanel addRemoveButtonsPanel;
     JPanel todoListPanel;
     JButton addTodoButton;
@@ -28,30 +32,19 @@ public class UserView extends JPanel {
     {
         this.userViewModel = userViewModel;
 
-        todos = new JList<>(new DefaultListModel<String>());
-        todos.setListData(new String[]
-                {"Walk Dog", "Get Groceries", "Make Dinner", "Buy Milk",
-                        "Pay Bills", "Another One", "Another 2", "Another 3", "Another 4"
-                });
-        todos.setLayoutOrientation(JList.VERTICAL);
+        // Initialize everything that needs user info
 
-        JScrollPane listScroller = new JScrollPane(todos);
+        todoNames = new JList<>(new DefaultListModel<String>());
+        todoNames.setLayoutOrientation(JList.VERTICAL);
+        JScrollPane listScroller = new JScrollPane(todoNames);
         listScroller.setPreferredSize(new Dimension(250, 120));
 
-        addRemoveButtonsPanel = new JPanel();
+        this.updateViewData();
+
+        // initialize the rest
 
         addTodoButton = new JButton("Add");
         removeTodoButton = new JButton("Remove");
-
-        addRemoveButtonsPanel.add(addTodoButton);
-        addRemoveButtonsPanel.add(removeTodoButton);
-
-        addRemoveButtonsPanel.setLayout(new BoxLayout(addRemoveButtonsPanel, BoxLayout.X_AXIS));
-
-        todoListPanel = new JPanel();
-        todoListPanel.setLayout(new BoxLayout(todoListPanel, BoxLayout.Y_AXIS));
-        todoListPanel.add(listScroller);
-        todoListPanel.add(addRemoveButtonsPanel);
 
         addTodoButton.addActionListener(new ActionListener() {
             @Override
@@ -66,6 +59,20 @@ public class UserView extends JPanel {
                 JOptionPane.showConfirmDialog(null, "Remove todo?");
             }
         });
+
+        // create all the panels and add everything
+
+        addRemoveButtonsPanel = new JPanel();
+
+        addRemoveButtonsPanel.add(addTodoButton);
+        addRemoveButtonsPanel.add(removeTodoButton);
+
+        addRemoveButtonsPanel.setLayout(new BoxLayout(addRemoveButtonsPanel, BoxLayout.X_AXIS));
+
+        todoListPanel = new JPanel();
+        todoListPanel.setLayout(new BoxLayout(todoListPanel, BoxLayout.Y_AXIS));
+        todoListPanel.add(listScroller);
+        todoListPanel.add(addRemoveButtonsPanel);
 
         this.add(todoListPanel);
     }
@@ -111,6 +118,27 @@ public class UserView extends JPanel {
             viewFrame.setVisible(true);
         }
     }
+
+    public void updateViewData()
+    {
+        ArrayList<String> taskNames = new ArrayList();
+        ArrayList<String> taskDescriptions = new ArrayList();
+        List<Todo> taskList = userViewModel.getLoggedInUser().getTaskList();
+        for(Todo todo : taskList)
+        {
+            taskNames.add(todo.getName());
+            taskDescriptions.add(todo.getDescription());
+        }
+
+        String[] taskNamesInput = new String[taskNames.size()];
+        String[] taskDescriptionsInput = new String[taskDescriptions.size()];
+
+        taskNames.toArray(taskNamesInput);
+        taskDescriptions.toArray(taskDescriptionsInput);
+
+        todoNames.setListData(taskNamesInput);
+    }
+
 
 
 }
