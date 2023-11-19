@@ -14,7 +14,7 @@ public class LoginViewModel extends ViewModel {
 
     private SignupViewModel signupViewModel;
 
-    private UserViewModel personalViewModel;
+    private UserViewModel userViewModel;
 
     private LoginState loginState;
 
@@ -22,7 +22,7 @@ public class LoginViewModel extends ViewModel {
     {
         super("Login", viewManager);
         this.signupViewModel = signupViewModel;
-        this.personalViewModel = userViewModel;
+        this.userViewModel = userViewModel;
         this.loginState = new LoginState();
     }
 
@@ -36,14 +36,14 @@ public class LoginViewModel extends ViewModel {
         this.signupViewModel = signupViewModel;
     }
 
-    public UserViewModel getPersonalViewModel()
+    public UserViewModel getUserViewModel()
     {
-        return personalViewModel;
+        return userViewModel;
     }
 
-    public void setPersonalViewModel(UserViewModel userViewModel)
+    public void setUserViewModel(UserViewModel userViewModel)
     {
-        this.personalViewModel = userViewModel;
+        this.userViewModel = userViewModel;
     }
 
     public LoginState getState()

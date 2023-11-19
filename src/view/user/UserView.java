@@ -11,11 +11,9 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.InputMethodEvent;
-import java.awt.event.InputMethodListener;
+import java.awt.event.*;
 import java.lang.reflect.Array;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -104,8 +102,8 @@ public class UserView extends JPanel {
 
     private class TodoInputView
     {
-        private JPanel startTimePanel;
-        private JPanel endTimePanel;
+        private DateTimeInputPanel startTimePanel;
+        private DateTimeInputPanel endTimePanel;
 
         private JPanel namePanel;
         private JTextField nameField;
@@ -116,6 +114,9 @@ public class UserView extends JPanel {
 
         private JPanel confirmButtonPanel;
         private JButton confirm, cancel;
+
+        JPanel todoDescriptionPanel;
+        JEditorPane todoDescriptionEditor;
 
         public TodoInputView(Todo previous, String title)
         {
@@ -134,6 +135,13 @@ public class UserView extends JPanel {
             confirmButtonPanel.add(confirm);
             confirmButtonPanel.add(cancel);
 
+            todoDescriptionEditor = new JEditorPane();
+            todoDescriptionEditor.setPreferredSize(new Dimension(160, 160));
+            todoDescriptionPanel = new JPanel();
+            todoDescriptionPanel.setLayout(new BoxLayout(todoDescriptionPanel, BoxLayout.Y_AXIS));
+            todoDescriptionPanel.add(new JLabel("Description"));
+            todoDescriptionPanel.add(todoDescriptionEditor);
+
             viewPanel = new JPanel();
             viewPanel.setLayout(new BoxLayout(viewPanel, BoxLayout.Y_AXIS));
             viewPanel.add(namePanel);
@@ -141,6 +149,7 @@ public class UserView extends JPanel {
             viewPanel.add(startTimePanel);
             viewPanel.add(new JLabel("End: "));
             viewPanel.add(endTimePanel);
+            viewPanel.add(todoDescriptionPanel);
             viewPanel.add(confirmButtonPanel);
 
             viewFrame = new JFrame(title);
@@ -152,9 +161,23 @@ public class UserView extends JPanel {
             confirm.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    List<Todo> newTaskList = userViewModel.getLoggedInUser().getTaskList();
-                    newTaskList.add(new Todo("Test Name", "Test Description", null, null, null, null, false));
-                    userViewModel.getLoggedInUser().setTaskList(newTaskList);
+                    if(!(startTimePanel.isValidInput() || endTimePanel.isValidInput()))
+                    {
+                        JOptionPane.showMessageDialog(null, "Please finish entering information");
+                        return;
+                    }
+
+                    String user = userViewModel.getLoggedInUser().getUsername();
+
+                    userController.execute(
+                            userViewModel.getState().getTodoName(),
+                            todoDescriptionEditor.getText(),
+                            startTimePanel.getLocalDateTime(),
+                            endTimePanel.getLocalDateTime(),
+                            user,
+                            false,
+                            user
+                    );
                     updateViewData();
                 }
             });
@@ -162,8 +185,21 @@ public class UserView extends JPanel {
             cancel.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-
+                    viewFrame.dispatchEvent(new WindowEvent(viewFrame, WindowEvent.WINDOW_CLOSING));
                 }
+            });
+
+            nameField.addKeyListener(new KeyListener() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    userViewModel.getState().setTodoName(nameField.getText() + e.getKeyChar());
+                }
+
+                @Override
+                public void keyPressed(KeyEvent e) {}
+
+                @Override
+                public void keyReleased(KeyEvent e) {}
             });
 
         }
@@ -171,23 +207,26 @@ public class UserView extends JPanel {
 
     public void updateViewData()
     {
-        ArrayList<String> taskNames = new ArrayList();
-        ArrayList<String> taskDescriptions = new ArrayList();
-        List<Todo> taskList = userViewModel.getLoggedInUser().getTaskList();
-        for(Todo todo : taskList)
+        if(userViewModel.getLoggedInUser() != null)
         {
-            taskNames.add(todo.getName());
-            taskDescriptions.add(todo.getDescription());
+            ArrayList<String> taskNames = new ArrayList();
+            ArrayList<String> taskDescriptions = new ArrayList();
+            List<Todo> taskList = userViewModel.getLoggedInUser().getTaskList();
+            for(Todo todo : taskList)
+            {
+                taskNames.add(todo.getName());
+                taskDescriptions.add(todo.getDescription());
+            }
+
+            String[] taskNamesInput = new String[taskNames.size()];
+            String[] taskDescriptionsInput = new String[taskDescriptions.size()];
+
+            taskNames.toArray(taskNamesInput);
+            taskDescriptions.toArray(taskDescriptionsInput);
+
+            todoNames.setListData(taskNamesInput);
+            todoDescriptions = taskDescriptionsInput;
         }
-
-        String[] taskNamesInput = new String[taskNames.size()];
-        String[] taskDescriptionsInput = new String[taskDescriptions.size()];
-
-        taskNames.toArray(taskNamesInput);
-        taskDescriptions.toArray(taskDescriptionsInput);
-
-        todoNames.setListData(taskNamesInput);
-        todoDescriptions = taskDescriptionsInput;
     }
 
 }
