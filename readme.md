@@ -43,6 +43,8 @@ TMM aims to make managing time management in a group environment easy. For examp
 - GSON (Json API): https://mvnrepository.com/artifact/com.google.code.gson/gson/2.10.1
 - OkHttp (Http Request API): https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp/4.10.0
 - ImageKit.io (Online Database API): https://github.com/imagekit-developer/imagekit-java
+- API for Open Weather: https://openweathermap.org/api/one-call-3
+
 
 # Sources and References
 
@@ -50,6 +52,7 @@ TMM aims to make managing time management in a group environment easy. For examp
 - OkHttp: https://square.github.io/okhttp/
 - JSON: https://docs.oracle.com/javaee/7/api/javax/json/JsonObject.html
 - ImageKit.io: https://docs.imagekit.io/
+- Open Weather: https://openweathermap.org/
 - Previous Labs and Class from (CSC207 UofT)
 
 # Responsibilities
