@@ -44,26 +44,26 @@ public class CreateTodoUserInteractor implements CreateTodoUserInputBoundary {
         for (Todo task : taskList) { // Check for duplicate name
             if (name.equals(task.getName())) {
                 CreateTodoUserOutputData outputData = new CreateTodoUserOutputData("There is another task with the same name!");
-                this.userPresenter.failureView(outputData);
+                this.userPresenter.createFailureView(outputData);
                 return;
             }
         }
         if (emptyName(name)) { // Check if the task has a name
             CreateTodoUserOutputData outputData = new CreateTodoUserOutputData("Task does not have a name!");
-            this.userPresenter.failureView(outputData);
+            this.userPresenter.createFailureView(outputData);
         } else if (start.isAfter(end)) { // Check if the start date is after the end date
             CreateTodoUserOutputData outputData = new CreateTodoUserOutputData("Invalid start & end dates!");
-            this.userPresenter.failureView(outputData);
+            this.userPresenter.createFailureView(outputData);
         } else if (start.isBefore(LocalDateTime.now())) { // Check if the start date is equal to or after the current date
             CreateTodoUserOutputData outputData = new CreateTodoUserOutputData("Invalid start date!");
-            this.userPresenter.failureView(outputData);
+            this.userPresenter.createFailureView(outputData);
         } else {
             CreateTodoUserOutputData outputData = new CreateTodoUserOutputData("Task Successfully Created!");
             user.getTaskList().add(newTodo);
             user.setTaskList(user.getTaskList());
             userDataAccessObject.updateUser(user);
             EntityMemory.setLoggedInUser(user);
-            this.userPresenter.successView(outputData);
+            this.userPresenter.createSuccessView(outputData);
         }
     }
 }
