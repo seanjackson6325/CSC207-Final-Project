@@ -47,10 +47,14 @@ public class UserView extends JPanel {
     JMenu mainMenu, viewMenu, weatherMenu;
     JMenuItem logoutMainMenuItem, teamViewMenuItem, weatherViewMenuItem;
 
+    // adding and editing:
+    TodoInputView todoInputView;
+
     public UserView(UserViewModel userViewModel, UserController userController)
     {
         this.userViewModel = userViewModel;
         this.userController = userController;
+        todoInputView = null;
 
         // Initialize everything that needs user info
         JScrollPane listScroller = new JScrollPane(userViewModel.getTodoNames());
@@ -82,7 +86,10 @@ public class UserView extends JPanel {
         addTodoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new TodoInputView(null, "Enter Todo Attributes");
+                if(todoInputView == null)
+                {
+                    todoInputView = new TodoInputView(null, "Enter Todo Attributes");
+                }
             }
         });
 
@@ -109,9 +116,12 @@ public class UserView extends JPanel {
                 }
                 else
                 {
-                    TodoInputView editTodoView = new TodoInputView(
-                                    userViewModel.getUserTodos()[userViewModel.getTodoNames().getSelectedIndex()],
-                                    "Edit Todo Attributes");
+                    if(todoInputView == null)
+                    {
+                        todoInputView = new TodoInputView(
+                                userViewModel.getUserTodos()[userViewModel.getTodoNames().getSelectedIndex()],
+                                "Edit Todo Attributes");
+                    }
                 }
             }
         });
@@ -281,6 +291,13 @@ public class UserView extends JPanel {
             viewFrame.setResizable(false);
             viewFrame.setVisible(true);
 
+            viewFrame.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    todoInputView = null;
+                }
+            });
+
             confirm.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -304,7 +321,7 @@ public class UserView extends JPanel {
 
                     if (!userViewModel.getState().isFailed()) {
                         userViewModel.updateDataForView();
-                        viewFrame.dispatchEvent(new WindowEvent(viewFrame, WindowEvent.WINDOW_CLOSING));
+                        closeView();
                     }
                 }
             });
@@ -312,7 +329,7 @@ public class UserView extends JPanel {
             cancel.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    viewFrame.dispatchEvent(new WindowEvent(viewFrame, WindowEvent.WINDOW_CLOSING));
+                    closeView();
                 }
             });
 
@@ -332,6 +349,13 @@ public class UserView extends JPanel {
             });
 
         }
+
+        public void closeView()
+        {
+            viewFrame.dispatchEvent(new WindowEvent(viewFrame, WindowEvent.WINDOW_CLOSING));
+            todoInputView = null;
+        }
+
     }
 
 }
