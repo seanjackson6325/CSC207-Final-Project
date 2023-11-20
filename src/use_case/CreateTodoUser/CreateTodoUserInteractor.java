@@ -1,6 +1,7 @@
 package use_case.CreateTodoUser;
 
 import Factory.TodoFactory;
+import app.EntityMemory;
 import data_access.DataAccessInterface;
 import entity.Todo;
 import entity.User;
@@ -59,6 +60,9 @@ public class CreateTodoUserInteractor implements CreateTodoUserInputBoundary {
         } else {
             CreateTodoUserOutputData outputData = new CreateTodoUserOutputData("Task Successfully Created!");
             user.getTaskList().add(newTodo);
+            user.setTaskList(user.getTaskList());
+            userDataAccessObject.updateUser(user);
+            EntityMemory.setLoggedInUser(user);
             this.userPresenter.successView(outputData);
         }
     }

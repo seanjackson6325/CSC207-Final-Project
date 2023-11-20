@@ -36,7 +36,7 @@ public class Main {
         SignupView signupView = SignupFactory.createSignupView(viewManager, signupViewModel, dataAccess, new UserFactory());
 
         UserViewModel userViewModel = new UserViewModel(viewManager);
-        UserView userView = new UserView(userViewModel);
+        UserView userView = UserFactory.createUserView(viewManager, userViewModel, dataAccess);
 
         LoginViewModel loginViewModel = new LoginViewModel(viewManager, signupViewModel, userViewModel);
         LoginView loginView = LoginFactory.createLoginView(viewManager, loginViewModel, dataAccess);
@@ -48,6 +48,6 @@ public class Main {
 
         applicationFrame.setLocationRelativeTo(null);
         applicationFrame.setVisible(true);
-        applicationFrame.setResizable(true);
+        applicationFrame.setResizable(false);
     }
 }

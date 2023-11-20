@@ -47,7 +47,6 @@ public class LoginView extends JPanel implements PropertyChangeListener {
                     public void actionPerformed(ActionEvent e) {
                         if(e.getSource().equals(loginButton))
                         {
-                            loginViewModel.getViewManager().switchToView(loginViewModel.getPersonalViewModel().getName());
                             String username = loginViewModel.getState().getUsername();
                             String password = loginViewModel.getState().getPassword();
                             loginController.execute(username, password);
@@ -89,7 +88,7 @@ public class LoginView extends JPanel implements PropertyChangeListener {
                 new KeyListener() {
                     @Override
                     public void keyTyped(KeyEvent e) {
-                        String text = usernameInputField.getText() + e.getKeyChar();
+                        String text = passwordInputField.getText() + e.getKeyChar();
                         loginViewModel.getState().setPassword(text);
                     }
 

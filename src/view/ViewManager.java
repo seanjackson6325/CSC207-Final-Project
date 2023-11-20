@@ -28,6 +28,7 @@ public class ViewManager {
     {
         lastView = currentView;
         currentView = name;
+        applicationFrame.setJMenuBar(null);
 
         if(lastView != null)
         {
@@ -47,6 +48,11 @@ public class ViewManager {
     public String getCurrentView()
     {
         return currentView;
+    }
+
+    public JFrame getApplicationFrame()
+    {
+        return applicationFrame;
     }
 
     public void switchToLastView()

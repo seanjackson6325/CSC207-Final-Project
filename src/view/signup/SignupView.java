@@ -84,7 +84,7 @@ public class SignupView extends JPanel {
                 new KeyListener() {
                     @Override
                     public void keyTyped(KeyEvent e) {
-                        String text = usernameInputField.getText() + e.getKeyChar();
+                        String text = passwordInputField1.getText() + e.getKeyChar();
                         signupViewModel.getState().setPassword(text);
                     }
 
@@ -101,7 +101,7 @@ public class SignupView extends JPanel {
                 new KeyListener() {
                     @Override
                     public void keyTyped(KeyEvent e) {
-                        String text = usernameInputField.getText() + e.getKeyChar();
+                        String text = passwordInputField2.getText() + e.getKeyChar();
                         signupViewModel.getState().setRepeatPassword(text);
                     }
 

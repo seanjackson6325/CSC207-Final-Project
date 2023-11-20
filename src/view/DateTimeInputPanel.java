@@ -1,14 +1,20 @@
 package view;
 
 import javax.swing.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 public class DateTimeInputPanel extends JPanel {
 
-    private static final String[] months = {
+    public static final String[] months = {
             "January",
             "February",
             "March",
@@ -23,25 +29,52 @@ public class DateTimeInputPanel extends JPanel {
             "December"
     };
 
-    JComboBox<String> monthsComboBox;
-    JTextField minuteTextField;
+    private static final Integer[] minutes = {
+            0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+            10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+            20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
+            30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
+            40, 41, 42, 43, 44, 45, 46, 47, 48, 49,
+            50, 51, 52, 53, 54, 55, 56, 57, 58, 59
+    };
 
-    JTextField hourTextField;
-    JTextField dayTextField;
+    public static final Integer[] hours = {
+            0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
+            12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23
+    };
 
-    JTextField yearTextField;
 
-    JComboBox<String> am_pm;
+    private JComboBox<String> monthsComboBox;
+    private JComboBox<Integer> minuteComboBox;
 
+    private JComboBox<Integer> hourComboBox;
+    private JTextField dayTextField;
+
+    private JTextField yearTextField;
+
+    private int month;
+    private int minute;
+    private int hour;
+    private int day;
+    private int year;
+
+    private final List<String> validDays = Arrays.asList(new String[]{
+            "1", "2", "3", "4", "5", "6", "7", "8", "9",
+            "11", "12", "13", "14", "15", "16", "17", "18", "19",
+            "21", "22", "23", "24", "25", "26", "27", "28", "29",
+            "31", "32"});
+
+    private final List<String> validChars = Arrays.asList(new String[]{
+            "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"
+    });
 
     public DateTimeInputPanel(LocalDateTime time)
     {
         dayTextField = new JTextField(2);
         monthsComboBox = new JComboBox<>(months);
         yearTextField = new JTextField(4);
-        hourTextField = new JTextField(2);
-        minuteTextField = new JTextField(2);
-        am_pm = new JComboBox<>(new String[] {"AM", "PM"});
+        hourComboBox = new JComboBox<>(hours);
+        minuteComboBox = new JComboBox<>(minutes);
 
         this.add(new JLabel("Year: "));
         this.add(yearTextField);
@@ -50,20 +83,102 @@ public class DateTimeInputPanel extends JPanel {
         this.add(new JLabel("Day: "));
         this.add(dayTextField);
         this.add(new JLabel("Time: "));
-        this.add(hourTextField);
+        this.add(hourComboBox);
         this.add(new JLabel(":"));
-        this.add(minuteTextField);
-        this.add(am_pm);
+        this.add(minuteComboBox);
+
+        month = 1;
+        minute = 0;
+        hour = 0;
+        day = -1;
+        year = -1;
+
+        monthsComboBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                month = monthsComboBox.getSelectedIndex() + 1;
+            }
+        });
+
+        minuteComboBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                minute = minutes[minuteComboBox.getSelectedIndex()];
+            }
+        });
+
+        hourComboBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                hour = hours[hourComboBox.getSelectedIndex()];
+            }
+        });
     }
 
     public LocalDateTime getLocalDateTime()
     {
-        int year = Integer.parseInt(yearTextField.getText());
-        int month = monthsComboBox.getSelectedIndex() + 1;
-        int day = 1;
-        int hour = 23;
-        int minute = 59;
-        return LocalDateTime.of(year, month, day, hour, minute);
+        return LocalDateTime.of(
+                Integer.parseInt(yearTextField.getText()),
+                month,
+                Integer.parseInt(dayTextField.getText()),
+                hour,
+                minute);
+    }
+
+    public boolean isValidInput()
+    {
+        boolean yearValid = false;
+        for(int i = 0; i < yearTextField.getText().length(); i++)
+        {
+            String charString = "" + yearTextField.getText().charAt(i);
+            if(!validChars.contains(charString))
+            {
+                return false;
+            }
+        }
+        yearValid = true;
+        boolean dayValid = validDays.contains(dayTextField.getText());
+        return yearValid && dayValid;
+    }
+
+    public void setInput(LocalDateTime time)
+    {
+        yearTextField.setText(time.getYear() + "");
+        dayTextField.setText(time.getDayOfMonth() + "");
+        monthsComboBox.setSelectedIndex(time.getMonthValue()-1);
+        hourComboBox.setSelectedIndex(time.getHour());
+        minuteComboBox.setSelectedIndex(time.getMinute());
+    }
+
+    public static String getFormattedTimeString(LocalDateTime time)
+    {
+        int timeHour = time.getHour();
+        String hourString = "";
+        String am_pm = "AM";
+        if(timeHour < 1)
+        {
+            timeHour += 12;
+        }
+        if(timeHour > 12)
+        {
+            timeHour -= 12;
+            am_pm = "PM";
+        }
+        hourString += Integer.toString(timeHour);
+        if(hourString.length() == 1)
+        {
+            hourString = "0" + hourString;
+        }
+
+
+        String minute = Integer.toString(time.getMinute());
+        if(minute.length() == 1)
+            minute = "0" + minute;
+
+        String timeString = hourString + ":" + minute + " " + am_pm;
+        return DateTimeInputPanel.months[time.getMonthValue()-1] + " " +
+                        time.getDayOfMonth() + ", " + time.getYear() + ", at " +
+                        timeString;
     }
 
 
