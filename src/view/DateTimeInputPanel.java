@@ -14,7 +14,7 @@ import java.util.List;
 
 public class DateTimeInputPanel extends JPanel {
 
-    private static final String[] months = {
+    public static final String[] months = {
             "January",
             "February",
             "March",
@@ -140,6 +140,47 @@ public class DateTimeInputPanel extends JPanel {
         boolean dayValid = validDays.contains(dayTextField.getText());
         return yearValid && dayValid;
     }
+
+    public void setInput(LocalDateTime time)
+    {
+        yearTextField.setText(time.getYear() + "");
+        dayTextField.setText(time.getDayOfMonth() + "");
+        monthsComboBox.setSelectedIndex(time.getMonthValue()-1);
+        hourComboBox.setSelectedIndex(time.getHour());
+        minuteComboBox.setSelectedIndex(time.getMinute());
+    }
+
+    public static String getFormattedTimeString(LocalDateTime time)
+    {
+        int timeHour = time.getHour();
+        String hourString = "";
+        String am_pm = "AM";
+        if(timeHour < 1)
+        {
+            timeHour += 12;
+        }
+        if(timeHour > 12)
+        {
+            timeHour -= 12;
+            am_pm = "PM";
+        }
+        hourString += Integer.toString(timeHour);
+        if(hourString.length() == 1)
+        {
+            hourString = "0" + hourString;
+        }
+
+
+        String minute = Integer.toString(time.getMinute());
+        if(minute.length() == 1)
+            minute = "0" + minute;
+
+        String timeString = hourString + ":" + minute + " " + am_pm;
+        return DateTimeInputPanel.months[time.getMonthValue()-1] + " " +
+                        time.getDayOfMonth() + ", " + time.getYear() + ", at " +
+                        timeString;
+    }
+
 
 }
 

@@ -3,11 +3,14 @@ package interface_adapter.user;
 import app.EntityMemory;
 import entity.Todo;
 import entity.User;
+import view.DateTimeInputPanel;
 import view.ViewManager;
 import view.ViewModel;
 
 import javax.swing.*;
+import javax.swing.text.Document;
 import java.awt.*;
+import java.sql.Array;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +19,13 @@ public class UserViewModel extends ViewModel {
 
     private User loggedInUser;
 
+    private Todo[] userTodos;
     private JList<String> todoNames;
-    private JEditorPane todoDescriptionTextPane;
+    private JTextPane todoDescriptionTextPane;
     private String[] todoDescriptions;
+
+    private String[] todoStartTimes;
+    private String[] todoEndTimes;
 
     public UserViewModel(ViewManager viewManager)
     {
@@ -29,10 +36,11 @@ public class UserViewModel extends ViewModel {
         todoNames = new JList<>(new DefaultListModel<String>());
         todoNames.setLayoutOrientation(JList.VERTICAL);
 
-        todoDescriptionTextPane = new JEditorPane();
-        todoDescriptionTextPane.setPreferredSize(new Dimension(200, 200));
+        todoDescriptionTextPane = new JTextPane();
+        todoDescriptionTextPane.setPreferredSize(new Dimension(240, 200));
         todoDescriptionTextPane.setEditable(false);
 
+        userTodos = null;
         todoDescriptions = null;
     }
 
@@ -74,27 +82,59 @@ public class UserViewModel extends ViewModel {
         return todoDescriptions;
     }
 
+    public String[] getTodoStartTimes()
+    {
+        return todoStartTimes;
+    }
+
+    public String[] getTodoEndTimes()
+    {
+        return todoEndTimes;
+    }
+
+    public Todo[] getUserTodos()
+    {
+        return userTodos;
+    }
+
+
     public void updateDataForView()
     {
         if(loggedInUser != null)
         {
-            ArrayList<String> taskNames = new ArrayList();
-            ArrayList<String> taskDescriptions = new ArrayList();
+            ArrayList<Todo> todos = new ArrayList<>();
+            ArrayList<String> taskNames = new ArrayList<>();
+            ArrayList<String> taskDescriptions = new ArrayList<>();
+            ArrayList<String> taskStartTimes = new ArrayList<>();
+            ArrayList<String> taskEndTimes = new ArrayList<>();
             List<Todo> taskList = loggedInUser.getTaskList();
             for(Todo todo : taskList)
             {
+                todos.add(todo);
                 taskNames.add(todo.getName());
-                taskDescriptions.add(todo.getDescription());
+                String description = todo.getDescription().replaceAll("\\\\r\\\\n", " ");
+                taskDescriptions.add(description);
+                taskStartTimes.add(DateTimeInputPanel.getFormattedTimeString(todo.getStartTime()));
+                taskEndTimes.add(DateTimeInputPanel.getFormattedTimeString(todo.getEndTime()));
             }
 
+            Todo[] todosInput = new Todo[todos.size()];
             String[] taskNamesInput = new String[taskNames.size()];
             String[] taskDescriptionsInput = new String[taskDescriptions.size()];
+            String[] taskStartTimesInput = new String[taskStartTimes.size()];
+            String[] taskEndTimesInput = new String[taskEndTimes.size()];
 
+            todos.toArray(todosInput);
             taskNames.toArray(taskNamesInput);
             taskDescriptions.toArray(taskDescriptionsInput);
+            taskStartTimes.toArray(taskStartTimesInput);
+            taskEndTimes.toArray(taskEndTimesInput);
 
+            userTodos = todosInput;
             todoNames.setListData(taskNamesInput);
             todoDescriptions = taskDescriptionsInput;
+            todoStartTimes = taskStartTimesInput;
+            todoEndTimes = taskEndTimesInput;
         }
     }
 
