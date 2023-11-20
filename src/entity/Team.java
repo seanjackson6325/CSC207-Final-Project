@@ -57,7 +57,7 @@ public class Team implements TeamInterface {
 
     @Override
     public void setMembers(List<String> members) {
-        this.managers = members;
+        this.members = members;
     }
 
 }
