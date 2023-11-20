@@ -34,6 +34,8 @@ public class UserView extends JPanel {
     JButton removeTodoButton;
     JButton editTodoButton;
 
+    JButton completeTodoButton;
+
     // for the description:
     JPanel todoDescriptionPanel;
     JPanel todoTimePanel;
@@ -72,6 +74,7 @@ public class UserView extends JPanel {
         addTodoButton = new JButton("Add");
         removeTodoButton = new JButton("Remove");
         editTodoButton = new JButton("Edit");
+        completeTodoButton = new JButton("Mark Done");
 
         todoDescriptionStartTime = new JEditorPane();
         todoDescriptionEndTime = new JEditorPane();
@@ -86,7 +89,14 @@ public class UserView extends JPanel {
         removeTodoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showConfirmDialog(null, "Remove todo?");
+                if(userViewModel.getTodoNames().getSelectedIndex() == -1)
+                {
+                    JOptionPane.showMessageDialog(null, "Select a Todo to Remove");
+                }
+                else
+                {
+                    JOptionPane.showConfirmDialog(null, "Remove todo?");
+                }
             }
         });
 
@@ -95,13 +105,27 @@ public class UserView extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 if(userViewModel.getTodoNames().getSelectedIndex() == -1)
                 {
-                    JOptionPane.showMessageDialog(null, "Select an Item to Edit");
+                    JOptionPane.showMessageDialog(null, "Select a Todo to Edit");
                 }
                 else
                 {
                     TodoInputView editTodoView = new TodoInputView(
                                     userViewModel.getUserTodos()[userViewModel.getTodoNames().getSelectedIndex()],
                                     "Edit Todo Attributes");
+                }
+            }
+        });
+
+        completeTodoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(userViewModel.getTodoNames().getSelectedIndex() == -1)
+                {
+                    JOptionPane.showMessageDialog(null, "Select a Todo to Mark Done");
+                }
+                else
+                {
+                    // complete it
                 }
             }
         });
@@ -149,6 +173,7 @@ public class UserView extends JPanel {
         addRemoveButtonsPanel.add(addTodoButton);
         addRemoveButtonsPanel.add(removeTodoButton);
         addRemoveButtonsPanel.add(editTodoButton);
+        addRemoveButtonsPanel.add(completeTodoButton);
 
         addRemoveButtonsPanel.setLayout(new BoxLayout(addRemoveButtonsPanel, BoxLayout.X_AXIS));
 
