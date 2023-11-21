@@ -50,6 +50,10 @@ public class UserViewModel extends ViewModel {
     {
         return state;
     }
+    private EditState editState = new EditState();
+    public EditState getEditState() {
+        return editState;
+    }
 
     public void setState(UserState state)
     {

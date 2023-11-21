@@ -10,6 +10,8 @@ import interface_adapter.user.UserViewModel;
 import use_case.CreateTodoUser.CreateTodoUserInputBoundary;
 import use_case.CreateTodoUser.CreateTodoUserInteractor;
 import use_case.CreateTodoUser.CreateTodoUserOutputBoundary;
+import use_case.EditTodo.EditTodoInteractor;
+import use_case.EditTodo.EditTodoOutputBoundary;
 import view.ViewManager;
 import view.user.UserView;
 
@@ -33,8 +35,10 @@ public class UserFactory {
                                                       DataAccessInterface userDataAccess)
     {
         CreateTodoUserOutputBoundary presenter = new UserPresenter(viewManager, userViewModel);
-        CreateTodoUserInteractor interactor = new CreateTodoUserInteractor(userDataAccess, presenter);
-        return new UserController(interactor);
+        CreateTodoUserInteractor createInteractor = new CreateTodoUserInteractor(userDataAccess, presenter);
+
+        EditTodoInteractor editInteractor = new EditTodoInteractor(userDataAccess, (EditTodoOutputBoundary) presenter);
+        return new UserController(createInteractor, editInteractor);
     }
 
 }
