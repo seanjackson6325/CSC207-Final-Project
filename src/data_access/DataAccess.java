@@ -138,6 +138,7 @@ public class DataAccess implements DataAccessInterface {
 
     @Override
     public void createUser(User user) {
+
         //checks for existence
         try {
             data.get("USER_" + user.getUsername()).getAsJsonObject();
@@ -158,6 +159,8 @@ public class DataAccess implements DataAccessInterface {
 
     @Override
     public User readUser(String username) {
+        LoadData();
+
         //checks for existence
         try {
             JsonObject userData = data.get("USER_" + username).getAsJsonObject();
@@ -183,6 +186,8 @@ public class DataAccess implements DataAccessInterface {
 
     @Override
     public void updateUser(User user) {
+        LoadData();
+
         try {
             data.remove("USER_" + user.getUsername());
             createUser(user);  // contains SaveData()
@@ -194,6 +199,8 @@ public class DataAccess implements DataAccessInterface {
 
     @Override
     public void deleteUser(String username) {
+        LoadData();
+
         //checks for existence
         try {
             data.remove("USER_" + username);
@@ -206,6 +213,7 @@ public class DataAccess implements DataAccessInterface {
 
     @Override
     public void createTeam(Team team) {
+
         //checks for existence
         try {
             data.get("TEAM_" + team.getTeamName()).getAsJsonObject();
@@ -226,6 +234,8 @@ public class DataAccess implements DataAccessInterface {
 
     @Override
     public Team readTeam(String teamName) {
+        LoadData();
+
         //checks for existence
         try {
             JsonObject teamData = data.get("TEAM_" + teamName).getAsJsonObject();
@@ -256,6 +266,8 @@ public class DataAccess implements DataAccessInterface {
 
     @Override
     public void updateTeam(Team team) {
+        LoadData();
+
         try {
             data.remove("TEAM_" + team.getTeamName());
             createTeam(team);  // contains SaveData()
@@ -267,6 +279,7 @@ public class DataAccess implements DataAccessInterface {
 
     @Override
     public void deleteTeam(String teamName) {
+        LoadData();
         //checks for existence
         try {
             data.remove("TEAM_" + teamName);
