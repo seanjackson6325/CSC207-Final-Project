@@ -22,8 +22,11 @@ TMM aims to make managing time management in a group environment easy. For examp
 # Specifications
 
     - Personal Todo List
+    - Create your own account
     - Create and Manage Groups
     - Group Todo Lists
+    - Has accurate weather analysis to base Todo tasks on
+    - Be able to edit a personal or team Todo task
     - Be able to see other's schedule (in the same group)
     - Be able to request and accept Todos from others on empty time slots
     - Different types of Todos (commute, private, work...etc)
@@ -35,8 +38,10 @@ TMM aims to make managing time management in a group environment easy. For examp
 3. Create TODO (Personal)
 4. Create TODO (Group)
 5. Delete TODO
-6. Create Group
-7. Add/Remove Group Members -> Invite/Accept/Remove Members
+6. Edit TODO
+7. Create Team
+8. Add/Remove Team Members -> Invite/Accept/Remove Members
+9. Mark As Done
 
 # APIs and Maven Dependencies
 
@@ -101,7 +106,7 @@ Below are Coding Related:
 (Entity)
 - [x] User (Kyle)
   - [ ] Test (Kyle)
-- [ ] UserFactory (Darryl)
+- [x] UserFactory (Darryl)
   - [ ] Test (Darryl)
 - [x] Todo (Kyle)
   - [ ] Test (Kyle)
@@ -151,6 +156,18 @@ Below are Coding Related:
 - [ ] OutputData ()
   - [ ] Test ()
 - [ ] Interactor ()
+  - [ ] Test ()
+
+(Use Case EditTodo)
+- [x] InputBoundary (Darryl)
+  - [ ] Test ()
+- [x] InputData (Darryl)
+  - [ ] Test ()
+- [x] OutputBoundary (Darryl)
+  - [ ] Test ()
+- [x] OutputData (Darryl)
+  - [ ] Test ()
+- [x] Interactor (Darryl)
   - [ ] Test ()
 
 (Use Cases Signup)
@@ -214,27 +231,39 @@ Below are Coding Related:
   - [ ] Test ()
 
 (Use Case AddMember)
-- [ ] InputBoundary (Darryl)
+- [x] InputBoundary (Darryl)
   - [ ] Test ()
-- [ ] InputData (Darryl)
+- [x] InputData (Darryl)
   - [ ] Test ()
-- [ ] OutputBoundary (Darryl)
+- [x] OutputBoundary (Darryl)
   - [ ] Test ()
-- [ ] OutputData (Darryl)
+- [x] OutputData (Darryl)
   - [ ] Test ()
-- [ ] Interactor (Darryl)
+- [x] Interactor (Darryl)
   - [ ] Test ()
 
 (Use Case RemoveMember)
-- [ ] InputBoundary (Darryl)
+- [x] InputBoundary (Darryl)
   - [ ] Test ()
-- [ ] InputData (Darryl)
+- [x] InputData (Darryl)
   - [ ] Test ()
-- [ ] OutputBoundary (Darryl)
+- [x] OutputBoundary (Darryl)
   - [ ] Test ()
-- [ ] OutputData (Darryl)
+- [x] OutputData (Darryl)
   - [ ] Test ()
-- [ ] Interactor (Darryl)
+- [x] Interactor (Darryl)
+  - [ ] Test ()
+
+(Use Case MarkDone)
+- [x] InputBoundary (Darryl)
+  - [ ] Test ()
+- [x] InputData (Darryl)
+  - [ ] Test ()
+- [x] OutputBoundary (Darryl)
+  - [ ] Test ()
+- [x] OutputData (Darryl)
+  - [ ] Test ()
+- [x] Interactor (Darryl)
   - [ ] Test ()
 
 # Diagrams (For references, not accurate; outdated)
