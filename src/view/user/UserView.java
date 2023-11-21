@@ -8,20 +8,10 @@ import interface_adapter.user.UserViewModel;
 import view.DateTimeInputPanel;
 
 import javax.swing.*;
-import javax.swing.border.AbstractBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.*;
-import java.lang.reflect.Array;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class UserView extends JPanel {
 
@@ -63,6 +53,7 @@ public class UserView extends JPanel {
      *  FOR ADDING AND EDITING TASKS (INTERNAL CLASS BELOW)
      */
     TodoInputView todoInputView;
+    EditTodoInputView editTodoInputView;
 
     /**
      *
@@ -147,12 +138,13 @@ public class UserView extends JPanel {
                 }
                 else
                 {
-                    if(todoInputView == null)
+                    if(editTodoInputView == null)
                     {
-                        todoInputView = new TodoInputView(
+                        userViewModel.getEditState().setTodoPrevName(userViewModel.getUserTodos()[userViewModel.getTodoNames().getSelectedIndex()].getName());
+                        userViewModel.getEditState().setTodoNewName(userViewModel.getUserTodos()[userViewModel.getTodoNames().getSelectedIndex()].getName());
+                        editTodoInputView = new EditTodoInputView(
                                 userViewModel.getUserTodos()[userViewModel.getTodoNames().getSelectedIndex()],
                                 "Edit Todo Attributes");
-
                     }
                 }
             }
@@ -354,7 +346,7 @@ public class UserView extends JPanel {
 
                     String user = userViewModel.getLoggedInUser().getUsername();
 
-                    userController.execute(
+                    userController.executeAdd(
                             userViewModel.getState().getTodoName(),
                             todoDescriptionEditor.getText(),
                             startTimePanel.getLocalDateTime(),
@@ -399,6 +391,139 @@ public class UserView extends JPanel {
         {
             viewFrame.dispatchEvent(new WindowEvent(viewFrame, WindowEvent.WINDOW_CLOSING));
             todoInputView = null;
+        }
+
+    }
+
+    private class EditTodoInputView {
+        private DateTimeInputPanel startTimePanel;
+        private DateTimeInputPanel endTimePanel;
+
+        private JPanel namePanel;
+        private JTextField nameField;
+        private JLabel nameLabel;
+
+        private JPanel viewPanel;
+        private JFrame viewFrame;
+
+        private JPanel confirmButtonPanel;
+        private JButton confirm, cancel;
+
+        JPanel todoDescriptionPanel;
+        JEditorPane todoDescriptionEditor;
+
+        public EditTodoInputView(Todo previous, String title) {
+            startTimePanel = new DateTimeInputPanel(null);
+            endTimePanel = new DateTimeInputPanel(null);
+
+            namePanel = new JPanel();
+            nameField = new JTextField(15);
+            nameLabel = new JLabel("Name: ");
+            namePanel.add(nameLabel);
+            namePanel.add(nameField);
+
+            confirmButtonPanel = new JPanel();
+            confirm = new JButton("Confirm");
+            cancel = new JButton("Cancel");
+            confirmButtonPanel.add(confirm);
+            confirmButtonPanel.add(cancel);
+
+            todoDescriptionEditor = new JEditorPane();
+            todoDescriptionEditor.setPreferredSize(new Dimension(240, 200));
+            todoDescriptionEditor.setMaximumSize(new Dimension(240, 200));
+            todoDescriptionPanel = new JPanel();
+            todoDescriptionPanel.setLayout(new BoxLayout(todoDescriptionPanel, BoxLayout.Y_AXIS));
+            todoDescriptionPanel.add(new JLabel("Description"));
+            todoDescriptionPanel.add(todoDescriptionEditor);
+
+            if(previous != null)
+            {
+                nameField.setText(previous.getName());
+                todoDescriptionEditor.setText(previous.getDescription());
+                startTimePanel.setInput(previous.getStartTime());
+                endTimePanel.setInput(previous.getEndTime());
+            }
+
+            viewPanel = new JPanel();
+            viewPanel.setLayout(new BoxLayout(viewPanel, BoxLayout.Y_AXIS));
+            viewPanel.add(namePanel);
+            viewPanel.add(new JLabel("Start: "));
+            viewPanel.add(startTimePanel);
+            viewPanel.add(new JLabel("End: "));
+            viewPanel.add(endTimePanel);
+            viewPanel.add(todoDescriptionPanel);
+            viewPanel.add(confirmButtonPanel);
+
+            viewFrame = new JFrame(title);
+            viewFrame.setLocationRelativeTo(null);
+            viewFrame.add(viewPanel);
+            viewFrame.pack();
+            viewFrame.setResizable(false);
+            viewFrame.setVisible(true);
+
+            confirm.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (!startTimePanel.isValidInput() || !endTimePanel.isValidInput()) {
+                        JOptionPane.showMessageDialog(null, "Please finish entering valid information");
+                        userViewModel.getState().setFailed(true);
+                        return;
+                    }
+
+                    String user = userViewModel.getLoggedInUser().getUsername();
+
+                    userController.executeEdit(
+                            userViewModel.getEditState().getTodoPrevName(),
+                            userViewModel.getEditState().getTodoNewName(),
+                            todoDescriptionEditor.getText(),
+                            startTimePanel.getLocalDateTime(),
+                            endTimePanel.getLocalDateTime(),
+                            user,
+                            false,
+                            user
+                    );
+
+                    if (!userViewModel.getState().isFailed()) {
+                        userViewModel.updateDataForView();
+                        closeView();
+                    }
+                }
+            });
+
+            viewFrame.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    editTodoInputView = null;
+                }
+            });
+
+            cancel.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    closeView();
+                }
+            });
+
+            nameField.addKeyListener(new KeyListener() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    userViewModel.getEditState().setTodoNewName(nameField.getText() + e.getKeyChar());
+                }
+
+                @Override
+                public void keyPressed(KeyEvent e) {
+                }
+
+                @Override
+                public void keyReleased(KeyEvent e) {
+                }
+            });
+        }
+
+        public void closeView()
+        {
+            viewFrame.dispatchEvent(new WindowEvent(viewFrame, WindowEvent.WINDOW_CLOSING));
+            editTodoInputView = null;
         }
 
     }
