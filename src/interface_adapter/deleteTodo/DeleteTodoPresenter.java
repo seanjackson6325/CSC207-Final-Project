@@ -1,12 +1,18 @@
 package interface_adapter.deleteTodo;
 
+import interface_adapter.user.UserViewModel;
 import use_case.DeleteTodo.DeleteTodoOutputBoundary;
 import use_case.DeleteTodo.DeleteTodoOutputData;
+import view.ViewManager;
 
 public class DeleteTodoPresenter implements DeleteTodoOutputBoundary {
 
-    public DeleteTodoPresenter() {
-        //TODO
+    private ViewManager viewManager;
+    private UserViewModel userViewModel;
+
+    public DeleteTodoPresenter(ViewManager viewManager, UserViewModel userViewModel) {
+        this.viewManager = viewManager;
+        this.userViewModel = userViewModel;
     }
 
     @Override
@@ -14,12 +20,10 @@ public class DeleteTodoPresenter implements DeleteTodoOutputBoundary {
         // this gets the success message, deleteTodoOutputData.getMessage();
         // probably want reload/update the view we are in
 
-        //TODO
     }
 
     @Override
     public void prepareFailView(String error) {
-        //TODO
 
     }
 }

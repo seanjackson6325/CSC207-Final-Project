@@ -23,9 +23,9 @@ public class UserViewModel extends ViewModel {
     private JList<String> todoNames;
     private JTextPane todoDescriptionTextPane;
     private String[] todoDescriptions;
-
     private String[] todoStartTimes;
     private String[] todoEndTimes;
+    private Boolean[] todoStatuses;
 
     public UserViewModel(ViewManager viewManager)
     {
@@ -42,6 +42,7 @@ public class UserViewModel extends ViewModel {
 
         userTodos = null;
         todoDescriptions = null;
+        todoStatuses = null;
     }
 
     private UserState state = new UserState();
@@ -101,6 +102,11 @@ public class UserViewModel extends ViewModel {
         return userTodos;
     }
 
+    public Boolean[] getTodoStatuses()
+    {
+        return todoStatuses;
+    }
+
 
     public void updateDataForView()
     {
@@ -111,6 +117,7 @@ public class UserViewModel extends ViewModel {
             ArrayList<String> taskDescriptions = new ArrayList<>();
             ArrayList<String> taskStartTimes = new ArrayList<>();
             ArrayList<String> taskEndTimes = new ArrayList<>();
+            ArrayList<Boolean> taskStatuses = new ArrayList<>();
             List<Todo> taskList = loggedInUser.getTaskList();
             for(Todo todo : taskList)
             {
@@ -120,6 +127,7 @@ public class UserViewModel extends ViewModel {
                 taskDescriptions.add(description);
                 taskStartTimes.add(DateTimeInputPanel.getFormattedTimeString(todo.getStartTime()));
                 taskEndTimes.add(DateTimeInputPanel.getFormattedTimeString(todo.getEndTime()));
+                taskStatuses.add(todo.getStatus());
             }
 
             Todo[] todosInput = new Todo[todos.size()];
@@ -127,18 +135,22 @@ public class UserViewModel extends ViewModel {
             String[] taskDescriptionsInput = new String[taskDescriptions.size()];
             String[] taskStartTimesInput = new String[taskStartTimes.size()];
             String[] taskEndTimesInput = new String[taskEndTimes.size()];
+            Boolean[] taskStatusesInput = new Boolean[taskStatuses.size()];
 
             todos.toArray(todosInput);
             taskNames.toArray(taskNamesInput);
             taskDescriptions.toArray(taskDescriptionsInput);
             taskStartTimes.toArray(taskStartTimesInput);
             taskEndTimes.toArray(taskEndTimesInput);
+            taskStatuses.toArray(taskStatusesInput);
+
 
             userTodos = todosInput;
             todoNames.setListData(taskNamesInput);
             todoDescriptions = taskDescriptionsInput;
             todoStartTimes = taskStartTimesInput;
             todoEndTimes = taskEndTimesInput;
+            todoStatuses = taskStatusesInput;
         }
     }
 

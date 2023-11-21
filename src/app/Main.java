@@ -21,6 +21,10 @@ import java.time.LocalDateTime;
 // best tutorial for swing stuff:
 // https://docs.oracle.com/javase/tutorial/uiswing/components/componentlist.html
 
+// THINGS TO FIX:
+// 1: Empty username and password should not be allowed as this breaks the login system
+
+
 public class Main {
 
     public static void main(String[] args)
