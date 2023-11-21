@@ -2,9 +2,9 @@ package interface_adapter.user;
 
 import java.time.LocalDateTime;
 
-public class UserState {
-
-    private String todoName;
+public class EditState extends UserState {
+    private String todoPrevName;
+    private String todoNewName;
     private String todoDescription;
     private LocalDateTime todoStartTime, todoEndTime;
     private String todoUser;
@@ -13,11 +13,12 @@ public class UserState {
 
     private boolean failed;
 
-    public UserState() {}
+    public EditState() {}
 
-    public UserState(UserState prev)
+    public EditState(EditState prev)
     {
-        todoName = prev.getTodoName();
+        todoPrevName = prev.getTodoPrevName();
+        todoNewName = prev.getTodoNewName();
         todoDescription = prev.getTodoDescription();
         todoStartTime = prev.getTodoStartTime();
         todoEndTime = prev.getTodoEndTime();
@@ -27,14 +28,24 @@ public class UserState {
         failed = prev.isFailed();
     }
 
-    public String getTodoName()
+    public String getTodoPrevName()
     {
-        return todoName;
+        return todoPrevName;
     }
 
-    public void setTodoName(String todoName)
+    public void setTodoPrevName(String todoName)
     {
-        this.todoName = todoName;
+        this.todoPrevName = todoName;
+    }
+
+    public String getTodoNewName()
+    {
+        return todoNewName;
+    }
+
+    public void setTodoNewName(String todoName)
+    {
+        this.todoNewName = todoName;
     }
 
     public String getTodoDescription()
@@ -107,18 +118,4 @@ public class UserState {
         return failed;
     }
 
-    public String getTodoPrevName() {
-        return null;
-    }
-
-    public String getTodoNewName() {
-        return null;
-    }
-
-    public void setTodoNewName(String s) {
-    }
-
-    public void setTodoPrevName(String s) {
-
-    }
 }
