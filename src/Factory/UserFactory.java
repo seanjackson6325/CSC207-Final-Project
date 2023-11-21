@@ -3,6 +3,8 @@ package Factory;
 import data_access.DataAccessInterface;
 import entity.Todo;
 import entity.User;
+import interface_adapter.deleteTodo.DeleteTodoController;
+import interface_adapter.deleteTodo.DeleteTodoPresenter;
 import interface_adapter.signup.SignupViewModel;
 import interface_adapter.user.UserController;
 import interface_adapter.user.UserPresenter;
@@ -10,6 +12,8 @@ import interface_adapter.user.UserViewModel;
 import use_case.CreateTodoUser.CreateTodoUserInputBoundary;
 import use_case.CreateTodoUser.CreateTodoUserInteractor;
 import use_case.CreateTodoUser.CreateTodoUserOutputBoundary;
+import use_case.DeleteTodo.DeleteTodoInteractor;
+import use_case.DeleteTodo.DeleteTodoOutputBoundary;
 import view.ViewManager;
 import view.user.UserView;
 
@@ -24,8 +28,9 @@ public class UserFactory {
                                           UserViewModel userViewModel,
                                           DataAccessInterface userDataAccess)
     {
-        UserController controller = createUserController(viewManager, userViewModel, userDataAccess);
-        return new UserView(userViewModel, controller);
+        UserController userController = createUserController(viewManager, userViewModel, userDataAccess);
+        DeleteTodoController deleteController = createDeleteTodoController(viewManager, userViewModel, userDataAccess);
+        return new UserView(userViewModel, userController, deleteController);
     }
 
     public static UserController createUserController(ViewManager viewManager,
@@ -37,4 +42,12 @@ public class UserFactory {
         return new UserController(interactor);
     }
 
+    public static DeleteTodoController createDeleteTodoController(ViewManager viewManager,
+                                                                  UserViewModel userViewModel,
+                                                                  DataAccessInterface userDataAccess)
+    {
+        DeleteTodoOutputBoundary presenter = new DeleteTodoPresenter(viewManager, userViewModel);
+        DeleteTodoInteractor interactor = new DeleteTodoInteractor(userDataAccess, presenter);
+        return new DeleteTodoController(interactor);
+    }
 }

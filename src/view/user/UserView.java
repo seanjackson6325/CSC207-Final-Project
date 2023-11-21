@@ -1,6 +1,7 @@
 package view.user;
 
 import entity.Todo;
+import interface_adapter.deleteTodo.DeleteTodoController;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.user.UserController;
 import interface_adapter.user.UserViewModel;
@@ -24,36 +25,58 @@ import java.util.Arrays;
 
 public class UserView extends JPanel {
 
+    /**
+     *  FOR RECEIVING AND SENDING DATA
+     */
     UserViewModel userViewModel;
     UserController userController;
+    DeleteTodoController deleteTodoController;
 
-    // For the list selector:
+    /**
+     *  FOR THE TASK SELECTOR
+     */
     JPanel addRemoveButtonsPanel;
     JPanel todoListPanel;
     JButton addTodoButton;
     JButton removeTodoButton;
     JButton editTodoButton;
-
     JButton completeTodoButton;
 
-    // for the description:
+    /**
+     *  FOR THE DESCRIPTION SECTION
+     */
     JPanel todoDescriptionPanel;
     JPanel todoTimePanel;
     JEditorPane todoDescriptionStartTime;
     JEditorPane todoDescriptionEndTime;
+    JPanel todoStatusPanel;
+    JEditorPane todoDescriptionStatus;
 
-    // for the toolbar
+    /**
+     *  FOR THE TOOLBAR
+     */
     JMenuBar menuBar;
     JMenu mainMenu, viewMenu, weatherMenu;
     JMenuItem logoutMainMenuItem, teamViewMenuItem, weatherViewMenuItem;
 
-    // adding and editing:
+    /**
+     *  FOR ADDING AND EDITING TASKS (INTERNAL CLASS BELOW)
+     */
     TodoInputView todoInputView;
 
-    public UserView(UserViewModel userViewModel, UserController userController)
+    /**
+     *
+     * Main constructor for this UserView object.
+     *
+     * @param userViewModel
+     * @param userController
+     */
+
+    public UserView(UserViewModel userViewModel, UserController userController, DeleteTodoController deleteTodoController)
     {
         this.userViewModel = userViewModel;
         this.userController = userController;
+        this.deleteTodoController = deleteTodoController;
         todoInputView = null;
 
         // Initialize everything that needs user info
@@ -83,6 +106,8 @@ public class UserView extends JPanel {
         todoDescriptionStartTime = new JEditorPane();
         todoDescriptionEndTime = new JEditorPane();
 
+        todoDescriptionStatus = new JEditorPane();
+
         addTodoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -102,7 +127,13 @@ public class UserView extends JPanel {
                 }
                 else
                 {
-                    JOptionPane.showConfirmDialog(null, "Remove todo?");
+                    int option = JOptionPane.showConfirmDialog(null, "Remove todo?");
+                    if(option == 0)
+                    {
+                        deleteTodoController.execute(userViewModel.getTodoNames().getSelectedIndex(),
+                                userViewModel.getLoggedInUser().getTaskList(), null);
+                        userViewModel.updateDataForView();
+                    }
                 }
             }
         });
@@ -121,6 +152,7 @@ public class UserView extends JPanel {
                         todoInputView = new TodoInputView(
                                 userViewModel.getUserTodos()[userViewModel.getTodoNames().getSelectedIndex()],
                                 "Edit Todo Attributes");
+
                     }
                 }
             }
@@ -147,7 +179,16 @@ public class UserView extends JPanel {
                 if(index != -1) {
                     todoDescriptionStartTime.setText("Start: " + userViewModel.getTodoStartTimes()[index]);
                     todoDescriptionEndTime.setText("End: " + userViewModel.getTodoEndTimes()[index]);
-
+                    String status = "";
+                    if(userViewModel.getTodoStatuses()[index])
+                    {
+                        status = "Complete";
+                    }
+                    else
+                    {
+                        status = "Incomplete";
+                    }
+                    todoDescriptionStatus.setText("Status: " + status);
                     userViewModel.getTodoDescriptionTextPane().setText(
                             userViewModel.getTodoDescriptions()[userViewModel.getTodoNames().getSelectedIndex()]);
                 }
@@ -201,6 +242,12 @@ public class UserView extends JPanel {
         todoDescriptionStartTime.setEditable(false);
         todoDescriptionEndTime.setEditable(false);
 
+        todoStatusPanel = new JPanel();
+        todoStatusPanel.add(todoDescriptionStatus);
+        todoStatusPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+        todoDescriptionStatus.setEditable(false);
+
+
         menuBar = new JMenuBar();
         menuBar.setMaximumSize(new Dimension(600, 50));
         menuBar.add(mainMenu);
@@ -210,19 +257,17 @@ public class UserView extends JPanel {
         todoDescriptionPanel = new JPanel();
         todoDescriptionPanel.setLayout(new BoxLayout(todoDescriptionPanel, BoxLayout.Y_AXIS));
         todoDescriptionPanel.add(todoTimePanel);
+        todoDescriptionPanel.add(todoStatusPanel);
         todoDescriptionPanel.add(userViewModel.getTodoDescriptionTextPane());
         todoDescriptionPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 
-        //JFrame applicationFrame = this.userViewModel.getViewManager().getApplicationFrame();
-        //applicationFrame.setJMenuBar(menuBar);
-        //applicationFrame.setVisible(true);
         JPanel content = new JPanel();
         content.add(todoListPanel);
         content.add(todoDescriptionPanel);
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.add(menuBar);
         this.add(content);
-        this.setPreferredSize(new Dimension(600, 300));
+        this.setPreferredSize(new Dimension(600, 320));
     }
 
     private class TodoInputView {
