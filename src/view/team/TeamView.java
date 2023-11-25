@@ -1,14 +1,14 @@
 package view.team;
 
-import interface_adapter.team.TeamViewModel;
+import interface_adapter.createTeam.TeamViewModel;
+import view.DateTimeInputPanel;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 public class TeamView extends JPanel {
 
@@ -29,6 +29,7 @@ public class TeamView extends JPanel {
     JButton addTodoButton, removeTodoButton, editTodoButton, completeTodoButton;
     JList<String> todoNameList;
     JScrollPane todoNameListScroller;
+    AddTodoInputView addTodoInputView;
 
     /**
      * FOR THE TASK DESCRIPTION MENU
@@ -93,12 +94,14 @@ public class TeamView extends JPanel {
          * INITIALIZE TASK INFO FIELDS
          */
 
+        // initialize text pane for description
         todoDescriptionTextPane = new JTextPane();
         todoDescriptionTextPane.setEditable(false);
         todoDescriptionTextPane.setPreferredSize(new Dimension(TeamViewModel.TODO_DESCRIPTION_TEXT_PANE_WIDTH,
                                                                TeamViewModel.TODO_DESCRIPTION_TEXT_PANE_HEIGHT));
         todoDescriptionTextPane.setText("This is a test description!");
 
+        // initialize time info and panel for info
         todoStartTimeTextPane = new JEditorPane();
         todoStartTimeTextPane.setText("Start: January 5, 2024 at 12:35 PM");
         todoStartTimeTextPane.setEditable(false);
@@ -110,6 +113,7 @@ public class TeamView extends JPanel {
         todoTimePanel.add(todoStartTimeTextPane);
         todoTimePanel.add(todoEndTimeTextPane);
 
+        // initialize status and assigned info elements
         todoStatusTextPane = new JEditorPane();
         todoStatusTextPane.setText("Status: Incomplete");
         todoStatusTextPane.setEditable(false);
@@ -122,6 +126,7 @@ public class TeamView extends JPanel {
         todoStatusPanel.add(todoStatusTextPane);
         todoStatusPanel.add(todoAssignedTextPane);
 
+        // initialize main panel for info and add all components
         todoInfoPanel = new JPanel();
         todoDescriptionLabel = new JLabel("Todo Description");
         todoInfoPanel.setLayout(new BoxLayout(todoInfoPanel, BoxLayout.Y_AXIS));
@@ -135,12 +140,14 @@ public class TeamView extends JPanel {
          * INITIALIZING TEAM SELECTION FIELDS
          */
 
+        // intialize team buttons panel and buttons
         teamButtonsPanel = new JPanel();
         addTeamMemberButton = new JButton(TeamViewModel.ADD_TEAM_MEMBER_BUTTON_STRING);
         removeTeamMemberButton = new JButton(TeamViewModel.REMOVE_TEAM_MEMBER_BUTTON_STRING);
         teamButtonsPanel.add(addTeamMemberButton);
         teamButtonsPanel.add(removeTeamMemberButton);
 
+        // initialize the scrollable team member list
         teamMembersList = new JList<>();
         teamMembersList.setListData(new String[]{"Sean", "Kyle", "Darryl"});
         teamMemberListScroller = new JScrollPane(teamMembersList);
@@ -148,6 +155,7 @@ public class TeamView extends JPanel {
         teamMemberListScroller.setPreferredSize(new Dimension(TeamViewModel.TEAM_MEMBER_LIST_SCROLLER_WIDTH,
                                                               TeamViewModel.TEAM_MEMBER_LIST_SCROLLER_HEIGHT));
 
+        // add all components to member selector panel
         teamMemberSelectorPanel = new JPanel();
         teamSelectorLabel = new JLabel("Team Label");
         teamMemberSelectorPanel.setLayout(new BoxLayout(teamMemberSelectorPanel, BoxLayout.Y_AXIS));
@@ -224,7 +232,10 @@ public class TeamView extends JPanel {
         addTodoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // add task
+                if(addTodoInputView == null)
+                {
+                    addTodoInputView = new AddTodoInputView("Enter Todo Attributes");
+                }
             }
         });
 
@@ -256,24 +267,153 @@ public class TeamView extends JPanel {
             }
         });
 
+        teamMembersList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                // select this current item
+                // update stuff
+            }
+        });
+
+        addTeamMemberButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // add new member
+            }
+        });
+
+        removeTeamMemberButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // remove team member
+            }
+        });
+
+        /**
+         * ADDING ELEMENTS TO PARENT PANEL
+         */
+
         // create an organization panels to add all the task and team components to
         JPanel todoAndTeamPanel = new JPanel();
         todoAndTeamPanel.setLayout(new BoxLayout(todoAndTeamPanel, BoxLayout.Y_AXIS));
         todoAndTeamPanel.add(teamMemberSelectorPanel);
         todoAndTeamPanel.add(todoSelectorPanel);
-
         JPanel viewPanel = new JPanel();
         viewPanel.add(todoAndTeamPanel);
         viewPanel.add(todoInfoPanel);
 
         // add all members to this class' parent JPanel
-
-
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.add(menuBar);
         this.add(viewPanel);
-
-        //this.setPreferredSize(new Dimension(TeamViewModel.PANEL_WIDTH, TeamViewModel.PANEL_HEIGHT));
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private class AddTodoInputView
+    {
+        private DateTimeInputPanel startTimePanel;
+        private DateTimeInputPanel endTimePanel;
+
+        private JPanel namePanel;
+        private JTextField nameField;
+        private JLabel nameLabel;
+
+        private JPanel viewPanel;
+        private JFrame viewFrame;
+
+        private JPanel confirmButtonPanel;
+        private JButton confirm, cancel;
+
+        JPanel todoDescriptionPanel;
+        JEditorPane todoDescriptionEditor;
+
+        public AddTodoInputView(String title) {
+            startTimePanel = new DateTimeInputPanel(null);
+            endTimePanel = new DateTimeInputPanel(null);
+
+            namePanel = new JPanel();
+            nameField = new JTextField(15);
+            nameLabel = new JLabel("Name: ");
+            namePanel.add(nameLabel);
+            namePanel.add(nameField);
+
+            confirmButtonPanel = new JPanel();
+            confirm = new JButton("Confirm");
+            cancel = new JButton("Cancel");
+            confirmButtonPanel.add(confirm);
+            confirmButtonPanel.add(cancel);
+
+            todoDescriptionEditor = new JEditorPane();
+            todoDescriptionEditor.setPreferredSize(new Dimension(240, 200));
+            todoDescriptionEditor.setMaximumSize(new Dimension(240, 200));
+            todoDescriptionPanel = new JPanel();
+            todoDescriptionPanel.setLayout(new BoxLayout(todoDescriptionPanel, BoxLayout.Y_AXIS));
+            todoDescriptionPanel.add(new JLabel("Description"));
+            todoDescriptionPanel.add(todoDescriptionEditor);
+
+            viewPanel = new JPanel();
+            viewPanel.setLayout(new BoxLayout(viewPanel, BoxLayout.Y_AXIS));
+            viewPanel.add(namePanel);
+            viewPanel.add(new JLabel("Start: "));
+            viewPanel.add(startTimePanel);
+            viewPanel.add(new JLabel("End: "));
+            viewPanel.add(endTimePanel);
+            viewPanel.add(todoDescriptionPanel);
+            viewPanel.add(confirmButtonPanel);
+
+            viewFrame = new JFrame(title);
+            viewFrame.setLocationRelativeTo(null);
+            viewFrame.add(viewPanel);
+            viewFrame.pack();
+            viewFrame.setResizable(false);
+            viewFrame.setVisible(true);
+
+            viewFrame.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    addTodoInputView = null;
+                }
+            });
+
+            confirm.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                }
+            });
+
+            cancel.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    closeView();
+                    addTodoInputView = null;
+                }
+            });
+
+            nameField.addKeyListener(new KeyListener() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    // set state name
+                }
+
+                @Override
+                public void keyPressed(KeyEvent e) {
+                }
+
+                @Override
+                public void keyReleased(KeyEvent e) {
+                }
+            });
+
+        }
+
+        public void closeView()
+        {
+            viewFrame.dispatchEvent(new WindowEvent(viewFrame, WindowEvent.WINDOW_CLOSING));
+        }
+    }
 }
