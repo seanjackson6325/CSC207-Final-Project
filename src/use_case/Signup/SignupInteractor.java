@@ -23,12 +23,27 @@ public class SignupInteractor implements SignupInputBoundary {
         this.userFactory = userFactory;
     }
 
+    private boolean emptyName(String name) {
+        for (int i = 0; i < name.length()-1; i++) {
+            if (name.charAt(i) != ' ') {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public void execute(SignupInputData signupInputData) {
+        String username = signupInputData.getUsername();
+        String password = signupInputData.getPassword();
         if (userDataAccessObject.readUser(signupInputData.getUsername()) != null) {
             userPresenter.prepareFailView("User already exists.");
         } else if (!signupInputData.getPassword().equals(signupInputData.getRepeatPassword())) {
             userPresenter.prepareFailView("Passwords don't match.");
+        } else if (username.isBlank()) {
+            userPresenter.prepareFailView("Invalid Username!");
+        } else if (password.isBlank()) {
+            userPresenter.prepareFailView("Invalid Password!");
         } else {
 
             LocalDateTime ltd = LocalDateTime.now();
