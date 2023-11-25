@@ -10,6 +10,7 @@ import use_case.Signup.SignupUserDataAccessInterface;
 import view.login.LoginView;
 import interface_adapter.login.LoginViewModel;
 import view.ViewManager;
+import view.team.TeamView;
 import view.user.UserView;
 import interface_adapter.user.UserViewModel;
 import view.signup.SignupView;
@@ -45,10 +46,15 @@ public class Main {
         LoginViewModel loginViewModel = new LoginViewModel(viewManager, signupViewModel, userViewModel);
         LoginView loginView = LoginFactory.createLoginView(viewManager, loginViewModel, dataAccess);
 
+        // FOR TESTING THE TEAM VIEW
+        TeamView teamView = new TeamView();
+        viewManager.addView(teamView, "team");
+
         viewManager.addView(loginView, loginViewModel.getName());
         viewManager.addView(signupView, signupViewModel.getName());
         viewManager.addView(userView, userViewModel.getName());
         viewManager.switchToView(loginViewModel.getName());
+
 
         applicationFrame.setLocationRelativeTo(null);
         applicationFrame.setVisible(true);

@@ -44,7 +44,7 @@ public class UserView extends JPanel {
     JEditorPane todoDescriptionStatus;
 
     /**
-     *  FOR THE TOOLBAR
+     *  FOR THE MENUBAR
      */
     JMenuBar menuBar;
     JMenu mainMenu, viewMenu, weatherMenu;
