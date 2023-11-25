@@ -5,6 +5,8 @@ import use_case.CreateTodoUser.CreateTodoUserInputBoundary;
 import use_case.CreateTodoUser.CreateTodoUserInputData;
 import use_case.EditTodo.EditTodoInputBoundary;
 import use_case.EditTodo.EditTodoInputData;
+import use_case.MarkDone.MarkDoneInputBoundary;
+import use_case.MarkDone.MarkDoneInputData;
 
 import java.time.LocalDateTime;
 
@@ -13,10 +15,14 @@ public class UserController {
     private final CreateTodoUserInputBoundary createTodoUserInputBoundary;
     private final EditTodoInputBoundary editTodoInputBoundary;
 
-    public UserController(CreateTodoUserInputBoundary createTodoUserInputBoundary, EditTodoInputBoundary editTodoInputBoundary)
+    private final MarkDoneInputBoundary markDoneInputBoundary;
+
+    public UserController(CreateTodoUserInputBoundary createTodoUserInputBoundary, EditTodoInputBoundary editTodoInputBoundary,
+                            MarkDoneInputBoundary markDoneInputBoundary)
     {
         this.createTodoUserInputBoundary = createTodoUserInputBoundary;
         this.editTodoInputBoundary = editTodoInputBoundary;
+        this.markDoneInputBoundary = markDoneInputBoundary;
     }
 
     public void executeAdd
@@ -67,5 +73,11 @@ public class UserController {
                         user
                 );
         editTodoInputBoundary.execute(input);
+    }
+
+    public void executeMarkDone(String todoName)
+    {
+        MarkDoneInputData input = new MarkDoneInputData(todoName);
+        markDoneInputBoundary.execute(input);
     }
 }

@@ -16,6 +16,10 @@ import use_case.DeleteTodo.DeleteTodoInteractor;
 import use_case.DeleteTodo.DeleteTodoOutputBoundary;
 import use_case.EditTodo.EditTodoInteractor;
 import use_case.EditTodo.EditTodoOutputBoundary;
+import use_case.MarkDone.MarkDoneInputBoundary;
+import use_case.MarkDone.MarkDoneInteractor;
+import use_case.MarkDone.MarkDoneOutputBoundary;
+import use_case.MarkDone.MarkDoneOutputData;
 import view.ViewManager;
 import view.user.UserView;
 
@@ -43,7 +47,8 @@ public class UserFactory {
         CreateTodoUserInteractor createInteractor = new CreateTodoUserInteractor(userDataAccess, presenter);
 
         EditTodoInteractor editInteractor = new EditTodoInteractor(userDataAccess, (EditTodoOutputBoundary) presenter);
-        return new UserController(createInteractor, editInteractor);
+        MarkDoneInteractor markDoneInteractor = new MarkDoneInteractor(userDataAccess, (MarkDoneOutputBoundary) presenter);
+        return new UserController(createInteractor, editInteractor, markDoneInteractor);
     }
 
     public static DeleteTodoController createDeleteTodoController(ViewManager viewManager,
