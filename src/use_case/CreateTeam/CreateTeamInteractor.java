@@ -3,10 +3,14 @@ package use_case.CreateTeam;
 import app.EntityMemory;
 import data_access.DataAccessInterface;
 import entity.Team;
+import entity.Todo;
 import entity.User;
 import use_case.DeleteTodo.DeleteTodoInputData;
 import use_case.DeleteTodo.DeleteTodoOutputBoundary;
 import use_case.DeleteTodo.DeleteTodoOutputData;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CreateTeamInteractor implements CreateTeamInputBoundary {
 
@@ -25,7 +29,7 @@ public class CreateTeamInteractor implements CreateTeamInputBoundary {
         try {
             if (dataAccess.readTeam(createTeamInputData.getTeamName()) == null) {
                 // Create Team
-                Team newTeam = new Team(createTeamInputData.getTeamName(), null, null, null);
+                Team newTeam = new Team(createTeamInputData.getTeamName(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
                 // Add team in the user's team list
                 User user = EntityMemory.getLoggedInUser();
                 user.getTeam().add(newTeam.getTeamName());

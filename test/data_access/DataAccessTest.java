@@ -4,6 +4,7 @@ import entity.Todo;
 import entity.User;
 import entity.Team;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -109,6 +110,10 @@ public class DataAccessTest {
         assertEquals(user2.getTaskList().get(0).getName(), users.get(1).getTaskList().get(0).getName());
     }
 
+    @Before
+    public void waitFor2() throws InterruptedException {
+        Thread.sleep(2000);
+    }
 
     @Test
     public void testUpdateUser() {
