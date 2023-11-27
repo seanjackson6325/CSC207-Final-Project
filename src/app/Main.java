@@ -2,9 +2,11 @@ package app;
 
 import Factory.LoginFactory;
 import Factory.SignupFactory;
+import Factory.TeamFactory;
 import Factory.UserFactory;
 import data_access.DataAccess;
 import data_access.DataAccessInterface;
+import interface_adapter.createTeam.TeamViewModel;
 import use_case.Login.LoginUserDataAccessInterface;
 import use_case.Signup.SignupUserDataAccessInterface;
 import view.login.LoginView;
@@ -46,13 +48,14 @@ public class Main {
         LoginViewModel loginViewModel = new LoginViewModel(viewManager, signupViewModel, userViewModel);
         LoginView loginView = LoginFactory.createLoginView(viewManager, loginViewModel, dataAccess);
 
-        // FOR TESTING THE TEAM VIEW
-        TeamView teamView = new TeamView();
-        viewManager.addView(teamView, "team");
+        TeamViewModel teamViewModel = new TeamViewModel(viewManager);
+        TeamView teamView = TeamFactory.createTeamView(viewManager, teamViewModel, dataAccess);
 
+        // FOR TESTING THE TEAM VIEW
         viewManager.addView(loginView, loginViewModel.getName());
         viewManager.addView(signupView, signupViewModel.getName());
         viewManager.addView(userView, userViewModel.getName());
+        viewManager.addView(teamView, teamViewModel.getName());
         viewManager.switchToView(loginViewModel.getName());
 
 
@@ -61,3 +64,6 @@ public class Main {
         applicationFrame.setResizable(false);
     }
 }
+
+
+

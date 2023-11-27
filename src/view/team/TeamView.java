@@ -1,6 +1,11 @@
 package view.team;
 
+import entity.Team;
+import interface_adapter.createTeam.CreateTeamController;
+import interface_adapter.createTeam.CreateTeamPresenter;
+import interface_adapter.createTeam.TeamState;
 import interface_adapter.createTeam.TeamViewModel;
+import use_case.CreateTeam.CreateTeamInputData;
 import view.DateTimeInputPanel;
 
 import javax.swing.*;
@@ -29,7 +34,6 @@ public class TeamView extends JPanel {
     JButton addTodoButton, removeTodoButton, editTodoButton, completeTodoButton;
     JList<String> todoNameList;
     JScrollPane todoNameListScroller;
-    AddTodoInputView addTodoInputView;
 
     /**
      * FOR THE TASK DESCRIPTION MENU
@@ -56,9 +60,47 @@ public class TeamView extends JPanel {
     JButton addTeamMemberButton;
     JButton removeTeamMemberButton;
 
+    /**
+     * View Models and Controllers
+     */
 
-    public TeamView()
+    TeamViewModel teamViewModel;
+    CreateTeamController createTeamController;
+
+    /**
+     * States
+     */
+
+    TeamState teamState;
+
+    /**
+     * Input Views
+     */
+
+    AddTodoInputView addTodoInputView;
+    AddTeamInputView addTeamInputView;
+
+
+    public TeamView(TeamViewModel teamViewModel, CreateTeamController createTeamController)
     {
+        /**
+         * INITIALIZE VIEW MODELS AND CONTROLLERS
+         */
+        this.teamViewModel = teamViewModel;
+        this.createTeamController = createTeamController;
+
+        /**
+         * INITIALIZE TEAM STATES
+         */
+        teamState = new TeamState();
+
+        /**
+         * INITIALIZE INPUT VIEWS
+         */
+
+        addTodoInputView = null;
+        addTeamInputView = null;
+
         /**
          * INITIALIZE TASK SELECTION FIELDS
          */
@@ -174,7 +216,7 @@ public class TeamView extends JPanel {
 
         // initialize view menu fields
         viewMenu = new JMenu(TeamViewModel.VIEW_MENU_STRING);
-        personalViewMenuItem = new JMenuItem(TeamViewModel.SWITCH_TEAM_MENU_ITEM_STRING);
+        personalViewMenuItem = new JMenuItem(TeamViewModel.PERSONAL_VIEW_MENU_ITEM_STRING);
         viewMenu.add(personalViewMenuItem);
 
         // initialize weather menu fields
@@ -204,14 +246,14 @@ public class TeamView extends JPanel {
         logoutMainMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // switch to login view
+                teamViewModel.getViewManager().switchToView("Login");
             }
         });
 
         personalViewMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // switch to personal view
+                teamViewModel.getViewManager().switchToLastView();
             }
         });
 
@@ -225,7 +267,12 @@ public class TeamView extends JPanel {
         addTeamMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // display pop up to add a new team
+
+                if(addTeamInputView != null)
+                {
+                    addTeamInputView = new AddTeamInputView("Enter Team Name");
+                    createTeamController.execute(teamState.getAddTeamUsernameInput());
+                }
             }
         });
 
@@ -416,4 +463,89 @@ public class TeamView extends JPanel {
             viewFrame.dispatchEvent(new WindowEvent(viewFrame, WindowEvent.WINDOW_CLOSING));
         }
     }
+
+    private class AddTeamInputView
+    {
+        private JPanel namePanel;
+        private JTextField nameField;
+        private JLabel nameLabel;
+
+        private JPanel viewPanel;
+        private JFrame viewFrame;
+
+        private JPanel confirmButtonPanel;
+        private JButton confirm, cancel;
+
+        public AddTeamInputView(String title) {
+
+            namePanel = new JPanel();
+            nameField = new JTextField(15);
+            nameLabel = new JLabel("Name: ");
+            namePanel.add(nameLabel);
+            namePanel.add(nameField);
+
+            confirmButtonPanel = new JPanel();
+            confirm = new JButton("Confirm");
+            cancel = new JButton("Cancel");
+            confirmButtonPanel.add(confirm);
+            confirmButtonPanel.add(cancel);
+
+            viewPanel = new JPanel();
+            viewPanel.setLayout(new BoxLayout(viewPanel, BoxLayout.Y_AXIS));
+            viewPanel.add(namePanel);
+            viewPanel.add(confirmButtonPanel);
+
+            viewFrame = new JFrame(title);
+            viewFrame.setLocationRelativeTo(null);
+            viewFrame.add(viewPanel);
+            viewFrame.pack();
+            viewFrame.setResizable(false);
+            viewFrame.setVisible(true);
+
+            viewFrame.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    addTeamInputView = null;
+                }
+            });
+
+            confirm.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                }
+            });
+
+            cancel.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    closeView();
+                    addTeamInputView = null;
+                }
+            });
+
+            nameField.addKeyListener(new KeyListener() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    String text = nameField.getText() + e.getKeyChar();
+                    teamState.setAddTeamUsernameInput(text);
+                }
+
+                @Override
+                public void keyPressed(KeyEvent e) {
+                }
+
+                @Override
+                public void keyReleased(KeyEvent e) {
+                }
+            });
+
+        }
+
+        public void closeView()
+        {
+            viewFrame.dispatchEvent(new WindowEvent(viewFrame, WindowEvent.WINDOW_CLOSING));
+        }
+    }
+
 }

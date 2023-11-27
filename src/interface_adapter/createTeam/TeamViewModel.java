@@ -57,12 +57,7 @@ public class TeamViewModel extends ViewModel {
 
     public TeamViewModel(ViewManager viewManager)
     {
-        super("team", viewManager);
-    }
-
-    public ViewManager getViewManger()
-    {
-        return viewManager;
+        super("Team", viewManager);
     }
 
 }

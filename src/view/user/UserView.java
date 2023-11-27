@@ -59,9 +59,6 @@ public class UserView extends JPanel {
     /**
      *
      * Main constructor for this UserView object.
-     *
-     * @param userViewModel
-     * @param userController
      */
 
     public UserView(UserViewModel userViewModel, UserController userController, DeleteTodoController deleteTodoController)
@@ -210,7 +207,7 @@ public class UserView extends JPanel {
         teamViewMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                userViewModel.getViewManager().switchToView("team");
+                userViewModel.getViewManager().switchToView("Team");
             }
         });
 
