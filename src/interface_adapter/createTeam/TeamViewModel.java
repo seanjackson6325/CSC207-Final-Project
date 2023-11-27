@@ -1,7 +1,15 @@
 package interface_adapter.createTeam;
 
+import app.EntityMemory;
+import entity.User;
 import view.ViewManager;
 import view.ViewModel;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class TeamViewModel extends ViewModel {
 
@@ -51,13 +59,74 @@ public class TeamViewModel extends ViewModel {
      instance fields
      */
 
-    ViewManager viewManager;
+    private ViewManager viewManager;
+    private TeamState teamState;
+
+    /**
+     * Bean objects that are directly connected to this class' data.
+     * Used in view
+     */
+    private JMenuBar menuBar;
+    private JMenu switchTeamSubMenu;
+    private ArrayList<JMenuItem> teams;
+    private int selectedTeamIndex;
 
 
 
     public TeamViewModel(ViewManager viewManager)
     {
         super("Team", viewManager);
+        teamState = new TeamState();
+
+        menuBar = new JMenuBar();
+        menuBar = new JMenuBar();
+        menuBar.setMaximumSize(new Dimension(TeamViewModel.MENU_BAR_WIDTH, TeamViewModel.MENU_BAR_HEIGHT));
+
+        switchTeamSubMenu = new JMenu(TeamViewModel.SWITCH_TEAM_MENU_ITEM_STRING);
+        selectedTeamIndex = 0;
+    }
+
+    public TeamState getTeamState()
+    {
+        return teamState;
+    }
+
+
+    public void updateViewData()
+    {
+        if(EntityMemory.getLoggedInUser() != null)
+        {
+            teams = new ArrayList<>();
+            switchTeamSubMenu.removeAll();
+            for(String team : EntityMemory.getLoggedInUser().getTeam())
+            {
+                System.out.println(EntityMemory.getLoggedInUser().getTeam().size());
+                System.out.println(team);
+
+                teams.add(new JMenuItem(team));
+                switchTeamSubMenu.add(teams.get(teams.size() - 1));
+                teams.get(teams.size() - 1).addActionListener(new ActionListener() {
+
+                    private int i = teams.size() - 1;
+
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        selectedTeamIndex = i;
+                        System.out.println(selectedTeamIndex);
+                    }
+                });
+            }
+        }
+    }
+
+    public JMenuBar getMenuBar()
+    {
+        return menuBar;
+    }
+
+    public JMenu getSwitchTeamSubMenu()
+    {
+        return switchTeamSubMenu;
     }
 
 }

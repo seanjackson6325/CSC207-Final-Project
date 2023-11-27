@@ -2,6 +2,7 @@ package view.user;
 
 import entity.Todo;
 import entity.User;
+import interface_adapter.createTeam.TeamViewModel;
 import interface_adapter.deleteTodo.DeleteTodoController;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.user.UserController;
@@ -20,6 +21,7 @@ public class UserView extends JPanel {
      *  FOR RECEIVING AND SENDING DATA
      */
     UserViewModel userViewModel;
+    TeamViewModel teamViewModel;
     UserController userController;
     DeleteTodoController deleteTodoController;
 
@@ -61,9 +63,10 @@ public class UserView extends JPanel {
      * Main constructor for this UserView object.
      */
 
-    public UserView(UserViewModel userViewModel, UserController userController, DeleteTodoController deleteTodoController)
+    public UserView(UserViewModel userViewModel, TeamViewModel teamViewModel, UserController userController, DeleteTodoController deleteTodoController)
     {
         this.userViewModel = userViewModel;
+        this.teamViewModel = teamViewModel;
         this.userController = userController;
         this.deleteTodoController = deleteTodoController;
         todoInputView = null;
@@ -207,6 +210,7 @@ public class UserView extends JPanel {
         teamViewMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                teamViewModel.updateViewData();
                 userViewModel.getViewManager().switchToView("Team");
             }
         });

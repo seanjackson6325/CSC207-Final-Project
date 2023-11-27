@@ -1,10 +1,13 @@
 package view.team;
 
+import app.EntityMemory;
 import entity.Team;
+import interface_adapter.addMember.AddMemberController;
 import interface_adapter.createTeam.CreateTeamController;
 import interface_adapter.createTeam.CreateTeamPresenter;
 import interface_adapter.createTeam.TeamState;
 import interface_adapter.createTeam.TeamViewModel;
+import interface_adapter.removeMember.RemoveMemberController;
 import use_case.CreateTeam.CreateTeamInputData;
 import view.DateTimeInputPanel;
 
@@ -20,10 +23,8 @@ public class TeamView extends JPanel {
     /**
      *  FOR THE TOOLBAR
      */
-    JMenuBar menuBar;
     JMenu mainMenu, viewMenu, weatherMenu, teamMenu;
     JMenuItem logoutMainMenuItem, personalViewMenuItem, weatherViewMenuItem, addTeamMenuItem;
-    JMenu switchTeamSubMenu;
 
     /**
      *  FOR THE TASK SELECTION MENU
@@ -66,6 +67,8 @@ public class TeamView extends JPanel {
 
     TeamViewModel teamViewModel;
     CreateTeamController createTeamController;
+    AddMemberController addMemberController;
+    RemoveMemberController removeMemberController;
 
     /**
      * States
@@ -81,13 +84,15 @@ public class TeamView extends JPanel {
     AddTeamInputView addTeamInputView;
 
 
-    public TeamView(TeamViewModel teamViewModel, CreateTeamController createTeamController)
+    public TeamView(TeamViewModel teamViewModel, CreateTeamController createTeamController, AddMemberController addMemberController, RemoveMemberController removeMemberController)
     {
         /**
          * INITIALIZE VIEW MODELS AND CONTROLLERS
          */
         this.teamViewModel = teamViewModel;
         this.createTeamController = createTeamController;
+        this.addMemberController = addMemberController;
+        this.removeMemberController = removeMemberController;
 
         /**
          * INITIALIZE TEAM STATES
@@ -199,7 +204,7 @@ public class TeamView extends JPanel {
 
         // add all components to member selector panel
         teamMemberSelectorPanel = new JPanel();
-        teamSelectorLabel = new JLabel("Team Label");
+        teamSelectorLabel = new JLabel("Team Members");
         teamMemberSelectorPanel.setLayout(new BoxLayout(teamMemberSelectorPanel, BoxLayout.Y_AXIS));
         teamMemberSelectorPanel.add(teamSelectorLabel);
         teamMemberSelectorPanel.add(teamMemberListScroller);
@@ -228,12 +233,10 @@ public class TeamView extends JPanel {
         teamMenu = new JMenu(TeamViewModel.TEAM_MENU_STRING);
         addTeamMenuItem = new JMenuItem(TeamViewModel.ADD_TEAM_MENU_ITEM_STRING);
         teamMenu.add(addTeamMenuItem);
-        switchTeamSubMenu = new JMenu(TeamViewModel.SWITCH_TEAM_MENU_ITEM_STRING);
-        teamMenu.add(switchTeamSubMenu);
+        teamMenu.add(teamViewModel.getSwitchTeamSubMenu());
 
         // initialize menu bar and add menus to it
-        menuBar = new JMenuBar();
-        menuBar.setMaximumSize(new Dimension(TeamViewModel.MENU_BAR_WIDTH, TeamViewModel.MENU_BAR_HEIGHT));
+        JMenuBar menuBar = teamViewModel.getMenuBar();
         menuBar.add(mainMenu);
         menuBar.add(viewMenu);
         menuBar.add(teamMenu);
@@ -268,10 +271,9 @@ public class TeamView extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                if(addTeamInputView != null)
+                if(addTeamInputView == null)
                 {
                     addTeamInputView = new AddTeamInputView("Enter Team Name");
-                    createTeamController.execute(teamState.getAddTeamUsernameInput());
                 }
             }
         });
@@ -354,6 +356,7 @@ public class TeamView extends JPanel {
         this.add(menuBar);
         this.add(viewPanel);
     }
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -512,7 +515,15 @@ public class TeamView extends JPanel {
             confirm.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    System.out.println(teamState.getAddTeamUsernameInput());
+                    createTeamController.execute(teamState.getAddTeamUsernameInput());
 
+                    if(!teamViewModel.getTeamState().getIsCreateTeamFailed())
+                    {
+                        closeView();
+                        addTeamInputView = null;
+                        teamViewModel.updateViewData();
+                    }
                 }
             });
 

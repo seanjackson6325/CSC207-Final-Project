@@ -3,6 +3,7 @@ package Factory;
 import data_access.DataAccessInterface;
 import entity.Todo;
 import entity.User;
+import interface_adapter.createTeam.TeamViewModel;
 import interface_adapter.deleteTodo.DeleteTodoController;
 import interface_adapter.deleteTodo.DeleteTodoPresenter;
 import interface_adapter.signup.SignupViewModel;
@@ -32,11 +33,12 @@ public class UserFactory {
 
     public static UserView createUserView(ViewManager viewManager,
                                           UserViewModel userViewModel,
+                                          TeamViewModel teamViewModel,
                                           DataAccessInterface userDataAccess)
     {
         UserController userController = createUserController(viewManager, userViewModel, userDataAccess);
         DeleteTodoController deleteController = createDeleteTodoController(viewManager, userViewModel, userDataAccess);
-        return new UserView(userViewModel, userController, deleteController);
+        return new UserView(userViewModel, teamViewModel, userController, deleteController);
     }
 
     public static UserController createUserController(ViewManager viewManager,

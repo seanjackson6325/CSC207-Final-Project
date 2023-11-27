@@ -42,14 +42,14 @@ public class Main {
         SignupViewModel signupViewModel = new SignupViewModel(viewManager);
         SignupView signupView = SignupFactory.createSignupView(viewManager, signupViewModel, dataAccess, new UserFactory());
 
+        TeamViewModel teamViewModel = new TeamViewModel(viewManager);
+        TeamView teamView = TeamFactory.createTeamView(viewManager, teamViewModel, dataAccess);
+
         UserViewModel userViewModel = new UserViewModel(viewManager);
-        UserView userView = UserFactory.createUserView(viewManager, userViewModel, dataAccess);
+        UserView userView = UserFactory.createUserView(viewManager, userViewModel, teamViewModel, dataAccess);
 
         LoginViewModel loginViewModel = new LoginViewModel(viewManager, signupViewModel, userViewModel);
         LoginView loginView = LoginFactory.createLoginView(viewManager, loginViewModel, dataAccess);
-
-        TeamViewModel teamViewModel = new TeamViewModel(viewManager);
-        TeamView teamView = TeamFactory.createTeamView(viewManager, teamViewModel, dataAccess);
 
         // FOR TESTING THE TEAM VIEW
         viewManager.addView(loginView, loginViewModel.getName());
