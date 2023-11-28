@@ -1,16 +1,16 @@
-package use_case.Signup;
+package use_case;
 
-import Factory.UserFactory;
 import app.EntityMemory;
 import data_access.DataAccess;
 import entity.Todo;
 import entity.User;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
-import use_case.Signup.SignupInputData;
-import use_case.Signup.SignupInteractor;
-import use_case.Signup.SignupOutputBoundary;
-import use_case.Signup.SignupOutputData;
+import use_case.CreateTodoUser.CreateTodoUserInteractor;
+import use_case.Login.LoginInputData;
+import use_case.Login.LoginInteractor;
+import use_case.Login.LoginOutputBoundary;
+import use_case.Login.LoginOutputData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class SignupInteractorTest {
+public class LoginInteractorTest {
     @Test
     public void testExecute() {
 
@@ -27,8 +27,6 @@ public class SignupInteractorTest {
             try {
                 Thread.sleep(2000);
                 dataAccess.deleteUser("testUser102983748912839");
-                Thread.sleep(2000);
-                dataAccess.deleteUser("testUser1029837489128391");
             } catch (Exception ignored) {
 
             }
@@ -36,40 +34,41 @@ public class SignupInteractorTest {
             List<String> teamList = new ArrayList<>();
             User testUser = new User("testUser102983748912839", "1234", todoList, teamList);
 
-            SignupInteractor SignupInteractor = getSignupInteractor(testUser, dataAccess);
+            LoginInteractor loginInteractor = getLoginInteractor(testUser, dataAccess);
+
+            dataAccess.createUser(testUser);
+            EntityMemory.setLoggedInUser(testUser);
 
             // assert that the interactor is properly initialized
-            assertNotNull(SignupInteractor);
+            assertNotNull(loginInteractor);
 
             // call execute (sleep to avoid errors with DA)
             Thread.sleep(2000);
-            SignupInputData inputData = new SignupInputData("testUser102983748912839", "1234", "1234");
-            SignupInteractor.execute(inputData);
+            LoginInputData inputData = new LoginInputData("testUser102983748912839", "1234");
+            loginInteractor.execute(inputData);
 
             // call execute (sleep to avoid errors with DA)
             Thread.sleep(2000);
-            SignupInputData inputDataExists = new SignupInputData("testUser102983748912839", "1234", "1234");
-            SignupInteractor.execute(inputDataExists);
+            LoginInputData inputDataExists = new LoginInputData("testUser1029837489128391HAHAHAHAHHAHAHHAHAHAHAH", "1234");
+            loginInteractor.execute(inputDataExists);
 
             // call execute (sleep to avoid errors with DA)
             Thread.sleep(2000);
-            SignupInputData inputDataWrongPswrd = new SignupInputData("testUser1029837489128391", "1234", "12345");
-            SignupInteractor.execute(inputDataWrongPswrd);
+            LoginInputData inputDataBlankName = new LoginInputData("", "1234");
+            loginInteractor.execute(inputDataBlankName);
 
             // call execute (sleep to avoid errors with DA)
             Thread.sleep(2000);
-            SignupInputData inputDataBlankName = new SignupInputData("", "1234", "1234");
-            SignupInteractor.execute(inputDataBlankName);
+            LoginInputData inputDataBlankPswrd = new LoginInputData("testUser102983748912839", "");
+            loginInteractor.execute(inputDataBlankPswrd);
 
             // call execute (sleep to avoid errors with DA)
             Thread.sleep(2000);
-            SignupInputData inputDataBlankPswrd = new SignupInputData("testUser1029837489128392", "", "");
-            SignupInteractor.execute(inputDataBlankPswrd);
+            LoginInputData inputDataWrongPswrd = new LoginInputData("testUser102983748912839", "12345");
+            loginInteractor.execute(inputDataWrongPswrd);
 
             Thread.sleep(2000);
             dataAccess.deleteUser("testUser102983748912839");
-            Thread.sleep(2000);
-            dataAccess.deleteUser("testUser1029837489128391");
         }
         catch (InterruptedException ignored) {
             assert false;
@@ -80,15 +79,15 @@ public class SignupInteractorTest {
     }
 
     @NotNull
-    private static SignupInteractor getSignupInteractor(User testUser, DataAccess dataAccess) {
+    private static LoginInteractor getLoginInteractor(User testUser, DataAccess dataAccess) {
         final boolean[] failure1 = {false};
         final boolean[] failure2 = {false};
         final boolean[] failure3 = {false};
         final boolean[] failure4 = {false};
-        SignupOutputBoundary presenter = new SignupOutputBoundary() {
+        LoginOutputBoundary presenter = new LoginOutputBoundary() {
             @Override
-            public void prepareSuccessView(SignupOutputData SignupOutputData) {
-                assertEquals(SignupOutputData.getUsername(), testUser.getUsername());
+            public void prepareSuccessView(LoginOutputData loginOutputData) {
+                assertEquals(loginOutputData.getUser().getUsername(), testUser.getUsername());
                 System.out.println("Success");
             }
 
@@ -96,22 +95,22 @@ public class SignupInteractorTest {
             public void prepareFailView(String error) {
 
                 if (!failure1[0]) {
-                    assertEquals("User already exists.", error);
+                    assertEquals(error, (testUser.getUsername() + "1HAHAHAHAHHAHAHHAHAHAHAH" + ": Account does not exist."));
                     failure1[0] = true;
                 } else if (!failure2[0]) {
-                    assertEquals("Passwords don't match.", error);
+                    assertEquals(error, "Invalid Username!");
                     failure2[0] = true;
                 } else if (!failure3[0]) {
-                    assertEquals("Invalid Username!", error);
+                    assertEquals(error, "Invalid Password!");
                     failure3[0] = true;
                 } else if (!failure4[0]) {
-                    assertEquals("Invalid Password!", error);
+                    assertEquals(error, ("Incorrect password for " + testUser.getUsername() + "."));
                     failure4[0] = true;
                 }
                 System.out.println("Failure: " + error);
             }
         };
-        UserFactory userFactory = new UserFactory();
-        return new SignupInteractor(dataAccess, presenter, userFactory);
+
+        return new LoginInteractor(dataAccess, presenter);
     }
 }

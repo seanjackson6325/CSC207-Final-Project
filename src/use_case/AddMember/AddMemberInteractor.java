@@ -22,6 +22,7 @@ public class AddMemberInteractor implements AddMemberInputBoundary {
     @Override
     public void execute(AddMemberInputData inputData) {
         String username = inputData.getUser();
+        User user = memberDataAccessObject.readUser(username);
         Team team = memberDataAccessObject.readTeam(inputData.getTeam());
 
         boolean caughtMember = false;
@@ -40,6 +41,11 @@ public class AddMemberInteractor implements AddMemberInputBoundary {
             memberPresenter.failureView(outputData);
         } else {
             team.getMembers().add(username);
+            team.setMembers(team.getMembers());
+            user.getTeam().add(team.getTeamName());
+            user.setTeams(user.getTeam());
+            memberDataAccessObject.updateUser(user);
+            memberDataAccessObject.updateTeam(team);
             AddMemberOutputData outputData = new AddMemberOutputData("User successfully added onto the team!");
             memberPresenter.successView(outputData);
         }

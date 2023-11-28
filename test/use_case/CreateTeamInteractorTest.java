@@ -1,4 +1,4 @@
-package use_case.CreateTeam;
+package use_case;
 
 import app.EntityMemory;
 import data_access.DataAccess;
@@ -6,6 +6,10 @@ import entity.Todo;
 import entity.User;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
+import use_case.CreateTeam.CreateTeamInputData;
+import use_case.CreateTeam.CreateTeamInteractor;
+import use_case.CreateTeam.CreateTeamOutputBoundary;
+import use_case.CreateTeam.CreateTeamOutputData;
 
 import java.util.ArrayList;
 import java.util.List;
