@@ -4,9 +4,9 @@ import app.EntityMemory;
 import data_access.DataAccess;
 import entity.Todo;
 import entity.User;
-import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -15,21 +15,28 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class CreateTeamInteractorTest {
+
     @Test
     public void testExecute() {
 
-        DataAccess dataAccess = new DataAccess();
         try {
-            Thread.sleep(2000);
-            dataAccess.deleteTeam("TestTeam950871023894776");
-            Thread.sleep(2000);
-            dataAccess.deleteUser("testUser102983748912839");
-        } catch (Exception ignored) {
+            // Initialize the interactor with the test cases at the end of the presenter
+            CreateTeamOutputBoundary presenter = new CreateTeamOutputBoundary() {
+                @Override
+                public void prepareSuccessView(CreateTeamOutputData createTeamOutputData) {
+                    assertEquals(createTeamOutputData.getMessage(), "Team Created");
+                    System.out.println("success1");
+                }
 
-        }
+                @Override
+                public void prepareFailView(String error) {
+                    assert(Objects.equals(error, "Team Name Already Exists")
+                            | Objects.equals(error, "Failed to Create Team"));
+                }
+            };
 
-        try {
-            CreateTeamInteractor createTeamInteractor = getCreateTeamInteractor(dataAccess);
+            DataAccess dataAccess = new DataAccess();
+            CreateTeamInteractor createTeamInteractor = new CreateTeamInteractor(dataAccess, presenter);
 
             List<Todo> todoList = new ArrayList<>();
             List<String> teamList = new ArrayList<>();
@@ -53,33 +60,16 @@ public class CreateTeamInteractorTest {
             dataAccess.deleteTeam("TestTeam950871023894776");
             Thread.sleep(2000);
             dataAccess.deleteUser("testUser102983748912839");
+
+
+            // returns a runtime error
+            EntityMemory.setLoggedInUser(null);
+            createTeamInteractor.execute(inputData);
+
         }
         catch (InterruptedException ignored) {
             assert false;
             System.out.println("Rerun the test");
         }
-
-
     }
-
-    @NotNull
-    private static CreateTeamInteractor getCreateTeamInteractor(DataAccess dataAccess) {
-        CreateTeamOutputBoundary presenter = new CreateTeamOutputBoundary() {
-            @Override
-            public void prepareSuccessView(CreateTeamOutputData createTeamOutputData) {
-                assertEquals(createTeamOutputData.getMessage(), "Team Created");
-                System.out.println("Success: " + createTeamOutputData.getMessage());
-            }
-
-            @Override
-            public void prepareFailView(String error) {
-                assert(Objects.equals(error, "Team Name Already Exists"));
-                System.out.println("Failure: " + error);
-            }
-        };
-
-        return new CreateTeamInteractor(dataAccess, presenter);
-    }
-
-
 }
