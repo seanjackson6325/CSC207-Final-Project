@@ -15,7 +15,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class CreateTeamInteractorTest {
-    CreateTeamInteractor createTeamInteractor;
 
     @Test
     public void testExecute() {
@@ -31,7 +30,8 @@ public class CreateTeamInteractorTest {
 
                 @Override
                 public void prepareFailView(String error) {
-                    assert(Objects.equals(error, "Team Name Already Exists"));
+                    assert(Objects.equals(error, "Team Name Already Exists")
+                            | Objects.equals(error, "Failed to Create Team"));
                 }
             };
 
@@ -60,14 +60,16 @@ public class CreateTeamInteractorTest {
             dataAccess.deleteTeam("TestTeam950871023894776");
             Thread.sleep(2000);
             dataAccess.deleteUser("testUser102983748912839");
+
+
+            // returns a runtime error
+            EntityMemory.setLoggedInUser(null);
+            createTeamInteractor.execute(inputData);
+
         }
         catch (InterruptedException ignored) {
             assert false;
             System.out.println("Rerun the test");
         }
-
-
     }
-
-
 }
