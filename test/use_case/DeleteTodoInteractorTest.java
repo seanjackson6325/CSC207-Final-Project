@@ -1,4 +1,4 @@
-package use_case.DeleteTodo;
+package use_case;
 
 import app.EntityMemory;
 import data_access.DataAccess;
@@ -10,6 +10,10 @@ import use_case.CreateTeam.CreateTeamInputData;
 import use_case.CreateTeam.CreateTeamInteractor;
 import use_case.CreateTeam.CreateTeamOutputBoundary;
 import use_case.CreateTeam.CreateTeamOutputData;
+import use_case.DeleteTodo.DeleteTodoInputData;
+import use_case.DeleteTodo.DeleteTodoInteractor;
+import use_case.DeleteTodo.DeleteTodoOutputBoundary;
+import use_case.DeleteTodo.DeleteTodoOutputData;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
