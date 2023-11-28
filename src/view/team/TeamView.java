@@ -55,7 +55,6 @@ public class TeamView extends JPanel {
 
     JLabel teamSelectorLabel;
     JPanel teamMemberSelectorPanel;
-    JList<String> teamMembersList;
     JScrollPane teamMemberListScroller;
     JPanel teamButtonsPanel;
     JButton addTeamMemberButton;
@@ -82,6 +81,7 @@ public class TeamView extends JPanel {
 
     AddTodoInputView addTodoInputView;
     AddTeamInputView addTeamInputView;
+    AddTeamMemberInputView addTeamMemberInputView;
 
 
     public TeamView(TeamViewModel teamViewModel, CreateTeamController createTeamController, AddMemberController addMemberController, RemoveMemberController removeMemberController)
@@ -105,6 +105,7 @@ public class TeamView extends JPanel {
 
         addTodoInputView = null;
         addTeamInputView = null;
+        addTeamMemberInputView = null;
 
         /**
          * INITIALIZE TASK SELECTION FIELDS
@@ -195,12 +196,11 @@ public class TeamView extends JPanel {
         teamButtonsPanel.add(removeTeamMemberButton);
 
         // initialize the scrollable team member list
-        teamMembersList = new JList<>();
-        teamMembersList.setListData(new String[]{"Sean", "Kyle", "Darryl"});
-        teamMemberListScroller = new JScrollPane(teamMembersList);
+        teamMemberListScroller = new JScrollPane(teamViewModel.getTeamMembersList());
         teamMemberListScroller.setFocusable(false);
         teamMemberListScroller.setPreferredSize(new Dimension(TeamViewModel.TEAM_MEMBER_LIST_SCROLLER_WIDTH,
                                                               TeamViewModel.TEAM_MEMBER_LIST_SCROLLER_HEIGHT));
+
 
         // add all components to member selector panel
         teamMemberSelectorPanel = new JPanel();
@@ -316,25 +316,42 @@ public class TeamView extends JPanel {
             }
         });
 
-        teamMembersList.addListSelectionListener(new ListSelectionListener() {
+        teamViewModel.getTeamMembersList().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                // select this current item
-                // update stuff
+                int index = teamViewModel.getTeamMembersList().getSelectedIndex();
+                teamViewModel.setSelectedTeamMemberIndex(index);
             }
         });
 
         addTeamMemberButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // add new member
+                if(addTeamMemberInputView == null)
+                {
+                    addTeamMemberInputView = new AddTeamMemberInputView("Input Username");
+                }
             }
         });
 
         removeTeamMemberButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // remove team member
+                if(teamViewModel.getSelectedTeamMemberIndex() != -1)
+                {
+                    String teamMemberName = teamViewModel.getSelectedTeamMemberName();
+                    String teamName = teamViewModel.getSelectedTeamName();
+                    String message = "Remove " + teamMemberName + " from team " + teamName + "?";
+                    int option = JOptionPane.showConfirmDialog(null, message);
+                    if(option == 0)
+                    {
+                        removeMemberController.execute(
+                                teamViewModel.getSelectedTeamMemberName(),
+                                teamViewModel.getSelectedTeamName()
+                        );
+                        teamViewModel.updateViewData();
+                    }
+                }
             }
         });
 
@@ -467,6 +484,12 @@ public class TeamView extends JPanel {
         }
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
     private class AddTeamInputView
     {
         private JPanel namePanel;
@@ -515,8 +538,8 @@ public class TeamView extends JPanel {
             confirm.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    System.out.println(teamState.getAddTeamUsernameInput());
-                    createTeamController.execute(teamState.getAddTeamUsernameInput());
+                    System.out.println("CURRENT TEAM TO ADD: " + teamState.getAddTeamNameInput());
+                    createTeamController.execute(teamState.getAddTeamNameInput());
 
                     if(!teamViewModel.getTeamState().getIsCreateTeamFailed())
                     {
@@ -539,7 +562,7 @@ public class TeamView extends JPanel {
                 @Override
                 public void keyTyped(KeyEvent e) {
                     String text = nameField.getText() + e.getKeyChar();
-                    teamState.setAddTeamUsernameInput(text);
+                    teamState.setAddTeamNameInput(text);
                 }
 
                 @Override
@@ -551,6 +574,107 @@ public class TeamView extends JPanel {
                 }
             });
 
+        }
+
+        public void closeView()
+        {
+            viewFrame.dispatchEvent(new WindowEvent(viewFrame, WindowEvent.WINDOW_CLOSING));
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    private class AddTeamMemberInputView
+    {
+        private JPanel namePanel;
+        private JTextField nameField;
+        private JLabel nameLabel;
+
+        private JPanel viewPanel;
+        private JFrame viewFrame;
+
+        private JPanel confirmButtonPanel;
+        private JButton confirm, cancel;
+
+        public AddTeamMemberInputView(String title) {
+
+            namePanel = new JPanel();
+            nameField = new JTextField(15);
+            nameLabel = new JLabel("Name: ");
+            namePanel.add(nameLabel);
+            namePanel.add(nameField);
+
+            confirmButtonPanel = new JPanel();
+            confirm = new JButton("Confirm");
+            cancel = new JButton("Cancel");
+            confirmButtonPanel.add(confirm);
+            confirmButtonPanel.add(cancel);
+
+            viewPanel = new JPanel();
+            viewPanel.setLayout(new BoxLayout(viewPanel, BoxLayout.Y_AXIS));
+            viewPanel.add(namePanel);
+            viewPanel.add(confirmButtonPanel);
+
+            viewFrame = new JFrame(title);
+            viewFrame.setLocationRelativeTo(null);
+            viewFrame.add(viewPanel);
+            viewFrame.pack();
+            viewFrame.setResizable(false);
+            viewFrame.setVisible(true);
+
+            viewFrame.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    addTeamMemberInputView = null;
+                }
+            });
+
+            confirm.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if(teamViewModel.getSelectedTeamIndex() == -1)
+                    {
+                        JOptionPane.showMessageDialog(null, "Please select a team first");
+                        return;
+                    }
+                    addMemberController.execute(teamState.getAddMemberNameInput(), teamViewModel.getSelectedTeamName());
+
+                    if(!teamViewModel.getTeamState().getIsAddTeamMemberFailed())
+                    {
+                        closeView();
+                        addTeamMemberInputView = null;
+                        teamViewModel.updateViewData();
+                    }
+                }
+            });
+
+            cancel.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    closeView();
+                    addTeamMemberInputView = null;
+                }
+            });
+
+            nameField.addKeyListener(new KeyListener() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    String text = nameField.getText() + e.getKeyChar();
+                    teamState.setAddMemberNameInput(text);
+                }
+
+                @Override
+                public void keyPressed(KeyEvent e) {
+                }
+
+                @Override
+                public void keyReleased(KeyEvent e) {
+                }
+            });
         }
 
         public void closeView()

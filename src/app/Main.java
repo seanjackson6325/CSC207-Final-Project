@@ -58,12 +58,8 @@ public class Main {
         viewManager.addView(teamView, teamViewModel.getName());
         viewManager.switchToView(loginViewModel.getName());
 
-
         applicationFrame.setLocationRelativeTo(null);
         applicationFrame.setVisible(true);
         applicationFrame.setResizable(false);
     }
 }
-
-
-

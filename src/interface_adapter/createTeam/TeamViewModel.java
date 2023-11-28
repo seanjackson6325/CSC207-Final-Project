@@ -2,6 +2,7 @@ package interface_adapter.createTeam;
 
 import app.EntityMemory;
 import entity.User;
+import interface_adapter.ViewHelper;
 import view.ViewManager;
 import view.ViewModel;
 
@@ -10,6 +11,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 
 public class TeamViewModel extends ViewModel {
 
@@ -69,7 +71,11 @@ public class TeamViewModel extends ViewModel {
     private JMenuBar menuBar;
     private JMenu switchTeamSubMenu;
     private ArrayList<JMenuItem> teams;
+    private ArrayList<String> teamNames;
     private int selectedTeamIndex;
+    private List<String> teamMembers;
+    private JList<String> teamMembersList;
+    private int selectedTeamMemberIndex;
 
 
 
@@ -82,8 +88,11 @@ public class TeamViewModel extends ViewModel {
         menuBar = new JMenuBar();
         menuBar.setMaximumSize(new Dimension(TeamViewModel.MENU_BAR_WIDTH, TeamViewModel.MENU_BAR_HEIGHT));
 
+        teamMembersList = new JList<>();
+
         switchTeamSubMenu = new JMenu(TeamViewModel.SWITCH_TEAM_MENU_ITEM_STRING);
-        selectedTeamIndex = 0;
+        selectedTeamIndex = -1;
+        selectedTeamMemberIndex = -1;
     }
 
     public TeamState getTeamState()
@@ -97,13 +106,14 @@ public class TeamViewModel extends ViewModel {
         if(EntityMemory.getLoggedInUser() != null)
         {
             teams = new ArrayList<>();
+            teamNames = new ArrayList<>();
             switchTeamSubMenu.removeAll();
             for(String team : EntityMemory.getLoggedInUser().getTeam())
             {
-                System.out.println(EntityMemory.getLoggedInUser().getTeam().size());
                 System.out.println(team);
 
                 teams.add(new JMenuItem(team));
+                teamNames.add(team);
                 switchTeamSubMenu.add(teams.get(teams.size() - 1));
                 teams.get(teams.size() - 1).addActionListener(new ActionListener() {
 
@@ -112,9 +122,23 @@ public class TeamViewModel extends ViewModel {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         selectedTeamIndex = i;
-                        System.out.println(selectedTeamIndex);
+                        updateViewData();
                     }
                 });
+            }
+
+            if(selectedTeamIndex != -1)
+            {
+                String selectedTeamName = teamNames.get(selectedTeamIndex);
+                System.out.println(selectedTeamName);
+                teamMembers = ViewHelper.getTeamByName(selectedTeamName).getMembers();
+                System.out.println(teamMembers.toString());
+                String[] teamMemberJListInput = new String[teamMembers.size()];
+                for(int i = 0; i < teamMemberJListInput.length; i++)
+                {
+                    teamMemberJListInput[i] = teamMembers.get(i);
+                }
+                teamMembersList.setListData(teamMemberJListInput);
             }
         }
     }
@@ -127,6 +151,41 @@ public class TeamViewModel extends ViewModel {
     public JMenu getSwitchTeamSubMenu()
     {
         return switchTeamSubMenu;
+    }
+
+    public JList<String> getTeamMembersList()
+    {
+        return teamMembersList;
+    }
+
+    public ArrayList<String> getTeamNames()
+    {
+        return teamNames;
+    }
+
+    public int getSelectedTeamIndex()
+    {
+        return selectedTeamIndex;
+    }
+
+    public String getSelectedTeamName()
+    {
+        return teamNames.get(selectedTeamIndex);
+    }
+
+    public int getSelectedTeamMemberIndex()
+    {
+        return selectedTeamMemberIndex;
+    }
+
+    public void setSelectedTeamMemberIndex(int index)
+    {
+        selectedTeamMemberIndex = index;
+    }
+
+    public String getSelectedTeamMemberName()
+    {
+        return teamMembers.get(selectedTeamMemberIndex);
     }
 
 }

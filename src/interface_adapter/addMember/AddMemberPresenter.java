@@ -21,10 +21,12 @@ public class AddMemberPresenter implements AddMemberOutputBoundary {
     @Override
     public void successView(AddMemberOutputData outputData) {
         JOptionPane.showMessageDialog(null, outputData.getMessage());
+        teamViewModel.getTeamState().setIsAddTeamMemberFailed(false);
     }
 
     @Override
     public void failureView(AddMemberOutputData outputData) {
         JOptionPane.showMessageDialog(null, outputData.getMessage());
+        teamViewModel.getTeamState().setIsAddTeamMemberFailed(true);
     }
 }

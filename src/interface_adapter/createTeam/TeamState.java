@@ -2,14 +2,19 @@ package interface_adapter.createTeam;
 
 public class TeamState
 {
-    String addTeamUsernameInput;
+    String addTeamNameInput;
+
+    String addMemberNameInput;
 
     private boolean isCreateTeamFailed;
+    private boolean isAddTeamMemberFailed;
 
     public TeamState()
     {
-        addTeamUsernameInput = "";
+        addTeamNameInput = "";
+        addMemberNameInput = "";
         isCreateTeamFailed = false;
+        isAddTeamMemberFailed = false;
     }
 
 
@@ -23,15 +28,34 @@ public class TeamState
         this.isCreateTeamFailed = isCreateTeamFailed;
     }
 
-    public String getAddTeamUsernameInput()
+    public String getAddTeamNameInput()
     {
-        return addTeamUsernameInput;
+        return addTeamNameInput;
     }
 
-    public void setAddTeamUsernameInput(String name)
+    public void setAddTeamNameInput(String name)
     {
-        addTeamUsernameInput = name;
+        addTeamNameInput = name;
     }
 
+    public String getAddMemberNameInput()
+    {
+        return addMemberNameInput;
+    }
+
+    public void setAddMemberNameInput(String name)
+    {
+        addMemberNameInput = name;
+    }
+
+    public boolean getIsAddTeamMemberFailed()
+    {
+        return isAddTeamMemberFailed;
+    }
+
+    public void setIsAddTeamMemberFailed(boolean status)
+    {
+        isAddTeamMemberFailed = status;
+    }
 
 }
