@@ -29,9 +29,11 @@ public class CreateTeamInteractor implements CreateTeamInputBoundary {
         try {
             if (dataAccess.readTeam(createTeamInputData.getTeamName()) == null) {
                 // Create Team
-                Team newTeam = new Team(createTeamInputData.getTeamName(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-                // Add team in the user's team list
                 User user = EntityMemory.getLoggedInUser();
+                List<String> memberList = new ArrayList<>();
+                memberList.add(user.getUsername());
+                Team newTeam = new Team(createTeamInputData.getTeamName(), null, null, memberList);
+                // Add team in the user's team list
                 user.getTeam().add(newTeam.getTeamName());
 
                 // update the change in the Database (for both User and newTeam)
