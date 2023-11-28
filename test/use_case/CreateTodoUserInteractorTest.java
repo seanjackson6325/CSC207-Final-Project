@@ -1,4 +1,4 @@
-package use_case.CreateTodoUser;
+package use_case;
 
 import app.EntityMemory;
 import data_access.DataAccess;
@@ -6,6 +6,10 @@ import entity.Todo;
 import entity.User;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
+import use_case.CreateTodoUser.CreateTodoUserInputData;
+import use_case.CreateTodoUser.CreateTodoUserInteractor;
+import use_case.CreateTodoUser.CreateTodoUserOutputBoundary;
+import use_case.CreateTodoUser.CreateTodoUserOutputData;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

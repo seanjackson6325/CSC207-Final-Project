@@ -3,6 +3,7 @@ package use_case.RemoveMember;
 import app.EntityMemory;
 import data_access.DataAccessInterface;
 import entity.Team;
+import entity.User;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class RemoveMemberInteractor implements RemoveMemberInputBoundary {
     @Override
     public void execute(RemoveMemberInputData inputData) {
         String username = inputData.getUser();
+        User user = memberDataAccessObject.readUser(username);
         Team team = memberDataAccessObject.readTeam(inputData.getTeam());
 
         boolean caughtMember = false;
@@ -38,17 +40,22 @@ public class RemoveMemberInteractor implements RemoveMemberInputBoundary {
             }
         }
 
-        if (!caughtMember) {
-            RemoveMemberOutputData outputData = new RemoveMemberOutputData("User is not on the team!");
-            memberPresenter.failureView(outputData);
-        } else if (memberDataAccessObject.readUser(username) == null) {
+        if (memberDataAccessObject.readUser(username) == null) {
             RemoveMemberOutputData outputData = new RemoveMemberOutputData("User does not exist!");
+            memberPresenter.failureView(outputData);
+        } else if (!caughtMember) {
+            RemoveMemberOutputData outputData = new RemoveMemberOutputData("User is not on the team!");
             memberPresenter.failureView(outputData);
         } else if (caughtManager) {
             RemoveMemberOutputData outputData = new RemoveMemberOutputData("Can't remove manager!");
             memberPresenter.failureView(outputData);
         } else {
             team.getMembers().remove(username);
+            team.setMembers(team.getMembers());
+            user.getTeam().remove(team.getTeamName());
+            user.setTeams(user.getTeam());
+            memberDataAccessObject.updateUser(user);
+            memberDataAccessObject.updateTeam(team);
             RemoveMemberOutputData outputData = new RemoveMemberOutputData("User successfully removed " + username + " from the team!");
             memberPresenter.successView(outputData);
         }
