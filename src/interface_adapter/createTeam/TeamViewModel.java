@@ -130,9 +130,7 @@ public class TeamViewModel extends ViewModel {
             if(selectedTeamIndex != -1)
             {
                 String selectedTeamName = teamNames.get(selectedTeamIndex);
-                System.out.println(selectedTeamName);
                 teamMembers = ViewHelper.getTeamByName(selectedTeamName).getMembers();
-                System.out.println(teamMembers.toString());
                 String[] teamMemberJListInput = new String[teamMembers.size()];
                 for(int i = 0; i < teamMemberJListInput.length; i++)
                 {
@@ -172,6 +170,12 @@ public class TeamViewModel extends ViewModel {
     {
         return teamNames.get(selectedTeamIndex);
     }
+
+    public List<String> getTeamMembers()
+    {
+        return teamMembers;
+    }
+
 
     public int getSelectedTeamMemberIndex()
     {

@@ -8,6 +8,8 @@ import interface_adapter.addMember.AddMemberPresenter;
 import interface_adapter.createTeam.CreateTeamController;
 import interface_adapter.createTeam.CreateTeamPresenter;
 import interface_adapter.createTeam.TeamViewModel;
+import interface_adapter.createTodoTeam.CreateTodoTeamController;
+import interface_adapter.createTodoTeam.CreateTodoTeamPresenter;
 import interface_adapter.removeMember.RemoveMemberController;
 import interface_adapter.removeMember.RemoveMemberPresenter;
 import interface_adapter.user.UserViewModel;
@@ -15,6 +17,8 @@ import use_case.AddMember.AddMemberInteractor;
 import use_case.AddMember.AddMemberOutputBoundary;
 import use_case.CreateTeam.CreateTeamInteractor;
 import use_case.CreateTeam.CreateTeamOutputBoundary;
+import use_case.CreateTodoTeam.CreateTodoTeamInteractor;
+import use_case.CreateTodoTeam.CreateTodoTeamOutputBoundary;
 import use_case.RemoveMember.RemoveMemberInteractor;
 import use_case.RemoveMember.RemoveMemberOutputBoundary;
 import view.ViewManager;
@@ -34,7 +38,12 @@ public class TeamFactory {
         CreateTeamController createTeamController = createTeamController(viewManager, teamViewModel, dataAccessInterface);
         AddMemberController addMemberController = createAddMemberController(viewManager, teamViewModel, dataAccessInterface);
         RemoveMemberController removeMemberController = createRemoveMemberController(viewManager, teamViewModel, dataAccessInterface);
-        return new TeamView(teamViewModel, createTeamController, addMemberController, removeMemberController);
+        CreateTodoTeamController createTodoTeamController = createAddTodoTeamController(viewManager, teamViewModel, dataAccessInterface);
+        return new TeamView(teamViewModel,
+                createTeamController,
+                addMemberController,
+                removeMemberController,
+                createTodoTeamController);
     }
 
     public static CreateTeamController createTeamController(ViewManager viewManager,
@@ -62,6 +71,15 @@ public class TeamFactory {
         RemoveMemberOutputBoundary removeMemberPresenter = new RemoveMemberPresenter(viewManager, teamViewModel);
         RemoveMemberInteractor removeMemberInteractor = new RemoveMemberInteractor(dataAccessInterface, removeMemberPresenter);
         return new RemoveMemberController(removeMemberInteractor);
+    }
+
+    public static CreateTodoTeamController createAddTodoTeamController(ViewManager viewManager,
+                                                                       TeamViewModel teamViewModel,
+                                                                       DataAccessInterface dataAccessInterface)
+    {
+        CreateTodoTeamOutputBoundary createTodoTeamPresenter = new CreateTodoTeamPresenter(viewManager, teamViewModel);
+        CreateTodoTeamInteractor createTodoTeamInteractor = new CreateTodoTeamInteractor(dataAccessInterface, createTodoTeamPresenter);
+        return new CreateTodoTeamController(createTodoTeamInteractor);
     }
 
 

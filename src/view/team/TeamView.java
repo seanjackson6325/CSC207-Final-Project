@@ -7,6 +7,7 @@ import interface_adapter.createTeam.CreateTeamController;
 import interface_adapter.createTeam.CreateTeamPresenter;
 import interface_adapter.createTeam.TeamState;
 import interface_adapter.createTeam.TeamViewModel;
+import interface_adapter.createTodoTeam.CreateTodoTeamController;
 import interface_adapter.removeMember.RemoveMemberController;
 import use_case.CreateTeam.CreateTeamInputData;
 import view.DateTimeInputPanel;
@@ -17,6 +18,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TeamView extends JPanel {
 
@@ -68,6 +71,7 @@ public class TeamView extends JPanel {
     CreateTeamController createTeamController;
     AddMemberController addMemberController;
     RemoveMemberController removeMemberController;
+    CreateTodoTeamController createTodoTeamController;
 
     /**
      * States
@@ -84,7 +88,11 @@ public class TeamView extends JPanel {
     AddTeamMemberInputView addTeamMemberInputView;
 
 
-    public TeamView(TeamViewModel teamViewModel, CreateTeamController createTeamController, AddMemberController addMemberController, RemoveMemberController removeMemberController)
+    public TeamView(TeamViewModel teamViewModel,
+                    CreateTeamController createTeamController,
+                    AddMemberController addMemberController,
+                    RemoveMemberController removeMemberController,
+                    CreateTodoTeamController createTodoTeamController)
     {
         /**
          * INITIALIZE VIEW MODELS AND CONTROLLERS
@@ -93,6 +101,7 @@ public class TeamView extends JPanel {
         this.createTeamController = createTeamController;
         this.addMemberController = addMemberController;
         this.removeMemberController = removeMemberController;
+        this.createTodoTeamController = createTodoTeamController;
 
         /**
          * INITIALIZE TEAM STATES
@@ -185,7 +194,7 @@ public class TeamView extends JPanel {
 
 
         /**
-         * INITIALIZING TEAM SELECTION FIELDS
+         * INITIALIZING TEAM MEMBER SELECTION FIELDS
          */
 
         // intialize team buttons panel and buttons
@@ -388,6 +397,10 @@ public class TeamView extends JPanel {
         private JPanel namePanel;
         private JTextField nameField;
         private JLabel nameLabel;
+        private JLabel assignedToLabel;
+        private JList<String> membersList;
+        private JScrollPane scroller;
+        int selectedMemberIndex;
 
         private JPanel viewPanel;
         private JFrame viewFrame;
@@ -402,11 +415,39 @@ public class TeamView extends JPanel {
             startTimePanel = new DateTimeInputPanel(null);
             endTimePanel = new DateTimeInputPanel(null);
 
+            selectedMemberIndex = -1;
+
+            List<String> members = teamViewModel.getTeamMembers();
+            String[] teamMemberJListInput = new String[members.size()];
+            for(int i = 0; i < teamMemberJListInput.length; i++)
+            {
+                teamMemberJListInput[i] = members.get(i);
+            }
+            membersList = new JList<>(teamMemberJListInput);
+
+            scroller = new JScrollPane(membersList);
+            scroller.setFocusable(false);
+            scroller.setPreferredSize(new Dimension(TeamViewModel.TEAM_MEMBER_LIST_SCROLLER_WIDTH,
+                    TeamViewModel.TEAM_MEMBER_LIST_SCROLLER_HEIGHT));
+
+            membersList.addListSelectionListener(new ListSelectionListener() {
+                @Override
+                public void valueChanged(ListSelectionEvent e) {
+                    selectedMemberIndex = membersList.getSelectedIndex();
+                }
+            });
+
+
             namePanel = new JPanel();
             nameField = new JTextField(15);
             nameLabel = new JLabel("Name: ");
+            assignedToLabel = new JLabel("Assign to:");
             namePanel.add(nameLabel);
             namePanel.add(nameField);
+            namePanel.add(assignedToLabel);
+            namePanel.add(scroller);
+
+
 
             confirmButtonPanel = new JPanel();
             confirm = new JButton("Confirm");
@@ -450,6 +491,36 @@ public class TeamView extends JPanel {
                 @Override
                 public void actionPerformed(ActionEvent e) {
 
+                    if (!startTimePanel.isValidInput() || !endTimePanel.isValidInput()) {
+                        JOptionPane.showMessageDialog(null, "Please finish entering valid information");
+                        teamViewModel.getTeamState().setIsAddTodoFailed(true);
+                        return;
+                    }
+
+                    if(selectedMemberIndex == -1)
+                    {
+                        JOptionPane.showMessageDialog(null, "Please select a team member first!");
+                    }
+
+
+                    String user = EntityMemory.getLoggedInUser().getUsername();
+
+                    System.out.println("ASSIGNED TO MEMBER: " + teamViewModel.getTeamMembers().get(selectedMemberIndex));
+
+                    createTodoTeamController.execute(
+                            nameField.getText(),
+                            todoDescriptionEditor.getText(),
+                            startTimePanel.getLocalDateTime(),
+                            endTimePanel.getLocalDateTime(),
+                            teamViewModel.getTeamMembers().get(selectedMemberIndex),
+                            false,
+                            teamViewModel.getSelectedTeamName()
+                    );
+
+                    if (!teamViewModel.getTeamState().getIsAddTodoFailed()) {
+                        teamViewModel.updateViewData();
+                        closeView();
+                    }
                 }
             });
 
@@ -469,10 +540,12 @@ public class TeamView extends JPanel {
 
                 @Override
                 public void keyPressed(KeyEvent e) {
+
                 }
 
                 @Override
                 public void keyReleased(KeyEvent e) {
+
                 }
             });
 

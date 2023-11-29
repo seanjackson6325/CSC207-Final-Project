@@ -4,6 +4,8 @@ import use_case.Signup.SignupOutputBoundary;
 import use_case.Signup.SignupOutputData;
 import view.ViewManager;
 
+import javax.swing.*;
+
 public class SignupPresenter implements SignupOutputBoundary {
 
     private SignupViewModel signupViewModel;
@@ -19,6 +21,7 @@ public class SignupPresenter implements SignupOutputBoundary {
     public void prepareSuccessView(SignupOutputData user) {
         signupViewModel.getState().setUsername(user.getUsername());
         signupViewModel.getState().setCreationTime(user.getCreationTime());
+        JOptionPane.showMessageDialog(null, "Account created!");
         viewManager.switchToLastView();
     }
 

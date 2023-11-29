@@ -27,6 +27,11 @@ import java.time.LocalDateTime;
 // THINGS TO FIX:
 // 1: Empty username and password should not be allowed as this breaks the login system
 
+// Login Info for test Users
+// "User1", "pass1"
+// "User2", "pass2"
+// "User3", "pass3"
+
 
 public class Main {
 
