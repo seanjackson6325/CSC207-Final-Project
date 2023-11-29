@@ -3,6 +3,8 @@ package Factory;
 import data_access.DataAccessInterface;
 import entity.Todo;
 import entity.User;
+import interface_adapter.checkWeather.CheckWeatherController;
+import interface_adapter.checkWeather.CheckWeatherPresenter;
 import interface_adapter.createTeam.TeamViewModel;
 import interface_adapter.deleteTodo.DeleteTodoController;
 import interface_adapter.deleteTodo.DeleteTodoPresenter;
@@ -10,6 +12,8 @@ import interface_adapter.signup.SignupViewModel;
 import interface_adapter.user.UserController;
 import interface_adapter.user.UserPresenter;
 import interface_adapter.user.UserViewModel;
+import use_case.CheckWeather.CheckWeatherInteractor;
+import use_case.CheckWeather.CheckWeatherOutputBoundary;
 import use_case.CreateTodoUser.CreateTodoUserInputBoundary;
 import use_case.CreateTodoUser.CreateTodoUserInteractor;
 import use_case.CreateTodoUser.CreateTodoUserOutputBoundary;
@@ -38,7 +42,8 @@ public class UserFactory {
     {
         UserController userController = createUserController(viewManager, userViewModel, userDataAccess);
         DeleteTodoController deleteController = createDeleteTodoController(viewManager, userViewModel, userDataAccess);
-        return new UserView(userViewModel, teamViewModel, userController, deleteController);
+        CheckWeatherController checkWeatherController = createCheckWeatherController(viewManager);
+        return new UserView(userViewModel, teamViewModel, userController, deleteController, checkWeatherController);
     }
 
     public static UserController createUserController(ViewManager viewManager,
@@ -60,6 +65,13 @@ public class UserFactory {
         DeleteTodoOutputBoundary presenter = new DeleteTodoPresenter(viewManager, userViewModel);
         DeleteTodoInteractor interactor = new DeleteTodoInteractor(userDataAccess, presenter);
         return new DeleteTodoController(interactor);
+    }
+
+    public static CheckWeatherController createCheckWeatherController(ViewManager viewManager)
+    {
+        CheckWeatherOutputBoundary checkWeatherPresenter = new CheckWeatherPresenter(viewManager);
+        CheckWeatherInteractor checkWeatherInteractor = new CheckWeatherInteractor(checkWeatherPresenter);
+        return new CheckWeatherController(checkWeatherInteractor);
     }
 }
 

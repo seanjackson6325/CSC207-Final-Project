@@ -1,4 +1,4 @@
-package weather_API;
+package entity;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -38,12 +38,12 @@ public class WeatherAPI {
             JsonObject weatherInfo = data.get("current").getAsJsonObject();
 
             return "TimeZone: " + data.get("timezone").getAsString() + " \n"
-                    + "Temperature: " + weatherInfo.get("temp") + " degrees \n"
-                    + "Feels Like: " + weatherInfo.get("feels_like") + " degrees \n"
+                    + "Temperature: " + weatherInfo.get("temp") + " degrees centigrade\n"
+                    + "Feels Like: " + weatherInfo.get("feels_like") + " degrees centigrade\n"
                     + data.get("daily").getAsJsonArray().get(0).getAsJsonObject().get("summary").toString().replace("\"", "");
 
         } catch (IOException e) {
-            return "Failed to Get Weather";
+            return null;
         }
         //
     }

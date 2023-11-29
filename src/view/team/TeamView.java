@@ -3,6 +3,7 @@ package view.team;
 import app.EntityMemory;
 import entity.Team;
 import interface_adapter.addMember.AddMemberController;
+import interface_adapter.checkWeather.CheckWeatherController;
 import interface_adapter.createTeam.CreateTeamController;
 import interface_adapter.createTeam.CreateTeamPresenter;
 import interface_adapter.createTeam.TeamState;
@@ -27,7 +28,7 @@ public class TeamView extends JPanel {
      *  FOR THE TOOLBAR
      */
     JMenu mainMenu, viewMenu, weatherMenu, teamMenu;
-    JMenuItem logoutMainMenuItem, personalViewMenuItem, weatherViewMenuItem, addTeamMenuItem;
+    JMenuItem logoutMainMenuItem, refreshMainMenuItem, personalViewMenuItem, weatherViewMenuItem, addTeamMenuItem;
 
     /**
      *  FOR THE TASK SELECTION MENU
@@ -36,7 +37,6 @@ public class TeamView extends JPanel {
     JPanel todoSelectorPanel;
     JPanel todoButtonsPanel;
     JButton addTodoButton, removeTodoButton, editTodoButton, completeTodoButton;
-    JList<String> todoNameList;
     JScrollPane todoNameListScroller;
 
     /**
@@ -72,6 +72,7 @@ public class TeamView extends JPanel {
     AddMemberController addMemberController;
     RemoveMemberController removeMemberController;
     CreateTodoTeamController createTodoTeamController;
+    CheckWeatherController checkWeatherController;
 
     /**
      * States
@@ -92,7 +93,8 @@ public class TeamView extends JPanel {
                     CreateTeamController createTeamController,
                     AddMemberController addMemberController,
                     RemoveMemberController removeMemberController,
-                    CreateTodoTeamController createTodoTeamController)
+                    CreateTodoTeamController createTodoTeamController,
+                    CheckWeatherController checkWeatherController)
     {
         /**
          * INITIALIZE VIEW MODELS AND CONTROLLERS
@@ -102,6 +104,7 @@ public class TeamView extends JPanel {
         this.addMemberController = addMemberController;
         this.removeMemberController = removeMemberController;
         this.createTodoTeamController = createTodoTeamController;
+        this.checkWeatherController = checkWeatherController;
 
         /**
          * INITIALIZE TEAM STATES
@@ -132,9 +135,7 @@ public class TeamView extends JPanel {
         todoButtonsPanel.add(completeTodoButton);
 
         // initialize the task list and scroll pane
-        todoNameList = new JList<>();
-        todoNameList.setListData(new String[] {"Test1", "Test2", "Test3"});
-        todoNameListScroller = new JScrollPane(todoNameList);
+        todoNameListScroller = new JScrollPane(teamViewModel.getTodoNameList());
         todoNameListScroller.setPreferredSize(new Dimension(TeamViewModel.TODO_LIST_SCROLLER_WIDTH,
                                                             TeamViewModel.TODO_LIST_SCROLLER_HEIGHT));
 
@@ -227,6 +228,8 @@ public class TeamView extends JPanel {
         mainMenu = new JMenu(TeamViewModel.MAIN_MENU_STRING);
         logoutMainMenuItem = new JMenuItem(TeamViewModel.LOGOUT_MENU_ITEM_STRING);
         mainMenu.add(logoutMainMenuItem);
+        refreshMainMenuItem = new JMenuItem(TeamViewModel.REFRESH_MENU_ITEM_STRING);
+        mainMenu.add(refreshMainMenuItem);
 
         // initialize view menu fields
         viewMenu = new JMenu(TeamViewModel.VIEW_MENU_STRING);
@@ -262,6 +265,13 @@ public class TeamView extends JPanel {
             }
         });
 
+        refreshMainMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                teamViewModel.updateViewData();
+            }
+        });
+
         personalViewMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -272,7 +282,7 @@ public class TeamView extends JPanel {
         weatherViewMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // show pop up of weather
+                checkWeatherController.execute();
             }
         });
 
@@ -290,9 +300,13 @@ public class TeamView extends JPanel {
         addTodoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(addTodoInputView == null)
+                if(addTodoInputView == null && teamViewModel.getSelectedTeamIndex() != -1)
                 {
                     addTodoInputView = new AddTodoInputView("Enter Todo Attributes");
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "Please select a team first.");
                 }
             }
         });
@@ -318,7 +332,7 @@ public class TeamView extends JPanel {
             }
         });
 
-        todoNameList.addListSelectionListener(new ListSelectionListener() {
+        teamViewModel.getTodoNameList().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 // change selected index and update stuff
@@ -336,9 +350,13 @@ public class TeamView extends JPanel {
         addTeamMemberButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(addTeamMemberInputView == null)
+                if(addTeamMemberInputView == null && teamViewModel.getSelectedTeamIndex() != -1)
                 {
                     addTeamMemberInputView = new AddTeamMemberInputView("Input Username");
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "Please select a team first.");
                 }
             }
         });
@@ -360,6 +378,10 @@ public class TeamView extends JPanel {
                         );
                         teamViewModel.updateViewData();
                     }
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "Please select a team first.");
                 }
             }
         });

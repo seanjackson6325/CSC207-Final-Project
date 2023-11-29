@@ -1,6 +1,7 @@
 package interface_adapter.createTeam;
 
 import app.EntityMemory;
+import entity.Todo;
 import entity.User;
 import interface_adapter.ViewHelper;
 import view.ViewManager;
@@ -28,6 +29,7 @@ public class TeamViewModel extends ViewModel {
     public static final int MENU_BAR_HEIGHT = 30;
     public static final String MAIN_MENU_STRING = "Menu";
     public static final String LOGOUT_MENU_ITEM_STRING = "Logout";
+    public static final String REFRESH_MENU_ITEM_STRING = "Refresh";
     public static final String VIEW_MENU_STRING = "View";
     public static final String PERSONAL_VIEW_MENU_ITEM_STRING = "Switch to Personal View";
     public static final String WEATHER_MENU_STRING = "Weather";
@@ -68,15 +70,25 @@ public class TeamViewModel extends ViewModel {
      * Bean objects that are directly connected to this class' data.
      * Used in view
      */
+
+    // FOR THE MENU BAR
     private JMenuBar menuBar;
     private JMenu switchTeamSubMenu;
+
+    // FOR THE TEAM MENU
     private ArrayList<JMenuItem> teams;
     private ArrayList<String> teamNames;
     private int selectedTeamIndex;
+
+    // FOR THE TEAM MEMBER MENU
     private List<String> teamMembers;
     private JList<String> teamMembersList;
     private int selectedTeamMemberIndex;
 
+    // FOR THE TEAM TASK MENU
+    private JList<String> todoNameList;
+    private List<String> todoNames;
+    private int selectedTodoIndex;
 
 
     public TeamViewModel(ViewManager viewManager)
@@ -89,10 +101,12 @@ public class TeamViewModel extends ViewModel {
         menuBar.setMaximumSize(new Dimension(TeamViewModel.MENU_BAR_WIDTH, TeamViewModel.MENU_BAR_HEIGHT));
 
         teamMembersList = new JList<>();
+        todoNameList = new JList<>();
 
         switchTeamSubMenu = new JMenu(TeamViewModel.SWITCH_TEAM_MENU_ITEM_STRING);
         selectedTeamIndex = -1;
         selectedTeamMemberIndex = -1;
+        selectedTodoIndex = -1;
     }
 
     public TeamState getTeamState()
@@ -107,6 +121,7 @@ public class TeamViewModel extends ViewModel {
         {
             teams = new ArrayList<>();
             teamNames = new ArrayList<>();
+            todoNames = new ArrayList<>();
             switchTeamSubMenu.removeAll();
             for(String team : EntityMemory.getLoggedInUser().getTeam())
             {
@@ -115,6 +130,7 @@ public class TeamViewModel extends ViewModel {
                 teams.add(new JMenuItem(team));
                 teamNames.add(team);
                 switchTeamSubMenu.add(teams.get(teams.size() - 1));
+
                 teams.get(teams.size() - 1).addActionListener(new ActionListener() {
 
                     private int i = teams.size() - 1;
@@ -137,6 +153,18 @@ public class TeamViewModel extends ViewModel {
                     teamMemberJListInput[i] = teamMembers.get(i);
                 }
                 teamMembersList.setListData(teamMemberJListInput);
+
+                if(selectedTodoIndex != -1)
+                {
+                    String selectedTodoName = todoNames.get(selectedTodoIndex);
+                    List<Todo> todos = ViewHelper.getTeamByName(selectedTeamName).getTeamTasks();
+                    String[] teamTodoJListInput = new String[todos.size()];
+                    for(int i = 0; i < teamTodoJListInput.length; i++)
+                    {
+                        teamTodoJListInput[i] = todos.get(i).getName();
+                    }
+                    todoNameList.setListData(teamTodoJListInput);
+                }
             }
         }
     }
@@ -190,6 +218,11 @@ public class TeamViewModel extends ViewModel {
     public String getSelectedTeamMemberName()
     {
         return teamMembers.get(selectedTeamMemberIndex);
+    }
+
+    public JList<String> getTodoNameList()
+    {
+        return todoNameList;
     }
 
 }

@@ -2,7 +2,7 @@ package interface_adapter;
 
 import data_access.DataAccess;
 import entity.Team;
-import weather_API.WeatherAPI;
+import entity.WeatherAPI;
 
 public class ViewHelper {
 

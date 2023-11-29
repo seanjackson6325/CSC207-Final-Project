@@ -2,6 +2,7 @@ package view.user;
 
 import entity.Todo;
 import entity.User;
+import interface_adapter.checkWeather.CheckWeatherController;
 import interface_adapter.createTeam.TeamViewModel;
 import interface_adapter.deleteTodo.DeleteTodoController;
 import interface_adapter.login.LoginViewModel;
@@ -24,6 +25,7 @@ public class UserView extends JPanel {
     TeamViewModel teamViewModel;
     UserController userController;
     DeleteTodoController deleteTodoController;
+    CheckWeatherController checkWeatherController;
 
     /**
      *  FOR THE TASK SELECTOR
@@ -63,12 +65,16 @@ public class UserView extends JPanel {
      * Main constructor for this UserView object.
      */
 
-    public UserView(UserViewModel userViewModel, TeamViewModel teamViewModel, UserController userController, DeleteTodoController deleteTodoController)
+    public UserView(UserViewModel userViewModel, TeamViewModel teamViewModel,
+                    UserController userController,
+                    DeleteTodoController deleteTodoController,
+                    CheckWeatherController checkWeatherController)
     {
         this.userViewModel = userViewModel;
         this.teamViewModel = teamViewModel;
         this.userController = userController;
         this.deleteTodoController = deleteTodoController;
+        this.checkWeatherController = checkWeatherController;
         todoInputView = null;
 
         // Initialize everything that needs user info
@@ -218,7 +224,7 @@ public class UserView extends JPanel {
         weatherViewMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // show pop up of weather
+                checkWeatherController.execute();
             }
         });
 

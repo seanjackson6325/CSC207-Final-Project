@@ -5,6 +5,8 @@ import entity.Todo;
 import entity.Team;
 import interface_adapter.addMember.AddMemberController;
 import interface_adapter.addMember.AddMemberPresenter;
+import interface_adapter.checkWeather.CheckWeatherController;
+import interface_adapter.checkWeather.CheckWeatherPresenter;
 import interface_adapter.createTeam.CreateTeamController;
 import interface_adapter.createTeam.CreateTeamPresenter;
 import interface_adapter.createTeam.TeamViewModel;
@@ -15,6 +17,8 @@ import interface_adapter.removeMember.RemoveMemberPresenter;
 import interface_adapter.user.UserViewModel;
 import use_case.AddMember.AddMemberInteractor;
 import use_case.AddMember.AddMemberOutputBoundary;
+import use_case.CheckWeather.CheckWeatherInteractor;
+import use_case.CheckWeather.CheckWeatherOutputBoundary;
 import use_case.CreateTeam.CreateTeamInteractor;
 import use_case.CreateTeam.CreateTeamOutputBoundary;
 import use_case.CreateTodoTeam.CreateTodoTeamInteractor;
@@ -39,11 +43,13 @@ public class TeamFactory {
         AddMemberController addMemberController = createAddMemberController(viewManager, teamViewModel, dataAccessInterface);
         RemoveMemberController removeMemberController = createRemoveMemberController(viewManager, teamViewModel, dataAccessInterface);
         CreateTodoTeamController createTodoTeamController = createAddTodoTeamController(viewManager, teamViewModel, dataAccessInterface);
+        CheckWeatherController checkWeatherController = createCheckWeatherController(viewManager);
         return new TeamView(teamViewModel,
                 createTeamController,
                 addMemberController,
                 removeMemberController,
-                createTodoTeamController);
+                createTodoTeamController,
+                checkWeatherController);
     }
 
     public static CreateTeamController createTeamController(ViewManager viewManager,
@@ -80,6 +86,13 @@ public class TeamFactory {
         CreateTodoTeamOutputBoundary createTodoTeamPresenter = new CreateTodoTeamPresenter(viewManager, teamViewModel);
         CreateTodoTeamInteractor createTodoTeamInteractor = new CreateTodoTeamInteractor(dataAccessInterface, createTodoTeamPresenter);
         return new CreateTodoTeamController(createTodoTeamInteractor);
+    }
+
+    public static CheckWeatherController createCheckWeatherController(ViewManager viewManager)
+    {
+        CheckWeatherOutputBoundary checkWeatherPresenter = new CheckWeatherPresenter(viewManager);
+        CheckWeatherInteractor checkWeatherInteractor = new CheckWeatherInteractor(checkWeatherPresenter);
+        return new CheckWeatherController(checkWeatherInteractor);
     }
 
 
