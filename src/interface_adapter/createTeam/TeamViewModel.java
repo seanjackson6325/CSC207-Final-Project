@@ -4,6 +4,7 @@ import app.EntityMemory;
 import entity.Todo;
 import entity.User;
 import interface_adapter.ViewHelper;
+import view.DateTimeInputPanel;
 import view.ViewManager;
 import view.ViewModel;
 
@@ -90,6 +91,13 @@ public class TeamViewModel extends ViewModel {
     private List<String> todoNames;
     private int selectedTodoIndex;
 
+    // FOR THE TASK DESCRIPTION MENU
+    JTextPane todoDescriptionTextPane;
+    JEditorPane todoStartTimeTextPane;
+    JEditorPane todoEndTimeTextPane;
+    JEditorPane todoStatusTextPane;
+    JEditorPane todoAssignedTextPane;
+
 
     public TeamViewModel(ViewManager viewManager)
     {
@@ -107,6 +115,12 @@ public class TeamViewModel extends ViewModel {
         selectedTeamIndex = -1;
         selectedTeamMemberIndex = -1;
         selectedTodoIndex = -1;
+
+        todoDescriptionTextPane = new JTextPane();
+        todoStartTimeTextPane = new JEditorPane();
+        todoEndTimeTextPane = new JEditorPane();
+        todoStatusTextPane = new JEditorPane();
+        todoAssignedTextPane = new JEditorPane();
     }
 
     public TeamState getTeamState()
@@ -125,7 +139,6 @@ public class TeamViewModel extends ViewModel {
             switchTeamSubMenu.removeAll();
             for(String team : EntityMemory.getLoggedInUser().getTeam())
             {
-                System.out.println(team);
 
                 teams.add(new JMenuItem(team));
                 teamNames.add(team);
@@ -145,6 +158,7 @@ public class TeamViewModel extends ViewModel {
 
             if(selectedTeamIndex != -1)
             {
+                selectedTodoIndex = todoNameList.getSelectedIndex();
                 String selectedTeamName = teamNames.get(selectedTeamIndex);
                 teamMembers = ViewHelper.getTeamByName(selectedTeamName).getMembers();
                 String[] teamMemberJListInput = new String[teamMembers.size()];
@@ -154,18 +168,33 @@ public class TeamViewModel extends ViewModel {
                 }
                 teamMembersList.setListData(teamMemberJListInput);
 
-                if(selectedTodoIndex != -1)
+                List<Todo> todos = ViewHelper.getTeamByName(selectedTeamName).getTeamTasks();
+                String[] teamTodoJListInput = new String[todos.size()];
+                for(int i = 0; i < teamTodoJListInput.length; i++)
                 {
-                    String selectedTodoName = todoNames.get(selectedTodoIndex);
-                    List<Todo> todos = ViewHelper.getTeamByName(selectedTeamName).getTeamTasks();
-                    String[] teamTodoJListInput = new String[todos.size()];
-                    for(int i = 0; i < teamTodoJListInput.length; i++)
-                    {
-                        teamTodoJListInput[i] = todos.get(i).getName();
-                    }
-                    todoNameList.setListData(teamTodoJListInput);
+                    teamTodoJListInput[i] = todos.get(i).getName();
                 }
+                todoNameList.setListData(teamTodoJListInput);
+
+                updateDescriptionData(selectedTeamName);
             }
+        }
+    }
+
+    public void updateDescriptionData(String selectedTeamName)
+    {
+        if(selectedTodoIndex != -1)
+        {
+            Todo selectedTodo = ViewHelper.getTeamByName(selectedTeamName).getTeamTasks().get(selectedTodoIndex);
+            todoDescriptionTextPane.setText(selectedTodo.getDescription());
+            todoStartTimeTextPane.setText(DateTimeInputPanel.getFormattedTimeString(selectedTodo.getStartTime()));
+            todoEndTimeTextPane.setText(DateTimeInputPanel.getFormattedTimeString(selectedTodo.getEndTime()));
+            boolean status = selectedTodo.getStatus();
+            String statusString = "Incomplete";
+            if(status)
+                statusString = "Complete";
+            todoStatusTextPane.setText(statusString);
+            todoAssignedTextPane.setText("Assigned to " + selectedTodo.getRequestedTo() + " by " + selectedTodo.getRequester());
         }
     }
 
@@ -223,6 +252,41 @@ public class TeamViewModel extends ViewModel {
     public JList<String> getTodoNameList()
     {
         return todoNameList;
+    }
+
+    public JTextPane getTodoDescriptionTextPane()
+    {
+        return todoDescriptionTextPane;
+    }
+
+    public JEditorPane getTodoStartTimeTextPane()
+    {
+        return todoStartTimeTextPane;
+    }
+
+    public JEditorPane getTodoEndTimeTextPane()
+    {
+        return todoEndTimeTextPane;
+    }
+
+    public JEditorPane getTodoStatusTextPane()
+    {
+        return todoStatusTextPane;
+    }
+
+    public JEditorPane getTodoAssignedTextPane()
+    {
+        return todoAssignedTextPane;
+    }
+
+    public int getSelectedTodoIndex()
+    {
+        return selectedTodoIndex;
+    }
+
+    public void setSelectedTodoIndex(int index)
+    {
+        selectedTodoIndex = index;
     }
 
 }

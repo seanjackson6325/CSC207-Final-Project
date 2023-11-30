@@ -44,13 +44,8 @@ public class TeamView extends JPanel {
      */
     JLabel todoDescriptionLabel;
     JPanel todoInfoPanel;
-    JTextPane todoDescriptionTextPane;
     JPanel todoTimePanel;
-    JEditorPane todoStartTimeTextPane;
-    JEditorPane todoEndTimeTextPane;
     JPanel todoStatusPanel;
-    JEditorPane todoStatusTextPane;
-    JEditorPane todoAssignedTextPane;
 
     /**
      * FOR THE TEAM MENU
@@ -153,36 +148,26 @@ public class TeamView extends JPanel {
          */
 
         // initialize text pane for description
-        todoDescriptionTextPane = new JTextPane();
-        todoDescriptionTextPane.setEditable(false);
-        todoDescriptionTextPane.setPreferredSize(new Dimension(TeamViewModel.TODO_DESCRIPTION_TEXT_PANE_WIDTH,
+        teamViewModel.getTodoDescriptionTextPane().setEditable(false);
+        teamViewModel.getTodoDescriptionTextPane().setPreferredSize(new Dimension(TeamViewModel.TODO_DESCRIPTION_TEXT_PANE_WIDTH,
                                                                TeamViewModel.TODO_DESCRIPTION_TEXT_PANE_HEIGHT));
-        todoDescriptionTextPane.setText("This is a test description!");
 
         // initialize time info and panel for info
-        todoStartTimeTextPane = new JEditorPane();
-        todoStartTimeTextPane.setText("Start: January 5, 2024 at 12:35 PM");
-        todoStartTimeTextPane.setEditable(false);
-        todoEndTimeTextPane = new JEditorPane();
-        todoEndTimeTextPane.setText("End: January 5, 2024 at 4:50 AM");
-        todoEndTimeTextPane.setEditable(false);
+        teamViewModel.getTodoStartTimeTextPane().setEditable(false);
+        teamViewModel.getTodoEndTimeTextPane().setEditable(false);
         todoTimePanel = new JPanel();
         todoTimePanel.setLayout(new BoxLayout(todoTimePanel, BoxLayout.Y_AXIS));
-        todoTimePanel.add(todoStartTimeTextPane);
-        todoTimePanel.add(todoEndTimeTextPane);
+        todoTimePanel.add(teamViewModel.getTodoStartTimeTextPane());
+        todoTimePanel.add(teamViewModel.getTodoEndTimeTextPane());
 
         // initialize status and assigned info elements
-        todoStatusTextPane = new JEditorPane();
-        todoStatusTextPane.setText("Status: Incomplete");
-        todoStatusTextPane.setEditable(false);
-        todoAssignedTextPane = new JEditorPane();
-        todoAssignedTextPane.setEditable(false);
-        todoAssignedTextPane.setText("Assigned to Sean by Kyle");
+        teamViewModel.getTodoStatusTextPane().setEditable(false);
+        teamViewModel.getTodoAssignedTextPane().setEditable(false);
         todoStatusPanel = new JPanel();
         todoStatusPanel.setBorder(new CompoundBorder());
         todoStatusPanel.setLayout(new BoxLayout(todoStatusPanel, BoxLayout.Y_AXIS));
-        todoStatusPanel.add(todoStatusTextPane);
-        todoStatusPanel.add(todoAssignedTextPane);
+        todoStatusPanel.add(teamViewModel.getTodoStatusTextPane());
+        todoStatusPanel.add(teamViewModel.getTodoAssignedTextPane());
 
         // initialize main panel for info and add all components
         todoInfoPanel = new JPanel();
@@ -191,7 +176,7 @@ public class TeamView extends JPanel {
         todoInfoPanel.add(todoDescriptionLabel);
         todoInfoPanel.add(todoTimePanel);
         todoInfoPanel.add(todoStatusPanel);
-        todoInfoPanel.add(todoDescriptionTextPane);
+        todoInfoPanel.add(teamViewModel.getTodoDescriptionTextPane());
 
 
         /**
@@ -335,7 +320,8 @@ public class TeamView extends JPanel {
         teamViewModel.getTodoNameList().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                // change selected index and update stuff
+                teamViewModel.setSelectedTodoIndex(teamViewModel.getTodoNameList().getSelectedIndex());
+                teamViewModel.updateDescriptionData(teamViewModel.getSelectedTeamName());
             }
         });
 
@@ -527,13 +513,12 @@ public class TeamView extends JPanel {
 
                     String user = EntityMemory.getLoggedInUser().getUsername();
 
-                    System.out.println("ASSIGNED TO MEMBER: " + teamViewModel.getTeamMembers().get(selectedMemberIndex));
-
                     createTodoTeamController.execute(
                             nameField.getText(),
                             todoDescriptionEditor.getText(),
                             startTimePanel.getLocalDateTime(),
                             endTimePanel.getLocalDateTime(),
+                            EntityMemory.getLoggedInUser().getUsername(),
                             teamViewModel.getTeamMembers().get(selectedMemberIndex),
                             false,
                             teamViewModel.getSelectedTeamName()
@@ -633,7 +618,6 @@ public class TeamView extends JPanel {
             confirm.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    System.out.println("CURRENT TEAM TO ADD: " + teamState.getAddTeamNameInput());
                     createTeamController.execute(teamState.getAddTeamNameInput());
 
                     if(!teamViewModel.getTeamState().getIsCreateTeamFailed())
