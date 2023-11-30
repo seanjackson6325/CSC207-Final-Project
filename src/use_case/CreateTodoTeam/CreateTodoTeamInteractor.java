@@ -34,15 +34,16 @@ public class CreateTodoTeamInteractor implements CreateTodoTeamInputBoundary {
         String desc = inputData.getDescription();
         LocalDateTime start = inputData.getStartTime();
         LocalDateTime end = inputData.getEndTime();
-        Team requestedTo = teamDataAccessObject.readTeam(inputData.getRequestedTo());
+        String requester = inputData.getRequester();
+        String requestedTo = inputData.getRequestedTo();
         Boolean status = inputData.getStatus();
         Team team = teamDataAccessObject.readTeam(inputData.getTeam());
         User user = EntityMemory.getLoggedInUser();
 
         TodoFactory todoFactory = new TodoFactory();
-        Todo newTodo = todoFactory.create(name, desc, start, end, team.getTeamName(), requestedTo.getTeamName(), status);
+        Todo newTodo = todoFactory.create(name, desc, start, end, requester, requestedTo, status);
 
-        List<Todo> taskList = user.getTaskList();
+        List<Todo> taskList = team.getTeamTasks();
         for (Todo task : taskList) { // Check for duplicate name
             if (name.equals(task.getName())) {
                 CreateTodoTeamOutputData outputData = new CreateTodoTeamOutputData("There is another task with the same name!");
