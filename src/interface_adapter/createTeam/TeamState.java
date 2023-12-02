@@ -10,6 +10,8 @@ public class TeamState
     private boolean isAddTeamMemberFailed;
     private boolean isAddTodoFailed;
 
+    private boolean isEditTodoFailed;
+
     public TeamState()
     {
         addTeamNameInput = "";
@@ -17,6 +19,7 @@ public class TeamState
         isCreateTeamFailed = false;
         isAddTeamMemberFailed = false;
         isAddTodoFailed = false;
+        isEditTodoFailed = false;
     }
 
 
@@ -68,6 +71,16 @@ public class TeamState
     public void setIsAddTodoFailed(boolean status)
     {
         this.isAddTodoFailed = status;
+    }
+
+    public void setIsEditTodoFailed(boolean status)
+    {
+        this.isEditTodoFailed = status;
+    }
+
+    public boolean getIsEditTodoFailed()
+    {
+        return isEditTodoFailed;
     }
 
 }

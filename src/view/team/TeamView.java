@@ -2,13 +2,18 @@ package view.team;
 
 import app.EntityMemory;
 import entity.Team;
+import entity.Todo;
+import interface_adapter.ViewHelper;
 import interface_adapter.addMember.AddMemberController;
 import interface_adapter.checkWeather.CheckWeatherController;
+import interface_adapter.completeTodoTeam.CompleteTodoTeamController;
 import interface_adapter.createTeam.CreateTeamController;
 import interface_adapter.createTeam.CreateTeamPresenter;
 import interface_adapter.createTeam.TeamState;
 import interface_adapter.createTeam.TeamViewModel;
 import interface_adapter.createTodoTeam.CreateTodoTeamController;
+import interface_adapter.deleteTodoTeam.DeleteTodoTeamController;
+import interface_adapter.editTodoTeam.EditTodoTeamController;
 import interface_adapter.removeMember.RemoveMemberController;
 import use_case.CreateTeam.CreateTeamInputData;
 import view.DateTimeInputPanel;
@@ -19,6 +24,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,6 +73,9 @@ public class TeamView extends JPanel {
     AddMemberController addMemberController;
     RemoveMemberController removeMemberController;
     CreateTodoTeamController createTodoTeamController;
+    DeleteTodoTeamController deleteTodoTeamController;
+    EditTodoTeamController editTodoTeamController;
+    CompleteTodoTeamController completeTodoTeamController;
     CheckWeatherController checkWeatherController;
 
     /**
@@ -89,6 +98,9 @@ public class TeamView extends JPanel {
                     AddMemberController addMemberController,
                     RemoveMemberController removeMemberController,
                     CreateTodoTeamController createTodoTeamController,
+                    DeleteTodoTeamController deleteTodoTeamController,
+                    EditTodoTeamController editTodoTeamController,
+                    CompleteTodoTeamController completeTodoTeamController,
                     CheckWeatherController checkWeatherController)
     {
         /**
@@ -99,6 +111,9 @@ public class TeamView extends JPanel {
         this.addMemberController = addMemberController;
         this.removeMemberController = removeMemberController;
         this.createTodoTeamController = createTodoTeamController;
+        this.deleteTodoTeamController = deleteTodoTeamController;
+        this.editTodoTeamController = editTodoTeamController;
+        this.completeTodoTeamController = completeTodoTeamController;
         this.checkWeatherController = checkWeatherController;
 
         /**
@@ -287,7 +302,7 @@ public class TeamView extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 if(addTodoInputView == null && teamViewModel.getSelectedTeamIndex() != -1)
                 {
-                    addTodoInputView = new AddTodoInputView("Enter Todo Attributes");
+                    addTodoInputView = new AddTodoInputView("Enter Todo Attributes", null, AddTodoInputView.ADD_TODO);
                 }
                 else
                 {
@@ -299,21 +314,78 @@ public class TeamView extends JPanel {
         removeTodoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // remove task
+                if(teamViewModel.getSelectedTeamIndex() != -1)
+                {
+                    if(teamViewModel.getSelectedTodoIndex() == -1)
+                    {
+                        JOptionPane.showMessageDialog(null, "Please select a Todo to Remove");
+                    }
+                    else
+                    {
+                        int option = JOptionPane.showConfirmDialog(null, "Remove todo?");
+                        if(option == 0)
+                        {
+                            deleteTodoTeamController.execute(teamViewModel.getSelectedTodoIndex(), teamViewModel.getSelectedTeamName());
+                            teamViewModel.updateViewData();
+                        }
+                    }
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "Select a Team first.");
+                }
             }
         });
 
         editTodoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // edit task
+                if(addTodoInputView == null && teamViewModel.getSelectedTeamIndex() != -1)
+                {
+                    if(teamViewModel.getSelectedTodoIndex() != -1)
+                    {
+                        addTodoInputView = new AddTodoInputView("Enter Todo Attributes", teamViewModel.getSelectedTodo(), AddTodoInputView.EDIT_TODO);
+                        teamViewModel.updateViewData();
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null, "Please select a Todo first.");
+                    }
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "Please select a team first.");
+                }
             }
         });
 
         completeTodoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // mark task done
+                if(teamViewModel.getSelectedTeamIndex() != -1)
+                {
+                    if(teamViewModel.getSelectedTodoIndex() != -1)
+                    {
+                        int index = teamViewModel.getSelectedTodoIndex();
+                        Todo todo = teamViewModel.getSelectedTodo();
+                        String name = todo.getName();
+                        String description = todo.getDescription();
+                        LocalDateTime start = todo.getStartTime();
+                        LocalDateTime end = todo.getEndTime();
+                        String requester = todo.getRequester();
+                        String requestedTo = todo.getRequestedTo();
+                        String team = teamViewModel.getSelectedTeamName();
+                        completeTodoTeamController.execute(index, name, description, start, end, requester, requestedTo, team);
+                        teamViewModel.updateViewData();
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null, "Please select a Todo first.");
+                    }
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "Please select a team first.");
+                }
             }
         });
 
@@ -399,6 +471,9 @@ public class TeamView extends JPanel {
 
     private class AddTodoInputView
     {
+        private static final int ADD_TODO = 0;
+        private static final int EDIT_TODO = 1;
+
         private DateTimeInputPanel startTimePanel;
         private DateTimeInputPanel endTimePanel;
 
@@ -419,7 +494,7 @@ public class TeamView extends JPanel {
         JPanel todoDescriptionPanel;
         JEditorPane todoDescriptionEditor;
 
-        public AddTodoInputView(String title) {
+        public AddTodoInputView(String title, Todo prev, int action) {
             startTimePanel = new DateTimeInputPanel(null);
             endTimePanel = new DateTimeInputPanel(null);
 
@@ -488,6 +563,14 @@ public class TeamView extends JPanel {
             viewFrame.setResizable(false);
             viewFrame.setVisible(true);
 
+            if(prev != null)
+            {
+                nameField.setText(prev.getName());
+                startTimePanel.setInput(prev.getStartTime());
+                endTimePanel.setInput(prev.getEndTime());
+                todoDescriptionEditor.setText(prev.getDescription());
+            }
+
             viewFrame.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosing(WindowEvent e) {
@@ -513,20 +596,41 @@ public class TeamView extends JPanel {
 
                     String user = EntityMemory.getLoggedInUser().getUsername();
 
-                    createTodoTeamController.execute(
-                            nameField.getText(),
-                            todoDescriptionEditor.getText(),
-                            startTimePanel.getLocalDateTime(),
-                            endTimePanel.getLocalDateTime(),
-                            EntityMemory.getLoggedInUser().getUsername(),
-                            teamViewModel.getTeamMembers().get(selectedMemberIndex),
-                            false,
-                            teamViewModel.getSelectedTeamName()
-                    );
+                    if(action == EDIT_TODO)
+                    {
+                        editTodoTeamController.execute(
+                                teamViewModel.getSelectedTodoIndex(),
+                                nameField.getText(),
+                                todoDescriptionEditor.getText(),
+                                startTimePanel.getLocalDateTime(),
+                                endTimePanel.getLocalDateTime(),
+                                EntityMemory.getLoggedInUser().getUsername(),
+                                teamViewModel.getTeamMembers().get(selectedMemberIndex),
+                                false,
+                                teamViewModel.getSelectedTeamName());
 
-                    if (!teamViewModel.getTeamState().getIsAddTodoFailed()) {
-                        teamViewModel.updateViewData();
-                        closeView();
+                        if (!teamViewModel.getTeamState().getIsEditTodoFailed()) {
+                            teamViewModel.updateViewData();
+                            closeView();
+                        }
+                    }
+                    else if (action == ADD_TODO)
+                    {
+                        createTodoTeamController.execute(
+                                nameField.getText(),
+                                todoDescriptionEditor.getText(),
+                                startTimePanel.getLocalDateTime(),
+                                endTimePanel.getLocalDateTime(),
+                                EntityMemory.getLoggedInUser().getUsername(),
+                                teamViewModel.getTeamMembers().get(selectedMemberIndex),
+                                false,
+                                teamViewModel.getSelectedTeamName()
+                        );
+
+                        if (!teamViewModel.getTeamState().getIsAddTodoFailed()) {
+                            teamViewModel.updateViewData();
+                            closeView();
+                        }
                     }
                 }
             });

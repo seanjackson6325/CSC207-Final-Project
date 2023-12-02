@@ -289,4 +289,9 @@ public class TeamViewModel extends ViewModel {
         selectedTodoIndex = index;
     }
 
+    public Todo getSelectedTodo()
+    {
+        return ViewHelper.getTeamByName(getSelectedTeamName()).getTeamTasks().get(selectedTodoIndex);
+    }
+
 }
