@@ -5,11 +5,13 @@ import use_case.CreateTodoUser.CreateTodoUserOutputBoundary;
 import use_case.CreateTodoUser.CreateTodoUserOutputData;
 import use_case.EditTodo.EditTodoOutputBoundary;
 import use_case.EditTodo.EditTodoOutputData;
+import use_case.MarkDone.MarkDoneOutputBoundary;
+import use_case.MarkDone.MarkDoneOutputData;
 import view.ViewManager;
 
 import javax.swing.*;
 
-public class UserPresenter implements CreateTodoUserOutputBoundary, EditTodoOutputBoundary
+public class UserPresenter implements CreateTodoUserOutputBoundary, EditTodoOutputBoundary, MarkDoneOutputBoundary
 {
     ViewManager viewManager;
     UserViewModel userViewModel;
@@ -45,5 +47,10 @@ public class UserPresenter implements CreateTodoUserOutputBoundary, EditTodoOutp
     public void editFailureView(EditTodoOutputData editTodoOutputData) {
         JOptionPane.showMessageDialog(null, editTodoOutputData.getMessage());
         userViewModel.getState().setFailed(true);
+    }
+
+    @Override
+    public void successView(MarkDoneOutputData outputData) {
+        JOptionPane.showMessageDialog(null, outputData.getMessage());
     }
 }

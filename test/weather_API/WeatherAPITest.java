@@ -1,5 +1,6 @@
 package weather_API;
 
+import entity.WeatherAPI;
 import org.junit.Test;
 import static org.junit.Assert.assertNotEquals;
 

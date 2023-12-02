@@ -1,6 +1,9 @@
 package view.user;
 
 import entity.Todo;
+import entity.User;
+import interface_adapter.checkWeather.CheckWeatherController;
+import interface_adapter.createTeam.TeamViewModel;
 import interface_adapter.deleteTodo.DeleteTodoController;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.user.UserController;
@@ -19,8 +22,10 @@ public class UserView extends JPanel {
      *  FOR RECEIVING AND SENDING DATA
      */
     UserViewModel userViewModel;
+    TeamViewModel teamViewModel;
     UserController userController;
     DeleteTodoController deleteTodoController;
+    CheckWeatherController checkWeatherController;
 
     /**
      *  FOR THE TASK SELECTOR
@@ -43,7 +48,7 @@ public class UserView extends JPanel {
     JEditorPane todoDescriptionStatus;
 
     /**
-     *  FOR THE TOOLBAR
+     *  FOR THE MENUBAR
      */
     JMenuBar menuBar;
     JMenu mainMenu, viewMenu, weatherMenu;
@@ -58,16 +63,18 @@ public class UserView extends JPanel {
     /**
      *
      * Main constructor for this UserView object.
-     *
-     * @param userViewModel
-     * @param userController
      */
 
-    public UserView(UserViewModel userViewModel, UserController userController, DeleteTodoController deleteTodoController)
+    public UserView(UserViewModel userViewModel, TeamViewModel teamViewModel,
+                    UserController userController,
+                    DeleteTodoController deleteTodoController,
+                    CheckWeatherController checkWeatherController)
     {
         this.userViewModel = userViewModel;
+        this.teamViewModel = teamViewModel;
         this.userController = userController;
         this.deleteTodoController = deleteTodoController;
+        this.checkWeatherController = checkWeatherController;
         todoInputView = null;
 
         // Initialize everything that needs user info
@@ -145,6 +152,7 @@ public class UserView extends JPanel {
                         editTodoInputView = new EditTodoInputView(
                                 userViewModel.getUserTodos()[userViewModel.getTodoNames().getSelectedIndex()],
                                 "Edit Todo Attributes");
+                        userViewModel.updateDataForView();
                     }
                 }
             }
@@ -159,7 +167,18 @@ public class UserView extends JPanel {
                 }
                 else
                 {
-                    // complete it
+                    userViewModel.getEditState().setTodoStatus(true);
+                    userController.executeMarkDone(userViewModel.getUserTodos()[userViewModel.getTodoNames().getSelectedIndex()].getName());
+
+                    int option = JOptionPane.showConfirmDialog(null, "Remove completed todo?");
+                    if(option == 0)
+                    {
+                        deleteTodoController.execute(userViewModel.getTodoNames().getSelectedIndex(),
+                                userViewModel.getLoggedInUser().getTaskList(), null);
+                        userViewModel.updateDataForView();
+                    }
+
+                    userViewModel.updateDataForView();
                 }
             }
         });
@@ -197,14 +216,15 @@ public class UserView extends JPanel {
         teamViewMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // switch to team view
+                teamViewModel.updateViewData();
+                userViewModel.getViewManager().switchToView("Team");
             }
         });
 
         weatherViewMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // show pop up of weather
+                checkWeatherController.execute();
             }
         });
 
@@ -507,7 +527,8 @@ public class UserView extends JPanel {
             nameField.addKeyListener(new KeyListener() {
                 @Override
                 public void keyTyped(KeyEvent e) {
-                    userViewModel.getEditState().setTodoNewName(nameField.getText() + e.getKeyChar());
+                    userViewModel.getEditState().setTodoNewName(
+                            (nameField.getText() + e.getKeyChar()).replaceAll("\b", ""));
                 }
 
                 @Override

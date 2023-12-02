@@ -151,6 +151,9 @@ public class UserViewModel extends ViewModel {
             todoStartTimes = taskStartTimesInput;
             todoEndTimes = taskEndTimesInput;
             todoStatuses = taskStatusesInput;
+
+            //if(todoNames.getSelectedIndex() != -1)
+            //todoDescriptionTextPane.setText(todoDescriptions[todoNames.getSelectedIndex()]);
         }
     }
 
