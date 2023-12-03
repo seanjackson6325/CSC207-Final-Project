@@ -1,6 +1,6 @@
 package use_case.CheckWeather;
 
-import entity.WeatherAPI;
+import weather_API.WeatherAPI;
 
 public class CheckWeatherInteractor implements CheckWeatherInputBoundary{
 

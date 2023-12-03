@@ -1,4 +1,4 @@
-package entity;
+package weather_API;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
