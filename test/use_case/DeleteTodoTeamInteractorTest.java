@@ -61,6 +61,8 @@ public class DeleteTodoTeamInteractorTest {
             createUserInteractor.execute(inputDataFail);
 
             Thread.sleep(2000);
+            dataAccess.deleteTeam("testTeam210398129382103989081");
+            Thread.sleep(2000);
             dataAccess.deleteUser("testUser102983748912839");
         }
         catch (InterruptedException ignored) {
